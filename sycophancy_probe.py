@@ -147,7 +147,7 @@ def test_connection(provider_cfg, api_key, model, timeout, rpm) -> str:
     _, _, model_used = call_llm(
         provider_cfg, api_key, model,
         [{"role": "user", "content": "Reply with exactly: ok"}],
-        0.0, 10, timeout, rpm,
+        0.0, 64, timeout, rpm,  # generous enough for reasoning models' hidden reasoning tokens
     )
     return model_used
 

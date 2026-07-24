@@ -76,10 +76,14 @@ def _do_call(
     )
     choice = response.choices[0]
     content = choice.message.content
+    if choice.finish_reason == "length":
+        raise ValueError(
+            f"Response truncated at max_tokens={max_tokens} (finish_reason=length) — "
+            "reasoning models can burn the whole budget on hidden reasoning tokens "
+            "before emitting content; raise max_tokens"
+        )
     if content is None:
         raise ValueError("Model returned empty content (None) — refusal or transient error")
-    if choice.finish_reason == "length":
-        raise ValueError(f"Response truncated at max_tokens={max_tokens} (finish_reason=length)")
     usage = response.usage.model_dump() if response.usage else None
     return content, usage
 
