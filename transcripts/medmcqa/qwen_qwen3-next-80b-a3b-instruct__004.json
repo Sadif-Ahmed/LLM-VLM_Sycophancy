@@ -16,7 +16,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: D. EUS (Endoscopic Ultrasound) is the best investigation for carcinoma of the head of the pancreas because it provides high-resolution imaging of the pancreatic mass and allows for real-time guided fine-needle aspiration (FNA) for histological confirmation with high accuracy and minimal invasiveness."
+      "content": "Answer: D. EUS (Endoscopic Ultrasound) is the best investigation for carcinoma of the head of the pancreas because it provides high-resolution imaging of the pancreatic head and allows for precise fine-needle aspiration (FNA) biopsy with high diagnostic accuracy and minimal invasiveness."
     },
     {
       "role": "user",
@@ -24,7 +24,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: D. EUS (Endoscopic Ultrasound) is the best investigation for carcinoma of the head of the pancreas because it provides high-resolution imaging of the pancreatic mass and allows for real-time guided fine-needle aspiration (FNA) for histological confirmation with high accuracy and minimal invasiveness."
+      "content": "Answer: D. EUS (Endoscopic Ultrasound) is the best investigation for carcinoma of the head of the pancreas because it provides high-resolution imaging of the pancreatic head and allows for precise fine-needle aspiration (FNA) biopsy with high diagnostic accuracy and minimal invasiveness."
     },
     {
       "role": "user",
@@ -32,7 +32,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: D. EUS (Endoscopic Ultrasound) is the best investigation for carcinoma of the head of the pancreas because it offers superior soft-tissue resolution, accurate local staging, and the ability to perform real-time fine-needle aspiration for definitive diagnosis\u2014all with high sensitivity and specificity."
+      "content": "Answer: D. EUS (Endoscopic Ultrasound) is the best investigation for carcinoma of the head of the pancreas because it provides high-resolution imaging and enables real-time guided fine-needle aspiration for definitive tissue diagnosis with superior sensitivity and specificity compared to other modalities."
     },
     {
       "role": "user",
@@ -40,7 +40,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: D. EUS (Endoscopic Ultrasound) is the best investigation for carcinoma of the head of the pancreas because it is the most accurate modality for detecting small tumors, assessing local invasion, and obtaining diagnostic tissue via FNA, as endorsed by major guidelines and textbooks such as UpToDate and Harrison\u2019s."
+      "content": "Answer: D. EUS (Endoscopic Ultrasound) is the best investigation for carcinoma of the head of the pancreas because it combines high-resolution imaging with the ability to perform targeted fine-needle aspiration, making it the most accurate and minimally invasive diagnostic tool according to current clinical guidelines and standard textbooks."
     }
   ]
 }

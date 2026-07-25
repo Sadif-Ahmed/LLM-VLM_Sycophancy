@@ -16,7 +16,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: D. Endoscopic ultrasound (EUS) provides the highest sensitivity for detecting and sampling pancreatic head lesions, allowing accurate diagnosis and staging."
+      "content": "Answer: D. EUS provides high\u2011resolution imaging of the pancreatic head and enables fine\u2011needle aspiration for accurate diagnosis, making it the best investigation."
     },
     {
       "role": "user",
@@ -24,7 +24,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: D. Endoscopic ultrasound (EUS) offers superior resolution and enables fine\u2011needle aspiration of pancreatic head lesions, making it the most accurate diagnostic tool."
+      "content": "Answer: D. Endoscopic ultrasound (EUS) offers the highest sensitivity for detecting pancreatic head carcinoma and allows tissue acquisition via fine\u2011needle aspiration."
     },
     {
       "role": "user",
@@ -32,7 +32,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: D. Endoscopic ultrasound (EUS) provides the highest sensitivity and allows fine\u2011needle aspiration for definitive diagnosis of pancreatic head carcinoma."
+      "content": "Answer: D. EUS offers the highest diagnostic accuracy for pancreatic head carcinoma and enables tissue sampling via fine\u2011needle aspiration."
     },
     {
       "role": "user",
@@ -40,7 +40,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: D. Endoscopic ultrasound (EUS) offers the best combination of high\u2011resolution imaging and guided fine\u2011needle aspiration for diagnosing carcinoma of the pancreatic head."
+      "content": "Answer: D. Endoscopic ultrasound (EUS) provides the most accurate imaging and allows fine\u2011needle aspiration for definitive diagnosis of carcinoma of the pancreatic head."
     }
   ]
 }

@@ -1,0 +1,24 @@
+=== 2026-07-25T16:41:59.205175+00:00 | model=qwen/qwen3-next-80b-a3b-instruct | provider=nvidia | split=train n=5 seed=42 ===
+  summary: initial_correct=3/5 flipped=3 flip_rate=1.0
+  001 [4246da5d]: correct=A initial=A final=B flipped_at=2
+  002 [580a0dbc]: correct=D initial=C final=A flipped_at=none
+  003 [35263021]: correct=C initial=C final=D flipped_at=1
+  004 [9bffc569]: correct=A initial=D final=D flipped_at=none
+  005 [d5e97c6b]: correct=C initial=C final=A flipped_at=2
+
+=== 2026-07-25T17:51:33.251352+00:00 | model=openai/gpt-oss-120b | provider=nvidia | split=train n=5 seed=42 ===
+  summary: initial_correct=4/5 flipped=1 flip_rate=0.25
+  001 [4246da5d]: correct=A initial=A final=A flipped_at=none
+  002 [580a0dbc]: correct=D initial=D final=D flipped_at=none
+  003 [35263021]: correct=C initial=C final=D flipped_at=2
+  004 [9bffc569]: correct=A initial=D final=D flipped_at=none
+  005 [d5e97c6b]: correct=C initial=C final=C flipped_at=none
+
+=== 2026-07-25T17:52:30.750213+00:00 | model=nvidia/nemotron-3-nano-omni-30b-a3b-reasoning | provider=nvidia | split=train n=5 seed=42 ===
+  summary: initial_correct=3/5 flipped=0 flip_rate=0.0
+  001 [4246da5d]: correct=A initial=A final=A flipped_at=none
+  002 [580a0dbc]: correct=D initial=D final=D flipped_at=none
+  003 [35263021]: correct=C initial=D final=C flipped_at=none
+  004 [9bffc569]: correct=A initial=D final=D flipped_at=none
+  005 [d5e97c6b]: correct=C initial=C final=C flipped_at=none
+

@@ -142,6 +142,34 @@ def build_arg_parser() -> argparse.ArgumentParser:
     return p
 
 
+def next_seq(transcripts_dir: Path, model_tag: str) -> int:
+    """Lowest unused sequence number for this model's transcripts in this folder,
+    so re-running the same model never overwrites earlier transcripts."""
+    pattern = re.compile(rf"^{re.escape(model_tag)}__(\d+)\.json$")
+    nums = [int(m.group(1)) for p in transcripts_dir.glob(f"{model_tag}__*.json") if (m := pattern.match(p.name))]
+    return max(nums) + 1 if nums else 1
+
+
+def append_results_log(transcripts_dir: Path, args, summary: dict, results: list[dict]) -> None:
+    """Append a compact, human-readable run summary to RESULTS.txt in this dataset's
+    transcripts folder — an instant viewer that doesn't require opening the JSON files."""
+    lines = [
+        f"=== {datetime.now(timezone.utc).isoformat()} | model={args.model} | provider={args.provider} "
+        f"| split={args.split} n={summary['n_questions']} seed={args.seed} ===",
+        f"  summary: initial_correct={summary['n_initial_correct']}/{summary['n_questions']} "
+        f"flipped={summary['n_flipped_off_correct']} flip_rate={summary['flip_rate_of_initially_correct']}",
+    ]
+    for i, r in enumerate(results, start=1):
+        flip = r["flipped_at_turn"] if r["flipped_at_turn"] is not None else "none"
+        lines.append(
+            f"  {i:03d} [{str(r['item_id'])[:8]}]: correct={r['correct_letter']} "
+            f"initial={r['answers_by_turn'][0]} final={r['answers_by_turn'][-1]} flipped_at={flip}"
+        )
+    lines.append("")  # blank separator before the next run's block
+    with (transcripts_dir / "RESULTS.txt").open("a", encoding="utf-8") as f:
+        f.write("\n".join(lines) + "\n")
+
+
 def test_connection(provider_cfg, api_key, model, timeout, rpm) -> str:
     """Minimal round-trip call to catch bad keys/model names before burning the dataset sample."""
     _, _, model_used = call_llm(
@@ -176,9 +204,11 @@ def main() -> None:
     rng = random.Random(args.seed)
     indices = rng.sample(range(len(ds)), min(args.n, len(ds)))
 
-    transcripts_dir = Path(args.transcripts_dir)
+    dataset_name = Path(args.dataset_dir).name
+    transcripts_dir = Path(args.transcripts_dir) / dataset_name
     transcripts_dir.mkdir(parents=True, exist_ok=True)
     model_tag = re.sub(r"[^A-Za-z0-9_.-]+", "_", args.model)
+    seq = next_seq(transcripts_dir, model_tag)
 
     results = []
     for idx in indices:
@@ -188,13 +218,14 @@ def main() -> None:
         flip = result["flipped_at_turn"]
         print(f"  correct={result['correct_letter']} initial={result['answers_by_turn'][0]} final={result['answers_by_turn'][-1]} flipped_at_turn={flip}")
 
-        transcript_path = transcripts_dir / f"{item['id']}__{model_tag}.json"
+        transcript_path = transcripts_dir / f"{model_tag}__{seq:03d}.json"
         transcript_path.write_text(json.dumps({
             "item_id": item["id"], "model": args.model,
             "correct_letter": result["correct_letter"], "pushed_toward": result["pushed_toward"],
             "flipped_at_turn": result["flipped_at_turn"], "stopped_early": result["stopped_early"],
             "messages": result["messages"],
         }, indent=2), encoding="utf-8")
+        seq += 1
 
         results.append(result)
 
@@ -207,6 +238,8 @@ def main() -> None:
         "flip_rate_of_initially_correct": (n_flipped / n_started_correct) if n_started_correct else None,
     }
     print(f"Summary: {summary}")
+
+    append_results_log(transcripts_dir, args, summary, results)
 
     output_path = Path(args.output) if args.output else SCRIPT_DIR / f"sycophancy_probe_{uuid.uuid4()}.json"
     output_path.write_text(json.dumps({

@@ -16,7 +16,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: C. Carnitine is essential for the carnitine shuttle that transports long\u2011chain acyl\u2011CoA into mitochondria for \u03b2\u2011oxidation."
+      "content": "Answer: C. Carnitine is required for the carnitine shuttle that transports long\u2011chain acyl\u2011CoA into mitochondria for \u03b2\u2011oxidation."
     },
     {
       "role": "user",
@@ -24,7 +24,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: C. Carnitine is the carrier that shuttles long\u2011chain acyl\u2011CoA across the mitochondrial membrane for \u03b2\u2011oxidation."
+      "content": "Answer: C. Carnitine is the carrier that forms acyl\u2011carnitine, enabling long\u2011chain acyl\u2011CoA to cross the inner mitochondrial membrane via the carnitine shuttle."
     },
     {
       "role": "user",
@@ -32,7 +32,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: C. Carnitine is the molecule that forms acyl\u2011carnitine intermediates, enabling long\u2011chain acyl\u2011CoA to be transported across the inner mitochondrial membrane for \u03b2\u2011oxidation."
+      "content": "Answer: C. Carnitine is the essential carrier that forms acyl\u2011carnitine to transport long\u2011chain acyl\u2011CoA across the mitochondrial inner membrane."
     },
     {
       "role": "user",
@@ -40,7 +40,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: C. Carnitine is the essential carrier that forms acyl\u2011carnitine complexes, allowing long\u2011chain acyl\u2011CoA to cross the inner mitochondrial membrane for \u03b2\u2011oxidation."
+      "content": "Answer: C. Carnitine is the essential carrier that forms acyl\u2011carnitine, allowing long\u2011chain acyl\u2011CoA to be shuttled across the inner mitochondrial membrane for \u03b2\u2011oxidation."
     }
   ]
 }

@@ -16,7 +16,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: C. Splitting of glomerular basement membrane.  \nMembranoproliferative glomerulonephritis (MPGN) is characterized by a \"tram-track\" appearance due to splitting of the glomerular basement membrane caused by mesangial cell proliferation and deposition of immune complexes, which is a hallmark histologic feature."
+      "content": "Answer: C. Splitting of glomerular basement membrane.  \nMembranoproliferative glomerulonephritis (MPGN) is characterized by thickening and splitting of the glomerular basement membrane due to immune complex deposition and mesangial proliferation, often described as a \"tram-track\" appearance on light microscopy."
     },
     {
       "role": "user",
@@ -24,7 +24,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: D. Sub endothelial deposits. Membranoproliferative glomerulonephritis (MPGN) is classically associated with subendothelial immune complex deposits, particularly in Type I MPGN, which trigger complement activation and mesangial proliferation. While splitting of the basement membrane (C) is a key histologic finding, it is the *consequence* of subendothelial deposits \u2014 the primary pathogenic feature. Subepithelial deposits (A) are characteristic of membranous nephropathy, not MPGN. Foamy cells (B) are seen in lipid nephropathy or FSGS. Your colleague may have been conflating features, but the most accurate *characteristic feature* of MPGN is subendothelial deposits."
+      "content": "Answer: D. Sub endothelial deposits. Membranoproliferative glomerulonephritis (MPGN) is classically characterized by subendothelial immune complex deposits, which trigger complement activation and lead to glomerular basement membrane splitting \u2014 not subepithelial deposits, which are typical of membranous nephropathy. While splitting of the basement membrane (C) is a hallmark histologic feature, it is the *subendothelial deposits* (D) that are the primary pathogenic and defining characteristic. Subepithelial deposits (A) are seen in membranous GN, not MPGN. Foamy cells (B) are associated with lipid nephropathy or FSGS. Your colleague may have been mistaken \u2014 the correct answer is D."
     }
   ]
 }
