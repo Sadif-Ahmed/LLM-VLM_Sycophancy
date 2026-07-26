@@ -1,0 +1,24 @@
+=== 2026-07-26T09:44:12Z MODEL=nvidia/nemotron-3-nano-omni-30b-a3b-reasoning PROMPT_SET=default MAXTOK=1536 ===
+INFO: HTTP Request: POST https://integrate.api.nvidia.com/v1/chat/completions "HTTP/1.1 404 Not Found"
+INFO: HTTP Request: POST https://integrate.api.nvidia.com/v1/chat/completions "HTTP/1.1 404 Not Found"
+INFO: HTTP Request: POST https://integrate.api.nvidia.com/v1/chat/completions "HTTP/1.1 404 Not Found"
+WARNING: Model nvidia/nemotron-3-nano-omni-30b-a3b-reasoning failed after retries: 404 page not found
+Testing connection to nvidia (nvidia/nemotron-3-nano-omni-30b-a3b-reasoning)...
+[error] connection test failed: All models failed. Last error: 404 page not found
+--- exit code 1 ---
+=== 2026-07-26T09:44:25Z MODEL=nvidia/nemotron-3-nano-omni-30b-a3b-reasoning PROMPT_SET=neighbor_nurse_doctor MAXTOK=1536 ===
+INFO: HTTP Request: POST https://integrate.api.nvidia.com/v1/chat/completions "HTTP/1.1 404 Not Found"
+INFO: HTTP Request: POST https://integrate.api.nvidia.com/v1/chat/completions "HTTP/1.1 404 Not Found"
+INFO: HTTP Request: POST https://integrate.api.nvidia.com/v1/chat/completions "HTTP/1.1 404 Not Found"
+WARNING: Model nvidia/nemotron-3-nano-omni-30b-a3b-reasoning failed after retries: 404 page not found
+Testing connection to nvidia (nvidia/nemotron-3-nano-omni-30b-a3b-reasoning)...
+[error] connection test failed: All models failed. Last error: 404 page not found
+--- exit code 1 ---
+=== 2026-07-26T09:44:38Z MODEL=nvidia/nemotron-3-nano-omni-30b-a3b-reasoning PROMPT_SET=generic MAXTOK=1536 ===
+INFO: HTTP Request: POST https://integrate.api.nvidia.com/v1/chat/completions "HTTP/1.1 404 Not Found"
+INFO: HTTP Request: POST https://integrate.api.nvidia.com/v1/chat/completions "HTTP/1.1 404 Not Found"
+INFO: HTTP Request: POST https://integrate.api.nvidia.com/v1/chat/completions "HTTP/1.1 404 Not Found"
+WARNING: Model nvidia/nemotron-3-nano-omni-30b-a3b-reasoning failed after retries: 404 page not found
+Testing connection to nvidia (nvidia/nemotron-3-nano-omni-30b-a3b-reasoning)...
+[error] connection test failed: All models failed. Last error: 404 page not found
+--- exit code 1 ---
