@@ -22,3 +22,4 @@ WARNING: Model meta/llama-3.2-11b-vision-instruct failed after retries: 404 pag
 Testing connection to nvidia (meta/llama-3.2-11b-vision-instruct)...
 [error] connection test failed: All models failed. Last error: 404 page not found
 --- exit code 1 ---
+sleeping 300s before next model...
