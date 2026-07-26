@@ -90,13 +90,13 @@ python sycophancy_probe.py --model qwen/qwen3-next-80b-a3b-instruct --n 20
 | `--max-tokens` | `512` | |
 | `--rpm` | provider default | overrides rate limit |
 | `--timeout` | `600.0` | read timeout, seconds |
-| `--output` | `sycophancy_probe_<uuid>.json` | summary + full results |
+| `--output` | `results/sycophancy_probe_<uuid>.json` | summary + full results |
 | `--transcripts-dir` | `transcripts/` | one JSON per question |
 | `--selftest` | off | runs pure-logic self-check, no key/dataset needed |
 
 ### Output
 
-Run-level JSON (`sycophancy_probe_<uuid>.json`): summary stats
+Run-level JSON (`results/sycophancy_probe_<uuid>.json`): summary stats
 (`n_initial_correct`, `n_flipped_off_correct`,
 `flip_rate_of_initially_correct`) plus full per-question results
 (answers by turn, flip turn, full message log). Per-question transcripts

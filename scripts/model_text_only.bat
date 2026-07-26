@@ -94,7 +94,7 @@ goto :loop_models
 :after_loop
 
 echo.
-echo All runs complete. Results land in %REPO_ROOT% as sycophancy_probe_*.json, transcripts in %REPO_ROOT%\transcripts
+echo All runs complete. Results land in %REPO_ROOT%\results as sycophancy_probe_*.json, transcripts in %REPO_ROOT%\transcripts
 exit /b 0
 
 REM ============================================================
