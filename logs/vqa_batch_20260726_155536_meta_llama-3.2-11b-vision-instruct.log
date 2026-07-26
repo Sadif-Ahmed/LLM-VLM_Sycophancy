@@ -1,25 +1,24 @@
-=== 2026-07-26T09:49:54Z MODEL=nvidia/nemotron-nano-12b-v2-vl PROMPT_SET=default MAXTOK=512 ===
+=== 2026-07-26T09:55:36Z MODEL=meta/llama-3.2-11b-vision-instruct PROMPT_SET=default MAXTOK=512 ===
 INFO: HTTP Request: POST https://integrate.api.nvidia.com/v1/chat/completions "HTTP/1.1 404 Not Found"
 INFO: HTTP Request: POST https://integrate.api.nvidia.com/v1/chat/completions "HTTP/1.1 404 Not Found"
 INFO: HTTP Request: POST https://integrate.api.nvidia.com/v1/chat/completions "HTTP/1.1 404 Not Found"
-WARNING: Model nvidia/nemotron-nano-12b-v2-vl failed after retries: 404 page not found
-Testing connection to nvidia (nvidia/nemotron-nano-12b-v2-vl)...
+WARNING: Model meta/llama-3.2-11b-vision-instruct failed after retries: 404 page not found
+Testing connection to nvidia (meta/llama-3.2-11b-vision-instruct)...
 [error] connection test failed: All models failed. Last error: 404 page not found
 --- exit code 1 ---
-=== 2026-07-26T09:50:07Z MODEL=nvidia/nemotron-nano-12b-v2-vl PROMPT_SET=neighbor_nurse_doctor MAXTOK=512 ===
+=== 2026-07-26T09:55:49Z MODEL=meta/llama-3.2-11b-vision-instruct PROMPT_SET=neighbor_nurse_doctor MAXTOK=512 ===
 INFO: HTTP Request: POST https://integrate.api.nvidia.com/v1/chat/completions "HTTP/1.1 404 Not Found"
 INFO: HTTP Request: POST https://integrate.api.nvidia.com/v1/chat/completions "HTTP/1.1 404 Not Found"
 INFO: HTTP Request: POST https://integrate.api.nvidia.com/v1/chat/completions "HTTP/1.1 404 Not Found"
-WARNING: Model nvidia/nemotron-nano-12b-v2-vl failed after retries: 404 page not found
-Testing connection to nvidia (nvidia/nemotron-nano-12b-v2-vl)...
+WARNING: Model meta/llama-3.2-11b-vision-instruct failed after retries: 404 page not found
+Testing connection to nvidia (meta/llama-3.2-11b-vision-instruct)...
 [error] connection test failed: All models failed. Last error: 404 page not found
 --- exit code 1 ---
-=== 2026-07-26T09:50:20Z MODEL=nvidia/nemotron-nano-12b-v2-vl PROMPT_SET=generic MAXTOK=512 ===
+=== 2026-07-26T09:56:02Z MODEL=meta/llama-3.2-11b-vision-instruct PROMPT_SET=generic MAXTOK=512 ===
 INFO: HTTP Request: POST https://integrate.api.nvidia.com/v1/chat/completions "HTTP/1.1 404 Not Found"
 INFO: HTTP Request: POST https://integrate.api.nvidia.com/v1/chat/completions "HTTP/1.1 404 Not Found"
 INFO: HTTP Request: POST https://integrate.api.nvidia.com/v1/chat/completions "HTTP/1.1 404 Not Found"
-WARNING: Model nvidia/nemotron-nano-12b-v2-vl failed after retries: 404 page not found
-Testing connection to nvidia (nvidia/nemotron-nano-12b-v2-vl)...
+WARNING: Model meta/llama-3.2-11b-vision-instruct failed after retries: 404 page not found
+Testing connection to nvidia (meta/llama-3.2-11b-vision-instruct)...
 [error] connection test failed: All models failed. Last error: 404 page not found
 --- exit code 1 ---
-sleeping 300s before next model...
