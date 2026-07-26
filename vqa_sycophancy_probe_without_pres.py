@@ -3,17 +3,17 @@ VLM sycophancy probe, prescription-free ablation of vqa_sycophancy_probe.py.
 
 Same setup as vqa_sycophancy_probe.py — ask a vision model a VQA-RAD yes/no
 question (image + question in one turn), then apply 3 escalating pushback
-turns — but with NO fabricated "proof" image ever attached. Pushback here is
-pure language pressure, reusing the generic "text" prompt sets from
-system_prompts.json / pushback_prompts.json (the ones with no reference to
-any image/scan/prescription at all — originally written for the text-only
-MedMCQA probe, but the wording is answer-format-agnostic so it works for
-Yes/No too). This isolates whether the high flip rates seen with the fake
+turns — but with NO fabricated "proof" image ever attached. Pushback wording
+comes from pushback_prompts.json's "vqa_no_pres" set: the same radiologist
+colleague -> two more radiologists -> board-certified attending escalation as
+the image-evidence "vqa" set, with only the prescription-specific phrases
+removed, paired with the same yes/no system prompt from system_prompts.json's
+"vqa" set. This isolates whether the high flip rates seen with the fake
 prescription image come from the image itself or from the escalating
-language alone.
+language alone, without also changing the wording/persona style.
 
 Reuses provider/call/retry plumbing from conversation_sim.py and the flip
-detector + connection test + prompt loader from sycophancy_probe.py.
+detector + connection test from sycophancy_probe.py.
 """
 import argparse
 import base64
@@ -30,10 +30,27 @@ from datasets import load_from_disk
 from PIL import Image
 
 from conversation_sim import PROVIDERS, call_llm, resolve_api_key
-from sycophancy_probe import detect_flip, test_connection, next_seq, append_results_log, load_prompt_set
+from sycophancy_probe import detect_flip, test_connection, next_seq, append_results_log
 
 SCRIPT_DIR = Path(__file__).parent
-TEXT_PROMPTS = load_prompt_set("text")
+
+
+def load_no_pres_prompt_set() -> dict:
+    """Combine the VQA yes/no system prompts (system_prompts.json['vqa']) with the
+    'vqa_no_pres' pushback wording (pushback_prompts.json['vqa_no_pres']) — the
+    same radiologist/nurse/attending escalation as the image-evidence 'vqa' set,
+    with only the prescription-specific phrases stripped out, so this is a clean
+    ablation of just the fake image rather than a switch to different wording
+    entirely (the generic MedMCQA 'text' set phrases things very differently).
+    Using system_prompts.json['text'] would also be wrong here: that pairs with
+    a letter-based "Answer: <letter>" instruction, which breaks extract_yesno()
+    on a yes/no task."""
+    vqa_system = json.loads((SCRIPT_DIR / "system_prompts.json").read_text(encoding="utf-8"))["vqa"]
+    no_pres_pushback = json.loads((SCRIPT_DIR / "pushback_prompts.json").read_text(encoding="utf-8"))["vqa_no_pres"]
+    return {name: {"system_prompt": sp, "pushback_templates": no_pres_pushback[name]} for name, sp in vqa_system.items()}
+
+
+NO_PRES_PROMPTS = load_no_pres_prompt_set()
 
 # NVIDIA NIM vision models cap input images at 1120x1120 (see nvidia_client.py).
 MAX_IMAGE_DIM = 1120
@@ -161,8 +178,8 @@ def build_arg_parser() -> argparse.ArgumentParser:
     p.add_argument("--timeout", type=float, default=600.0, help="Read timeout in seconds")
     p.add_argument("--output", default=None, help="Output JSON path (default: results/<dataset>_no_pres/vqa_sycophancy_probe_without_pres_<uuid>.json)")
     p.add_argument("--transcripts-dir", default=str(SCRIPT_DIR / "transcripts"))
-    p.add_argument("--prompt-set", choices=list(TEXT_PROMPTS), default="default",
-                    help="System prompt + pushback script (generic wording, no visual-evidence claim) — see system_prompts.json/pushback_prompts.json 'text' section")
+    p.add_argument("--prompt-set", choices=list(NO_PRES_PROMPTS), default="default",
+                    help="VQA yes/no system prompt + 'vqa_no_pres' pushback wording (same escalation as 'vqa', prescription phrases removed) — see system_prompts.json['vqa'] / pushback_prompts.json['vqa_no_pres']")
     p.add_argument("--selftest", action="store_true")
     return p
 
@@ -200,7 +217,7 @@ def main() -> None:
     transcripts_dir.mkdir(parents=True, exist_ok=True)
     model_tag = re.sub(r"[^A-Za-z0-9_.-]+", "_", args.model)
     seq = next_seq(transcripts_dir, model_tag)
-    prompt_set = TEXT_PROMPTS[args.prompt_set]
+    prompt_set = NO_PRES_PROMPTS[args.prompt_set]
 
     results = []
     for idx in indices:
