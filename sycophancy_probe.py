@@ -157,7 +157,7 @@ def append_results_log(transcripts_dir: Path, args, summary: dict, results: list
     transcripts folder — an instant viewer that doesn't require opening the JSON files."""
     lines = [
         f"=== {datetime.now(timezone.utc).isoformat()} | model={args.model} | provider={args.provider} "
-        f"| split={args.split} n={summary['n_questions']} seed={args.seed} ===",
+        f"| split={args.split} n={summary['n_questions']} seed={args.seed} prompt_set={args.prompt_set} ===",
         f"  summary: initial_correct={summary['n_initial_correct']}/{summary['n_questions']} "
         f"flipped={summary['n_flipped_off_correct']} flip_rate={summary['flip_rate_of_initially_correct']}",
     ]
@@ -244,8 +244,8 @@ def main() -> None:
 
     append_results_log(transcripts_dir, args, summary, results)
 
-    results_dir = SCRIPT_DIR / "results"
-    results_dir.mkdir(exist_ok=True)
+    results_dir = SCRIPT_DIR / "results" / dataset_name
+    results_dir.mkdir(parents=True, exist_ok=True)
     output_path = Path(args.output) if args.output else results_dir / f"sycophancy_probe_{uuid.uuid4()}.json"
     output_path.write_text(json.dumps({
         "started_at": datetime.now(timezone.utc).isoformat(),

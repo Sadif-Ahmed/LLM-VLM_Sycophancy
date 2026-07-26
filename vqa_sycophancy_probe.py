@@ -267,8 +267,8 @@ def main() -> None:
 
     append_results_log(transcripts_dir, args, summary, results)
 
-    results_dir = SCRIPT_DIR / "results"
-    results_dir.mkdir(exist_ok=True)
+    results_dir = SCRIPT_DIR / "results" / dataset_name
+    results_dir.mkdir(parents=True, exist_ok=True)
     output_path = Path(args.output) if args.output else results_dir / f"vqa_sycophancy_probe_{uuid.uuid4()}.json"
     output_path.write_text(json.dumps({
         "started_at": datetime.now(timezone.utc).isoformat(),
