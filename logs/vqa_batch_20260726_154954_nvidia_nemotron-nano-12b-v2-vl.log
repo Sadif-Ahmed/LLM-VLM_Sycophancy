@@ -1,25 +1,24 @@
-=== 2026-07-26T09:44:12Z MODEL=nvidia/nemotron-3-nano-omni-30b-a3b-reasoning PROMPT_SET=default MAXTOK=1536 ===
+=== 2026-07-26T09:49:54Z MODEL=nvidia/nemotron-nano-12b-v2-vl PROMPT_SET=default MAXTOK=512 ===
 INFO: HTTP Request: POST https://integrate.api.nvidia.com/v1/chat/completions "HTTP/1.1 404 Not Found"
 INFO: HTTP Request: POST https://integrate.api.nvidia.com/v1/chat/completions "HTTP/1.1 404 Not Found"
 INFO: HTTP Request: POST https://integrate.api.nvidia.com/v1/chat/completions "HTTP/1.1 404 Not Found"
-WARNING: Model nvidia/nemotron-3-nano-omni-30b-a3b-reasoning failed after retries: 404 page not found
-Testing connection to nvidia (nvidia/nemotron-3-nano-omni-30b-a3b-reasoning)...
+WARNING: Model nvidia/nemotron-nano-12b-v2-vl failed after retries: 404 page not found
+Testing connection to nvidia (nvidia/nemotron-nano-12b-v2-vl)...
 [error] connection test failed: All models failed. Last error: 404 page not found
 --- exit code 1 ---
-=== 2026-07-26T09:44:25Z MODEL=nvidia/nemotron-3-nano-omni-30b-a3b-reasoning PROMPT_SET=neighbor_nurse_doctor MAXTOK=1536 ===
+=== 2026-07-26T09:50:07Z MODEL=nvidia/nemotron-nano-12b-v2-vl PROMPT_SET=neighbor_nurse_doctor MAXTOK=512 ===
 INFO: HTTP Request: POST https://integrate.api.nvidia.com/v1/chat/completions "HTTP/1.1 404 Not Found"
 INFO: HTTP Request: POST https://integrate.api.nvidia.com/v1/chat/completions "HTTP/1.1 404 Not Found"
 INFO: HTTP Request: POST https://integrate.api.nvidia.com/v1/chat/completions "HTTP/1.1 404 Not Found"
-WARNING: Model nvidia/nemotron-3-nano-omni-30b-a3b-reasoning failed after retries: 404 page not found
-Testing connection to nvidia (nvidia/nemotron-3-nano-omni-30b-a3b-reasoning)...
+WARNING: Model nvidia/nemotron-nano-12b-v2-vl failed after retries: 404 page not found
+Testing connection to nvidia (nvidia/nemotron-nano-12b-v2-vl)...
 [error] connection test failed: All models failed. Last error: 404 page not found
 --- exit code 1 ---
-=== 2026-07-26T09:44:38Z MODEL=nvidia/nemotron-3-nano-omni-30b-a3b-reasoning PROMPT_SET=generic MAXTOK=1536 ===
+=== 2026-07-26T09:50:20Z MODEL=nvidia/nemotron-nano-12b-v2-vl PROMPT_SET=generic MAXTOK=512 ===
 INFO: HTTP Request: POST https://integrate.api.nvidia.com/v1/chat/completions "HTTP/1.1 404 Not Found"
 INFO: HTTP Request: POST https://integrate.api.nvidia.com/v1/chat/completions "HTTP/1.1 404 Not Found"
 INFO: HTTP Request: POST https://integrate.api.nvidia.com/v1/chat/completions "HTTP/1.1 404 Not Found"
-WARNING: Model nvidia/nemotron-3-nano-omni-30b-a3b-reasoning failed after retries: 404 page not found
-Testing connection to nvidia (nvidia/nemotron-3-nano-omni-30b-a3b-reasoning)...
+WARNING: Model nvidia/nemotron-nano-12b-v2-vl failed after retries: 404 page not found
+Testing connection to nvidia (nvidia/nemotron-nano-12b-v2-vl)...
 [error] connection test failed: All models failed. Last error: 404 page not found
 --- exit code 1 ---
-sleeping 300s before next model...
