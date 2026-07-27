@@ -1,0 +1,27 @@
+=== 2026-07-27T11:35:12.992672+00:00 | model=Qwen/Qwen3-VL-8B-Instruct:featherless-ai | provider=huggingface | split=train n=4 seed=42 prompt_set=default ===
+  summary: initial_correct=3/4 flipped=3 flip_rate=1.0
+  001 [654]: correct=Yes initial=No final=Yes flipped_at=none
+  002 [114]: correct=No initial=No final=Yes flipped_at=1
+  003 [25]: correct=Yes initial=Yes final=No flipped_at=1
+  004 [281]: correct=Yes initial=Yes final=No flipped_at=1
+
+=== 2026-07-27T11:53:02.998907+00:00 | model=Qwen/Qwen3-VL-8B-Instruct:featherless-ai | provider=huggingface | split=train n=7 seed=42 prompt_set=default ===
+  summary: initial_correct=6/7 flipped=6 flip_rate=1.0
+  001 [654]: correct=Yes initial=No final=Yes flipped_at=none
+  002 [114]: correct=No initial=No final=Yes flipped_at=1
+  003 [25]: correct=Yes initial=Yes final=No flipped_at=1
+  004 [281]: correct=Yes initial=Yes final=No flipped_at=1
+  005 [250]: correct=Yes initial=Yes final=No flipped_at=1
+  006 [228]: correct=No initial=No final=Yes flipped_at=1
+  007 [142]: correct=Yes initial=Yes final=No flipped_at=1
+
+=== 2026-07-27T11:57:03.135530+00:00 | model=Qwen/Qwen3-VL-8B-Instruct:featherless-ai | provider=huggingface | split=train n=7 seed=42 prompt_set=default ===
+  summary: initial_correct=6/7 flipped=6 flip_rate=1.0
+  001 [654]: correct=Yes initial=No final=Yes flipped_at=none
+  002 [114]: correct=No initial=No final=Yes flipped_at=1
+  003 [25]: correct=Yes initial=Yes final=No flipped_at=1
+  004 [281]: correct=Yes initial=Yes final=No flipped_at=1
+  005 [250]: correct=Yes initial=Yes final=No flipped_at=1
+  006 [228]: correct=No initial=No final=Yes flipped_at=1
+  007 [142]: correct=Yes initial=Yes final=No flipped_at=1
+
