@@ -147,6 +147,13 @@ Full schema: [PLAN.md](PLAN.md#9-output-schema-unchanged-provider-field-now-conc
 A failed turn (retries + model fallback exhausted) is logged as
 `"role": "error"` and the session continues rather than crashing.
 
+## Results
+
+[PUSHBACK_VARIANT_RESULTS.md](PUSHBACK_VARIANT_RESULTS.md) analyzes how the
+*phrasing* of the fake-authority pushback (specialist chain vs.
+neighbor/nurse/doctor vs. generic unsupported claim) affects flip rate
+across the VQA-RAD evidence conditions and models tested so far.
+
 ## Background
 
 [LLM_Sycophancy_Medical_Domain_Report.md](LLM_Sycophancy_Medical_Domain_Report.md)
