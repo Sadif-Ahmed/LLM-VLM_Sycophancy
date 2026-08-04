@@ -22,7 +22,7 @@ from pathlib import Path
 from datasets import load_from_disk
 
 from conversation_sim import PROVIDERS, call_llm, resolve_api_key
-from sycophancy_probe import detect_flip, test_connection, next_seq, append_results_log, load_prompt_set, select_pushback_turns
+from sycophancy_probe import detect_flip, test_connection, next_seq, append_results_log, load_prompt_set, select_pushback_turns, refused_turns, build_summary, load_completed
 from vqa_sycophancy_probe import pil_to_base64, load_image_b64, strip_images_except_last, extract_yesno, format_question
 
 SCRIPT_DIR = Path(__file__).parent
@@ -83,6 +83,7 @@ def run_probe(item_id, item, provider_cfg, api_key, model, temperature, max_toke
         "initial_correct": answers[0] == correct,
         "final_correct": answers[-1] == correct,
         "flipped_at_turn": flip_turn,
+        "refused_turns": refused_turns(answers),
         "stopped_early": flip_turn is not None and len(answers) < len(pushback_templates) + 1,
         "turns": turns,
         "messages": messages,
@@ -93,6 +94,8 @@ def _selftest() -> None:
     assert image_for_pushback_turn(1, "REAL", "FAKE") == "FAKE"
     assert image_for_pushback_turn(2, "REAL", "FAKE") == "REAL"
     assert image_for_pushback_turn(3, "REAL", "FAKE") == "REAL"
+    assert image_for_pushback_turn(10, "REAL", "FAKE") == "REAL"
+    assert refused_turns(["Yes", None, "No", None]) == [1, 3]
     print("selftest OK")
 
 
@@ -111,7 +114,7 @@ def build_arg_parser() -> argparse.ArgumentParser:
     p.add_argument("--output", default=None, help="Output JSON path (default: results/<dataset>_grounded/vqa_sycophancy_probe_grounded_<uuid>.json)")
     p.add_argument("--transcripts-dir", default=str(SCRIPT_DIR / "transcripts"))
     p.add_argument("--prompt-set", choices=list(VQA_PROMPTS), default="default", help="System prompt + pushback script, see prompts.py")
-    p.add_argument("--pushback-turns", type=int, default=3, help="Number of escalating pushback turns to run, 1-10 (default: 3, matching earlier PUSHBACK_VARIANT_RESULTS.md runs)")
+    p.add_argument("--pushback-turns", type=int, default=10, help="Number of escalating pushback turns to run, 1-10 (default: 10, the full authored escalation)")
     p.add_argument("--proof-yes-image", default=None, help="Path to fake 'confirmed Yes case' proof image (required unless --selftest)")
     p.add_argument("--proof-no-image", default=None, help="Path to fake 'confirmed No case' proof image (required unless --selftest)")
     p.add_argument("--selftest", action="store_true")
@@ -151,49 +154,47 @@ def main() -> None:
     indices = rng.sample(range(len(ds)), min(args.n, len(ds)))
 
     dataset_name = Path(args.dataset_dir).name + "_grounded"
-    transcripts_dir = Path(args.transcripts_dir) / dataset_name
-    transcripts_dir.mkdir(parents=True, exist_ok=True)
     model_tag = re.sub(r"[^A-Za-z0-9_.-]+", "_", args.model)
-    seq = next_seq(transcripts_dir, model_tag)
+    transcripts_dir = Path(args.transcripts_dir) / dataset_name / model_tag / args.prompt_set
+    transcripts_dir.mkdir(parents=True, exist_ok=True)
+    seq = next_seq(transcripts_dir)
     try:
         prompt_set = select_pushback_turns(VQA_PROMPTS[args.prompt_set], args.pushback_turns)
     except ValueError as e:
         raise SystemExit(f"[error] {e}")
 
+    completed = load_completed(transcripts_dir)
+    done_ids = {r["item_id"] for r in completed}
+    if completed:
+        print(f"Resuming: {len(completed)} item(s) already done in {transcripts_dir}, skipping those.")
+
     results = []
     for idx in indices:
+        if idx in done_ids:
+            continue
         item = ds[idx]
         print(f"[{idx}] {item['question'][:80]}...")
         result = run_probe(idx, item, provider_cfg, api_key, model, args.temperature, args.max_tokens, args.timeout, rpm, proof_b64, prompt_set)
         flip = result["flipped_at_turn"]
         print(f"  correct={result['correct_answer']} initial={result['answers_by_turn'][0]} final={result['answers_by_turn'][-1]} flipped_at_turn={flip}")
 
-        transcript_path = transcripts_dir / f"{model_tag}__{seq:03d}.json"
+        transcript_path = transcripts_dir / f"{seq:03d}.json"
         transcript_path.write_text(json.dumps({
-            "item_id": result["item_id"], "model": args.model, "prompt_set": args.prompt_set,
-            "correct_answer": result["correct_answer"], "pushed_toward": result["pushed_toward"],
-            "flipped_at_turn": result["flipped_at_turn"], "stopped_early": result["stopped_early"],
-            "messages": result["messages"],
+            **result, "model": args.model, "prompt_set": args.prompt_set,
         }, indent=2), encoding="utf-8")
         seq += 1
 
         results.append(result)
 
-    n_started_correct = sum(1 for r in results if r["initial_correct"])
-    n_flipped = sum(1 for r in results if r["flipped_at_turn"] is not None)
-    summary = {
-        "n_questions": len(results),
-        "n_initial_correct": n_started_correct,
-        "n_flipped_off_correct": n_flipped,
-        "flip_rate_of_initially_correct": (n_flipped / n_started_correct) if n_started_correct else None,
-    }
+    results = completed + results
+    summary = build_summary(results)
     print(f"Summary: {summary}")
 
     append_results_log(transcripts_dir, args, summary, results)
 
-    results_dir = SCRIPT_DIR / "results" / dataset_name
+    results_dir = SCRIPT_DIR / "results" / dataset_name / model_tag / args.prompt_set
     results_dir.mkdir(parents=True, exist_ok=True)
-    output_path = Path(args.output) if args.output else results_dir / f"vqa_sycophancy_probe_grounded_{uuid.uuid4()}.json"
+    output_path = Path(args.output) if args.output else results_dir / f"{uuid.uuid4()}.json"
     output_path.write_text(json.dumps({
         "started_at": datetime.now(timezone.utc).isoformat(),
         "provider": args.provider, "model": args.model, "split": args.split, "seed": args.seed,
