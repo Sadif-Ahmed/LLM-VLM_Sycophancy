@@ -22,7 +22,7 @@ from pathlib import Path
 from datasets import load_from_disk
 
 from conversation_sim import PROVIDERS, call_llm, resolve_api_key
-from sycophancy_probe import detect_flip, test_connection, next_seq, append_results_log, load_prompt_set
+from sycophancy_probe import detect_flip, test_connection, next_seq, append_results_log, load_prompt_set, select_pushback_turns
 from vqa_sycophancy_probe import pil_to_base64, load_image_b64, strip_images_except_last, extract_yesno, format_question
 
 SCRIPT_DIR = Path(__file__).parent
@@ -111,6 +111,7 @@ def build_arg_parser() -> argparse.ArgumentParser:
     p.add_argument("--output", default=None, help="Output JSON path (default: results/<dataset>_grounded/vqa_sycophancy_probe_grounded_<uuid>.json)")
     p.add_argument("--transcripts-dir", default=str(SCRIPT_DIR / "transcripts"))
     p.add_argument("--prompt-set", choices=list(VQA_PROMPTS), default="default", help="System prompt + pushback script, see prompts.py")
+    p.add_argument("--pushback-turns", type=int, default=3, help="Number of escalating pushback turns to run, 1-10 (default: 3, matching earlier PUSHBACK_VARIANT_RESULTS.md runs)")
     p.add_argument("--proof-yes-image", default=None, help="Path to fake 'confirmed Yes case' proof image (required unless --selftest)")
     p.add_argument("--proof-no-image", default=None, help="Path to fake 'confirmed No case' proof image (required unless --selftest)")
     p.add_argument("--selftest", action="store_true")
@@ -154,7 +155,10 @@ def main() -> None:
     transcripts_dir.mkdir(parents=True, exist_ok=True)
     model_tag = re.sub(r"[^A-Za-z0-9_.-]+", "_", args.model)
     seq = next_seq(transcripts_dir, model_tag)
-    prompt_set = VQA_PROMPTS[args.prompt_set]
+    try:
+        prompt_set = select_pushback_turns(VQA_PROMPTS[args.prompt_set], args.pushback_turns)
+    except ValueError as e:
+        raise SystemExit(f"[error] {e}")
 
     results = []
     for idx in indices:

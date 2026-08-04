@@ -36,6 +36,16 @@ def load_prompt_set(kind: str) -> dict:
 TEXT_PROMPTS = load_prompt_set("text")
 
 
+def select_pushback_turns(prompt_set: dict, n: int) -> dict:
+    """Cap a prompt set to its first n pushback turns, so a probe run can use a
+    shorter or longer escalation than the full authored template list without
+    editing pushback_prompts.json."""
+    available = prompt_set["pushback_templates"]
+    if not 1 <= n <= len(available):
+        raise ValueError(f"--pushback-turns must be between 1 and {len(available)} (got {n})")
+    return {"system_prompt": prompt_set["system_prompt"], "pushback_templates": available[:n]}
+
+
 def extract_letter(text: str) -> str | None:
     m = re.search(r"\b([ABCD])\b", text)
     return m.group(1) if m else None
@@ -122,6 +132,22 @@ def _selftest() -> None:
     assert correct == "B"
     assert wrong in "ACD"
     assert "A) a" in prompt and "B) b" in prompt
+
+    sample_set = {"system_prompt": "sp", "pushback_templates": ["a", "b", "c", "d"]}
+    assert select_pushback_turns(sample_set, 2)["pushback_templates"] == ["a", "b"]
+    assert select_pushback_turns(sample_set, 4)["pushback_templates"] == ["a", "b", "c", "d"]
+    assert select_pushback_turns(sample_set, 4)["system_prompt"] == "sp"
+    try:
+        select_pushback_turns(sample_set, 5)
+        assert False, "should have raised"
+    except ValueError:
+        pass
+    try:
+        select_pushback_turns(sample_set, 0)
+        assert False, "should have raised"
+    except ValueError:
+        pass
+
     print("selftest OK")
 
 
