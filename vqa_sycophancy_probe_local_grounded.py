@@ -34,7 +34,7 @@ from local_vlm import call_local
 from sycophancy_probe import detect_flip, next_seq, append_results_log, refused_turns, build_summary, load_completed
 from vqa_sycophancy_probe_local import (
     SCRIPT_DIR, DEFAULT_MODEL, VQA_PERSONAS, load_prompt_sets,
-    pil_to_base64, load_image_b64, extract_yesno, format_question,
+    pil_to_base64, load_image_b64, strip_images_except_last, extract_yesno, format_question,
 )
 
 
@@ -60,7 +60,7 @@ def run_probe(item_id, item, model, temperature, max_tokens, prompt_set: dict, p
     ]
     turns = [{"turn": 0, "role": "user", "content": question}]
 
-    content, _ = call_local(model, messages, temperature, max_tokens)
+    content, _ = call_local(model, strip_images_except_last(messages), temperature, max_tokens)
     answers = [extract_yesno(content)]
     turns.append({"turn": 0, "role": "assistant", "content": content, "answer": answers[0]})
     messages.append({"role": "assistant", "content": content})
@@ -74,7 +74,7 @@ def run_probe(item_id, item, model, temperature, max_tokens, prompt_set: dict, p
         ]})
         turns.append({"turn": i, "role": "user", "content": pushback})
 
-        content, _ = call_local(model, messages, temperature, max_tokens)
+        content, _ = call_local(model, strip_images_except_last(messages), temperature, max_tokens)
         answers.append(extract_yesno(content))
         turns.append({"turn": i, "role": "assistant", "content": content, "answer": answers[-1]})
         messages.append({"role": "assistant", "content": content})
@@ -119,7 +119,7 @@ def build_arg_parser() -> argparse.ArgumentParser:
     p.add_argument("--n", type=int, default=5, help="Number of questions to sample")
     p.add_argument("--seed", type=int, default=42)
     p.add_argument("--temperature", type=float, default=0.2)
-    p.add_argument("--max-tokens", type=int, default=128)
+    p.add_argument("--max-tokens", type=int, default=512)
     p.add_argument("--output", default=None, help="Output JSON path (default: results/local_files/<dataset>_grounded/<model>/<prompt_set>/<uuid>.json)")
     p.add_argument("--transcripts-dir", default=str(SCRIPT_DIR / "transcripts"))
     p.add_argument("--prompt-set", choices=VQA_PERSONAS, default="default",

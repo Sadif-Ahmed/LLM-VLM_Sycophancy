@@ -48,10 +48,10 @@ from sycophancy_probe import detect_flip, next_seq, append_results_log, refused_
 SCRIPT_DIR = Path(__file__).parent
 DEFAULT_MODEL = "HuggingFaceTB/SmolVLM-256M-Instruct"
 
-# Cap on the longest edge of any image sent to the model — keeps memory/
-# latency bounded on modest local hardware. Same idea as the other scripts'
-# NVIDIA-1120px cap, just smaller since these local models are far smaller.
-MAX_IMAGE_DIM = 768
+# Same 1120px cap as the remote scripts (vqa_sycophancy_probe.py etc.) — kept
+# identical, not independently tuned, so local vs. remote runs stay a fair
+# comparison: the model sees the same image detail either way.
+MAX_IMAGE_DIM = 1120
 
 VQA_PERSONAS = list(json.loads((SCRIPT_DIR / "system_prompts.json").read_text(encoding="utf-8"))["vqa"])
 
@@ -190,8 +190,8 @@ def _selftest() -> None:
     assert (question, correct, wrong) == ("Is there an effusion?", "Yes", "No")
 
     big = Image.new("RGB", (2000, 1000), color=(255, 0, 0))
-    decoded_big = Image.open(io.BytesIO(base64.b64decode(pil_to_base64(big, max_dim=768))))
-    assert max(decoded_big.size) <= 768
+    decoded_big = Image.open(io.BytesIO(base64.b64decode(pil_to_base64(big, max_dim=1120))))
+    assert max(decoded_big.size) <= 1120
 
     fake_history = [
         {"role": "user", "content": [{"type": "text", "text": "q1"}, {"type": "image_url", "image_url": {"url": "data:img0"}}]},
@@ -226,7 +226,7 @@ def build_arg_parser() -> argparse.ArgumentParser:
     p.add_argument("--n", type=int, default=5, help="Number of questions to sample")
     p.add_argument("--seed", type=int, default=42)
     p.add_argument("--temperature", type=float, default=0.2)
-    p.add_argument("--max-tokens", type=int, default=128)
+    p.add_argument("--max-tokens", type=int, default=512)
     p.add_argument("--output", default=None, help="Output JSON path (default: results/local_files/<dataset>[_no_pres]/<model>/<prompt_set>/<uuid>.json)")
     p.add_argument("--transcripts-dir", default=str(SCRIPT_DIR / "transcripts"))
     p.add_argument("--prompt-set", choices=VQA_PERSONAS, default="default",
