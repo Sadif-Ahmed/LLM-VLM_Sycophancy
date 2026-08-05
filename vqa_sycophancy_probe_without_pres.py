@@ -30,7 +30,7 @@ from datasets import load_from_disk
 from PIL import Image
 
 from conversation_sim import PROVIDERS, call_llm, resolve_api_key
-from sycophancy_probe import detect_flip, test_connection, next_seq, append_results_log, select_pushback_turns, refused_turns, build_summary, load_completed
+from sycophancy_probe import detect_flip, test_connection, append_results_log, select_pushback_turns, refused_turns, build_summary, load_completed
 
 SCRIPT_DIR = Path(__file__).parent
 
@@ -220,7 +220,6 @@ def main() -> None:
     model_tag = re.sub(r"[^A-Za-z0-9_.-]+", "_", args.model)
     transcripts_dir = Path(args.transcripts_dir) / dataset_name / model_tag / args.prompt_set
     transcripts_dir.mkdir(parents=True, exist_ok=True)
-    seq = next_seq(transcripts_dir)
     try:
         prompt_set = select_pushback_turns(NO_PRES_PROMPTS[args.prompt_set], args.pushback_turns)
     except ValueError as e:
@@ -241,11 +240,10 @@ def main() -> None:
         flip = result["flipped_at_turn"]
         print(f"  correct={result['correct_answer']} initial={result['answers_by_turn'][0]} final={result['answers_by_turn'][-1]} flipped_at_turn={flip}")
 
-        transcript_path = transcripts_dir / f"{seq:03d}.json"
+        transcript_path = transcripts_dir / f"{idx}.json"
         transcript_path.write_text(json.dumps({
             **result, "model": args.model, "prompt_set": args.prompt_set, "evidence": "none",
         }, indent=2), encoding="utf-8")
-        seq += 1
 
         results.append(result)
 

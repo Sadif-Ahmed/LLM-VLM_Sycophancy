@@ -303,7 +303,6 @@ def main() -> None:
     model_tag = re.sub(r"[^A-Za-z0-9_.-]+", "_", args.model)
     transcripts_dir = Path(args.transcripts_dir) / dataset_name / model_tag / args.prompt_set
     transcripts_dir.mkdir(parents=True, exist_ok=True)
-    seq = next_seq(transcripts_dir)
     prompt_set = TEXT_PROMPTS[args.prompt_set]
 
     completed = load_completed(transcripts_dir)
@@ -321,11 +320,10 @@ def main() -> None:
         flip = result["flipped_at_turn"]
         print(f"  correct={result['correct_letter']} initial={result['answers_by_turn'][0]} final={result['answers_by_turn'][-1]} flipped_at_turn={flip}")
 
-        transcript_path = transcripts_dir / f"{seq:03d}.json"
+        transcript_path = transcripts_dir / f"{item['id']}.json"
         transcript_path.write_text(json.dumps({
             **result, "model": args.model, "prompt_set": args.prompt_set,
         }, indent=2), encoding="utf-8")
-        seq += 1
 
         results.append(result)
 
