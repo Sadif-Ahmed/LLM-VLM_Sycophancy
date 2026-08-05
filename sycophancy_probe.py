@@ -196,12 +196,14 @@ def _selftest() -> None:
         tmp_path = Path(tmp)
         assert next_seq(tmp_path) == 1
         assert load_completed(tmp_path) == []
-        (tmp_path / "001.json").write_text(json.dumps({"item_id": 5, "flipped_at_turn": None}))
-        (tmp_path / "002.json").write_text(json.dumps({"item_id": 9, "flipped_at_turn": 2}))
+        (tmp_path / "001.json").write_text(json.dumps({"item_id": 5, "flipped_at_turn": None, "answers_by_turn": ["A"]}))
+        (tmp_path / "002.json").write_text(json.dumps({"item_id": 9, "flipped_at_turn": 2, "answers_by_turn": ["B"]}))
+        (tmp_path / "003.json").write_text("{not valid json")
+        (tmp_path / "004.json").write_text(json.dumps({"item_id": 12, "flipped_at_turn": None, "answers_by_turn": []}))
         (tmp_path / "RESULTS.txt").write_text("not a seq file")
-        assert next_seq(tmp_path) == 3
+        assert next_seq(tmp_path) == 5
         loaded = load_completed(tmp_path)
-        assert {r["item_id"] for r in loaded} == {5, 9}
+        assert {r["item_id"] for r in loaded} == {5, 9}, "malformed (003: bad JSON, 004: empty answers_by_turn) must be skipped"
 
     print("selftest OK")
 
@@ -239,8 +241,24 @@ def load_completed(transcripts_dir: Path) -> list[dict]:
     little run metadata), so a killed run can resume: skip item_ids already
     on disk, then merge these back into `results` before computing the final
     summary/aggregate — so that output stays complete no matter when the run
-    was interrupted, not just when it runs to completion in one go."""
-    return [json.loads(p.read_text(encoding="utf-8")) for p in sorted(transcripts_dir.glob("*.json"))]
+    was interrupted, not just when it runs to completion in one go.
+
+    A transcript that fails to parse or is missing its core fields (e.g. a
+    write that got killed mid-flush) is treated as not-done rather than
+    included as-is or raised on: the caller's done_ids won't cover its
+    item_id, so the item gets reprocessed and the bad file overwritten."""
+    completed = []
+    for p in sorted(transcripts_dir.glob("*.json")):
+        try:
+            record = json.loads(p.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            logging.warning(f"Skipping malformed checkpoint {p.name}: invalid JSON, item will be reprocessed")
+            continue
+        if not isinstance(record, dict) or record.get("item_id") is None or not record.get("answers_by_turn"):
+            logging.warning(f"Skipping malformed checkpoint {p.name}: missing required fields, item will be reprocessed")
+            continue
+        completed.append(record)
+    return completed
 
 
 def append_results_log(transcripts_dir: Path, args, summary: dict, results: list[dict]) -> None:
@@ -311,11 +329,11 @@ def main() -> None:
         print(f"Resuming: {len(completed)} item(s) already done in {transcripts_dir}, skipping those.")
 
     results = []
-    for idx in indices:
+    for i, idx in enumerate(indices, start=1):
         item = ds[idx]
         if item["id"] in done_ids:
             continue
-        print(f"[{item['id']}] {item['subject_name']}: {item['question'][:80]}...")
+        print(f"[{i}/{len(indices)}] [{item['id']}] {item['subject_name']}: {item['question'][:80]}...")
         result = run_probe(item, provider_cfg, api_key, model, args.temperature, args.max_tokens, args.timeout, rpm, rng, prompt_set)
         flip = result["flipped_at_turn"]
         print(f"  correct={result['correct_letter']} initial={result['answers_by_turn'][0]} final={result['answers_by_turn'][-1]} flipped_at_turn={flip}")
@@ -327,9 +345,14 @@ def main() -> None:
 
         results.append(result)
 
+    new_count = len(results)
     results = completed + results
     summary = build_summary(results)
     print(f"Summary: {summary}")
+
+    if not new_count:
+        print(f"Nothing new or repaired in {transcripts_dir} — all {len(results)} item(s) already checkpointed, skipping RESULTS.txt/results.json rewrite.")
+        return
 
     append_results_log(transcripts_dir, args, summary, results)
 

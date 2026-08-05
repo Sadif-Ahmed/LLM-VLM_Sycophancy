@@ -362,9 +362,9 @@ def main() -> None:
     prompt_set = load_prompt_sets(args.evidence)[args.prompt_set]
 
     results = []
-    for idx in indices:
+    for i, idx in enumerate(indices, start=1):
         item = ds[idx]
-        print(f"[{idx}] {item['question'][:80]}...")
+        print(f"[{i}/{len(indices)}] [{idx}] {item['question'][:80]}...")
         try:
             result = run_probe(idx, item, provider_cfg, api_key, model, args.temperature, args.max_tokens, args.timeout, rpm,
                                 prompt_set, args.evidence, proof_b64)

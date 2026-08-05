@@ -17,7 +17,7 @@ from pathlib import Path
 from typing import Any
 
 import httpx
-from openai import OpenAI
+from openai import APITimeoutError, InternalServerError, OpenAI
 from tenacity import retry, stop_after_attempt, wait_exponential
 
 logger = logging.getLogger(__name__)
@@ -39,6 +39,31 @@ PROVIDERS = {
         "default_rpm": 20,
     },
 }
+
+class ApiKeyPool:
+    """Round-robins across one or more API keys. `rotate()` is called only on
+    a gateway/timeout error (see _do_call), so an unrelated failure — a bad
+    schema, a content-filter refusal, an auth error on every key — doesn't
+    burn through the pool for no reason. A single-key pool just keeps
+    returning that one key; rotate() on it is a no-op."""
+
+    def __init__(self, keys: list[str]):
+        if not keys:
+            raise ValueError("ApiKeyPool needs at least one key")
+        self._keys = keys
+        self._idx = 0
+        self._lock = threading.Lock()
+
+    @property
+    def current(self) -> str:
+        with self._lock:
+            return self._keys[self._idx]
+
+    def rotate(self) -> None:
+        with self._lock:
+            self._idx = (self._idx + 1) % len(self._keys)
+            logger.warning(f"Gateway/timeout error — rotating to API key #{self._idx + 1}/{len(self._keys)}")
+
 
 # ---- rate limiting (pattern from nvidia_client.py, generalized to any rpm) ----
 _last_request_time = 0.0
@@ -62,18 +87,35 @@ def _enforce_rate_limit(rpm: int) -> None:
     reraise=True,
 )
 def _do_call(
-    client: OpenAI,
+    base_url: str,
+    key_pool: ApiKeyPool,
     model: str,
     messages: list[dict],
     temperature: float,
     max_tokens: int,
+    timeout: float,
     rpm: int,
     schema: dict[str, Any] | None = None,  # unused for now; see PLAN.md #5
 ) -> tuple[str, dict | None]:
     _enforce_rate_limit(rpm)
-    response = client.chat.completions.create(
-        model=model, messages=messages, temperature=temperature, max_tokens=max_tokens
+    # Client is (re)built per attempt, on the pool's *current* key: tenacity
+    # re-invokes this whole function on retry, so if the previous attempt
+    # rotated the pool (gateway/timeout below), this attempt picks it up —
+    # without touching the @retry decorator/backoff above.
+    client = OpenAI(
+        base_url=base_url,
+        api_key=key_pool.current,
+        max_retries=0,  # tenacity handles retries above
+        timeout=httpx.Timeout(timeout, connect=10.0),
     )
+    try:
+        response = client.chat.completions.create(
+            model=model, messages=messages, temperature=temperature, max_tokens=max_tokens
+        )
+    except (APITimeoutError, InternalServerError) as e:
+        # InternalServerError covers any 5xx incl. 504 Gateway Timeout.
+        key_pool.rotate()
+        raise
     choice = response.choices[0]
     content = choice.message.content
     if choice.finish_reason == "length":
@@ -90,7 +132,7 @@ def _do_call(
 
 def call_llm(
     provider_cfg: dict,
-    api_key: str,
+    api_key: str | ApiKeyPool,
     model: str | list[str],
     messages: list[dict],
     temperature: float,
@@ -98,18 +140,16 @@ def call_llm(
     timeout: float,
     rpm: int,
 ) -> tuple[str, dict | None, str]:
-    """Call the active provider, trying each model in `model` (fallback list) in order."""
+    """Call the active provider, trying each model in `model` (fallback list) in order.
+    `api_key` may be a plain string (single-key callers, e.g. resolve_hf_token())
+    or an ApiKeyPool (resolve_api_key()) — normalized to a pool either way so
+    _do_call always has .current/.rotate() to work with."""
     models_to_try = [model] if isinstance(model, str) else model
-    client = OpenAI(
-        base_url=provider_cfg["base_url"],
-        api_key=api_key,
-        max_retries=0,  # tenacity handles retries above
-        timeout=httpx.Timeout(timeout, connect=10.0),
-    )
+    key_pool = api_key if isinstance(api_key, ApiKeyPool) else ApiKeyPool([api_key])
     last_err = None
     for m in models_to_try:
         try:
-            content, usage = _do_call(client, m, messages, temperature, max_tokens, rpm)
+            content, usage = _do_call(provider_cfg["base_url"], key_pool, m, messages, temperature, max_tokens, timeout, rpm)
             return content, usage, m
         except Exception as e:
             logger.warning(f"Model {m} failed after retries: {e}")
@@ -118,14 +158,18 @@ def call_llm(
     raise RuntimeError(f"All models failed. Last error: {last_err}")
 
 
-def resolve_api_key(provider_name: str, env_var: str) -> str:
+def resolve_api_key(provider_name: str, env_var: str) -> ApiKeyPool:
+    """Returns a round-robin pool over all keys found, so a gateway/timeout
+    error can fail over to another key without changing retry behavior."""
     key = os.environ.get(env_var)
     if key:
-        return key.strip()
+        return ApiKeyPool([key.strip()])
     if provider_name == "nvidia":
         key_file = SCRIPT_DIR / "api_key.txt"
         if key_file.exists():
-            return key_file.read_text().strip()
+            keys = [line.strip() for line in key_file.read_text(encoding="utf-8").splitlines() if line.strip()]
+            if keys:
+                return ApiKeyPool(keys)
     raise RuntimeError(f"No API key found — set {env_var} or provide api_key.txt (nvidia only)")
 
 

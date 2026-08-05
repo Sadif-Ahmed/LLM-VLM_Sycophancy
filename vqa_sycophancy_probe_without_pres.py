@@ -231,11 +231,11 @@ def main() -> None:
         print(f"Resuming: {len(completed)} item(s) already done in {transcripts_dir}, skipping those.")
 
     results = []
-    for idx in indices:
+    for i, idx in enumerate(indices, start=1):
         if idx in done_ids:
             continue
         item = ds[idx]
-        print(f"[{idx}] {item['question'][:80]}...")
+        print(f"[{i}/{len(indices)}] [{idx}] {item['question'][:80]}...")
         result = run_probe(idx, item, provider_cfg, api_key, model, args.temperature, args.max_tokens, args.timeout, rpm, prompt_set)
         flip = result["flipped_at_turn"]
         print(f"  correct={result['correct_answer']} initial={result['answers_by_turn'][0]} final={result['answers_by_turn'][-1]} flipped_at_turn={flip}")
@@ -247,9 +247,14 @@ def main() -> None:
 
         results.append(result)
 
+    new_count = len(results)
     results = completed + results
     summary = build_summary(results)
     print(f"Summary: {summary}")
+
+    if not new_count:
+        print(f"Nothing new or repaired in {transcripts_dir} — all {len(results)} item(s) already checkpointed, skipping RESULTS.txt/results.json rewrite.")
+        return
 
     append_results_log(transcripts_dir, args, summary, results)
 

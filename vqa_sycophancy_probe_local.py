@@ -285,11 +285,11 @@ def main() -> None:
         print(f"Resuming: {len(completed)} item(s) already done in {transcripts_dir}, skipping those.")
 
     results = []
-    for idx in indices:
+    for i, idx in enumerate(indices, start=1):
         if idx in done_ids:
             continue
         item = ds[idx]
-        print(f"[{idx}] {item['question'][:80]}...")
+        print(f"[{i}/{len(indices)}] [{idx}] {item['question'][:80]}...")
         try:
             result = run_probe(idx, item, args.model, args.temperature, args.max_tokens, prompt_set, args.evidence, proof_b64)
         except Exception as e:
@@ -305,9 +305,14 @@ def main() -> None:
 
         results.append(result)
 
+    new_count = len(results)
     results = completed + results
     summary = build_summary(results)
     print(f"Summary: {summary}")
+
+    if not new_count:
+        print(f"Nothing new or repaired in {transcripts_dir} — all {len(results)} item(s) already checkpointed, skipping RESULTS.txt/results.json rewrite.")
+        return
 
     args.provider = "local"  # append_results_log's header line expects args.provider
     append_results_log(transcripts_dir, args, summary, results)
