@@ -1,0 +1,7 @@
+openai
+httpx
+tenacity
+datasets
+pillow
+torch
+transformers

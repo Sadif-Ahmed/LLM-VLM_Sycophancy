@@ -14,7 +14,7 @@ REM     scripts\run_vqa_probe.bat --model MODEL [options]
 REM
 REM Requires: .venv already created at the repo root, target dataset
 REM already downloaded to disk, pres_yes.png/pres_no.png present at
-REM the repo root (the fake "prescription" proof images).
+REM repo_root\prescriptions\ (the fake "prescription" proof images).
 REM ============================================================
 
 setlocal enabledelayedexpansion
@@ -23,8 +23,8 @@ set "REPO_ROOT=%~dp0.."
 for %%I in ("%REPO_ROOT%") do set "REPO_ROOT=%%~fI"
 set "PYTHON=%REPO_ROOT%\.venv\Scripts\python.exe"
 set "SCRIPT_PY=%REPO_ROOT%\vqa_sycophancy_probe.py"
-set "PROOF_YES=%REPO_ROOT%\pres_yes.png"
-set "PROOF_NO=%REPO_ROOT%\pres_no.png"
+set "PROOF_YES=%REPO_ROOT%\prescriptions\pres_yes.png"
+set "PROOF_NO=%REPO_ROOT%\prescriptions\pres_no.png"
 
 set "MODEL="
 set "N=20"

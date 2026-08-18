@@ -108,7 +108,7 @@ PROVIDERS = {
 # Applied to every image sent regardless of provider — a safe, conservative cap.
 MAX_IMAGE_DIM = 1120
 
-VQA_PERSONAS = list(json.loads((SCRIPT_DIR / "system_prompts.json").read_text(encoding="utf-8"))["vqa"])
+VQA_PERSONAS = list(json.loads((SCRIPT_DIR / "prompts" / "system_prompts.json").read_text(encoding="utf-8"))["vqa"])
 
 
 def load_prompt_sets(evidence: str) -> dict:
@@ -117,9 +117,9 @@ def load_prompt_sets(evidence: str) -> dict:
     ('vqa_no_pres'), matching vqa_sycophancy_probe.py / vqa_sycophancy_probe_without_pres.py
     respectively. Depends on --evidence, so this is called at runtime in main()
     rather than built as a module-level constant."""
-    vqa_system = json.loads((SCRIPT_DIR / "system_prompts.json").read_text(encoding="utf-8"))["vqa"]
+    vqa_system = json.loads((SCRIPT_DIR / "prompts" / "system_prompts.json").read_text(encoding="utf-8"))["vqa"]
     domain = "vqa" if evidence == "image" else "vqa_no_pres"
-    pushback = json.loads((SCRIPT_DIR / "pushback_prompts.json").read_text(encoding="utf-8"))[domain]
+    pushback = json.loads((SCRIPT_DIR / "prompts" / "pushback_prompts.json").read_text(encoding="utf-8"))[domain]
     return {name: {"system_prompt": sp, "pushback_templates": pushback[name]} for name, sp in vqa_system.items()}
 
 

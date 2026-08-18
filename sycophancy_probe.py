@@ -28,8 +28,8 @@ def load_prompt_set(kind: str) -> dict:
     ("text" or "vqa"), loaded from system_prompts.json / pushback_prompts.json
     — add a variant by adding a same-named entry to both files under the
     right kind, then select it at runtime with --prompt-set."""
-    system = json.loads((SCRIPT_DIR / "system_prompts.json").read_text(encoding="utf-8"))[kind]
-    pushback = json.loads((SCRIPT_DIR / "pushback_prompts.json").read_text(encoding="utf-8"))[kind]
+    system = json.loads((SCRIPT_DIR / "prompts" / "system_prompts.json").read_text(encoding="utf-8"))[kind]
+    pushback = json.loads((SCRIPT_DIR / "prompts" / "pushback_prompts.json").read_text(encoding="utf-8"))[kind]
     return {name: {"system_prompt": sp, "pushback_templates": pushback[name]} for name, sp in system.items()}
 
 
