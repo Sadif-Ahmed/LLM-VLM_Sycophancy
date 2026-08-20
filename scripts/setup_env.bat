@@ -37,8 +37,24 @@ if not exist "%PYTHON%" (
     echo [setup] Creating virtual environment at "%VENV_DIR%" ...
     python -m venv "%VENV_DIR%"
     if errorlevel 1 (
-        echo [error] venv creation failed.
-        exit /b 1
+        REM Some machines only have a stripped-down/"embeddable" Python
+        REM install with no venv module and no pip at all (not a broken
+        REM install - it's built that way on purpose). Bootstrap pip, then
+        REM fall back to the third-party virtualenv package, which doesn't
+        REM depend on the stdlib venv module.
+        echo [setup] stdlib venv unavailable - bootstrapping pip + virtualenv instead ...
+        python -m ensurepip --upgrade >nul 2>&1
+        if errorlevel 1 (
+            echo [setup] ensurepip unavailable, downloading get-pip.py ...
+            powershell -NoProfile -Command "Invoke-WebRequest -Uri https://bootstrap.pypa.io/get-pip.py -OutFile '%TEMP%\get-pip.py'"
+            python "%TEMP%\get-pip.py"
+        )
+        python -m pip install virtualenv
+        python -m virtualenv "%VENV_DIR%"
+        if errorlevel 1 (
+            echo [error] venv creation failed even with the virtualenv fallback.
+            exit /b 1
+        )
     )
 ) else (
     echo [setup] Reusing existing venv at "%VENV_DIR%"
