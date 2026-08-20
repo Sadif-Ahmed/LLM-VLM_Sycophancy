@@ -70,12 +70,24 @@ if not errorlevel 1 (
     REM Plain "pip install torch" does NOT reliably give a CUDA build on
     REM Windows - PyPI's default index can silently resolve to CPU-only.
     REM The CUDA build requires pip pointed explicitly at PyTorch's own
-    REM wheel index (see https://pytorch.org/get-started/locally/). Try a
-    REM couple of CUDA versions, newest first, falling back if a tag has
-    REM been retired; a newer NVIDIA driver runs an older-CUDA-tagged
-    REM wheel fine, so an older tag succeeding here is not a problem.
+    REM wheel index (see https://pytorch.org/get-started/locally/).
+    REM
+    REM cu126 tried FIRST, not cu128/newer: starting with PyTorch 2.11,
+    REM the cu128/cu129 wheel builds dropped Volta (compute capability
+    REM 7.0 - e.g. Tesla V100) support entirely, to allow a cuDNN bump
+    REM incompatible with Volta. torch.cuda.is_available() still reports
+    REM True on an unsupported-arch build - it just fails the moment a
+    REM kernel actually runs - so this silently "worked" before while
+    REM being broken. cu126 still includes Volta and every GPU newer
+    REM than it (a newer driver runs an older-CUDA-tagged wheel fine),
+    REM so it's the safer default across all the machines this repo runs
+    REM on (V100 and RTX-class alike), not just a Volta-specific fix.
     echo [setup] nvidia-smi found - installing CUDA-enabled torch + torchvision ...
-    "%PYTHON%" -m pip install torch torchvision --index-url https://download.pytorch.org/whl/cu128
+    "%PYTHON%" -m pip install torch torchvision --index-url https://download.pytorch.org/whl/cu126
+    if errorlevel 1 (
+        echo [setup] cu126 index failed, trying cu128 ...
+        "%PYTHON%" -m pip install torch torchvision --index-url https://download.pytorch.org/whl/cu128
+    )
     if errorlevel 1 (
         echo [setup] cu128 index failed, trying cu121 ...
         "%PYTHON%" -m pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
@@ -95,8 +107,11 @@ echo [setup] Installing everything else from requirements.txt ...
 "%PYTHON%" -m pip install -r "%REPO_ROOT%\requirements.txt"
 if errorlevel 1 exit /b 1
 
-echo [setup] Verifying torch sees the GPU ...
-"%PYTHON%" -c "import torch; print('[setup] torch.cuda.is_available() =', torch.cuda.is_available())"
+echo [setup] Verifying torch sees the GPU AND can actually run a kernel on it ...
+REM torch.cuda.is_available() alone is NOT enough - it returns True even on a
+REM build that was compiled without kernels for this GPU's compute capability
+REM (see the cu126-vs-cu128 note above), and only fails once a real op runs.
+"%PYTHON%" -c "import torch; print('torch.cuda.is_available() =', torch.cuda.is_available()); x = torch.randn(4, 4, device='cuda') if torch.cuda.is_available() else None; y = (x @ x) if x is not None else None; torch.cuda.synchronize() if x is not None else None; print('GPU kernel test:', 'OK on ' + torch.cuda.get_device_name(0) if x is not None else 'skipped (no GPU)')"
 
 echo.
 echo === Environment ready at "%VENV_DIR%" ===
