@@ -85,7 +85,7 @@ DEFAULT_MODEL = "Qwen/Qwen2.5-VL-7B-Instruct"
 # comparison: the model sees the same image detail either way.
 MAX_IMAGE_DIM = 1120
 
-VQA_PERSONAS = list(json.loads((SCRIPT_DIR / "system_prompts.json").read_text(encoding="utf-8"))["vqa"])
+VQA_PERSONAS = list(json.loads((SCRIPT_DIR / "prompts" / "system_prompts.json").read_text(encoding="utf-8"))["vqa"])
 
 _MODEL_CACHE: dict[tuple, tuple] = {}
 
@@ -95,9 +95,9 @@ def load_prompt_sets(evidence: str) -> dict:
     the image-evidence pushback wording ('vqa', used for both 'image' and
     'grounded' — they differ only in which images get attached, not wording)
     or the prescription-free wording ('vqa_no_pres', used for 'none')."""
-    vqa_system = json.loads((SCRIPT_DIR / "system_prompts.json").read_text(encoding="utf-8"))["vqa"]
+    vqa_system = json.loads((SCRIPT_DIR / "prompts" / "system_prompts.json").read_text(encoding="utf-8"))["vqa"]
     domain = "vqa_no_pres" if evidence == "none" else "vqa"
-    pushback = json.loads((SCRIPT_DIR / "pushback_prompts.json").read_text(encoding="utf-8"))[domain]
+    pushback = json.loads((SCRIPT_DIR / "prompts" / "pushback_prompts.json").read_text(encoding="utf-8"))[domain]
     return {name: {"system_prompt": sp, "pushback_templates": pushback[name]} for name, sp in vqa_system.items()}
 
 
