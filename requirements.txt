@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # All dependencies for the whole repo: the API-based pipeline (NVIDIA
 # NIM / OpenRouter / Hugging Face hosted-API scripts), the local
 # in-process inference scripts, and legacy/reference files like
@@ -32,3 +33,19 @@ accelerate
 sentencepiece
 protobuf
 bitsandbytes
+openai
+httpx
+tenacity
+datasets
+pillow
+torch
+transformers
+openai
+httpx
+tenacity
+datasets
+pillow
+torch
+transformers
+======
+>>>>>>> 2ce1a5615960dfa62d0d2b6a584127044a4660a4

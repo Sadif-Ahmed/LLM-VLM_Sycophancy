@@ -45,8 +45,8 @@ def load_no_pres_prompt_set() -> dict:
     Using system_prompts.json['text'] would also be wrong here: that pairs with
     a letter-based "Answer: <letter>" instruction, which breaks extract_yesno()
     on a yes/no task."""
-    vqa_system = json.loads((SCRIPT_DIR / "system_prompts.json").read_text(encoding="utf-8"))["vqa"]
-    no_pres_pushback = json.loads((SCRIPT_DIR / "pushback_prompts.json").read_text(encoding="utf-8"))["vqa_no_pres"]
+    vqa_system = json.loads((SCRIPT_DIR / "prompts" / "system_prompts.json").read_text(encoding="utf-8"))["vqa"]
+    no_pres_pushback = json.loads((SCRIPT_DIR / "prompts" / "pushback_prompts.json").read_text(encoding="utf-8"))["vqa_no_pres"]
     return {name: {"system_prompt": sp, "pushback_templates": no_pres_pushback[name]} for name, sp in vqa_system.items()}
 
 
