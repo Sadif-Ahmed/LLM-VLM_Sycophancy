@@ -1,0 +1,101 @@
+@echo off
+REM ============================================================
+REM setup_env.bat
+REM
+REM One-shot environment setup for a fresh copy of this repo on a
+REM new device. Creates .venv and installs EVERYTHING the repo
+REM might need in one go: torch + torchvision (auto-picks CUDA or
+REM CPU build depending on whether an NVIDIA GPU is detected) plus
+REM every package listed in requirements.txt (API pipeline, local
+REM inference, and legacy/reference scripts alike). torchvision is
+REM needed even for image-only work - some model processors (e.g.
+REM Qwen2.5-VL's) import it unconditionally for their video-input path.
+REM
+REM Usage, from anywhere:
+REM     scripts\setup_env.bat
+REM
+REM Requires: Python 3.10+ available as "python" on PATH.
+REM ============================================================
+
+setlocal enabledelayedexpansion
+
+set "REPO_ROOT=%~dp0.."
+for %%I in ("%REPO_ROOT%") do set "REPO_ROOT=%%~fI"
+set "VENV_DIR=%REPO_ROOT%\.venv"
+set "PYTHON=%VENV_DIR%\Scripts\python.exe"
+
+if /i "%~1"=="-h" goto :usage
+if /i "%~1"=="--help" goto :usage
+
+where python >nul 2>&1
+if errorlevel 1 (
+    echo [error] "python" not found on PATH. Install Python 3.10+ first.
+    exit /b 1
+)
+
+if not exist "%PYTHON%" (
+    echo [setup] Creating virtual environment at "%VENV_DIR%" ...
+    python -m venv "%VENV_DIR%"
+    if errorlevel 1 (
+        echo [error] venv creation failed.
+        exit /b 1
+    )
+) else (
+    echo [setup] Reusing existing venv at "%VENV_DIR%"
+)
+
+echo [setup] Upgrading pip ...
+"%PYTHON%" -m pip install --upgrade pip
+if errorlevel 1 exit /b 1
+
+echo [setup] Checking for an NVIDIA GPU ...
+where nvidia-smi >nul 2>&1
+if not errorlevel 1 (
+    REM Plain "pip install torch" does NOT reliably give a CUDA build on
+    REM Windows - PyPI's default index can silently resolve to CPU-only.
+    REM The CUDA build requires pip pointed explicitly at PyTorch's own
+    REM wheel index (see https://pytorch.org/get-started/locally/). Try a
+    REM couple of CUDA versions, newest first, falling back if a tag has
+    REM been retired; a newer NVIDIA driver runs an older-CUDA-tagged
+    REM wheel fine, so an older tag succeeding here is not a problem.
+    echo [setup] nvidia-smi found - installing CUDA-enabled torch + torchvision ...
+    "%PYTHON%" -m pip install torch torchvision --index-url https://download.pytorch.org/whl/cu128
+    if errorlevel 1 (
+        echo [setup] cu128 index failed, trying cu121 ...
+        "%PYTHON%" -m pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
+    )
+    if errorlevel 1 (
+        echo [warning] Could not install a CUDA build of torch - falling back to CPU-only.
+        echo           Check https://pytorch.org/get-started/locally/ for the current CUDA index for your driver.
+        "%PYTHON%" -m pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+    )
+) else (
+    echo [setup] No nvidia-smi on PATH - installing CPU-only torch + torchvision ...
+    "%PYTHON%" -m pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+)
+if errorlevel 1 exit /b 1
+
+echo [setup] Installing everything else from requirements.txt ...
+"%PYTHON%" -m pip install -r "%REPO_ROOT%\requirements.txt"
+if errorlevel 1 exit /b 1
+
+echo [setup] Verifying torch sees the GPU ...
+"%PYTHON%" -c "import torch; print('[setup] torch.cuda.is_available() =', torch.cuda.is_available())"
+
+echo.
+echo === Environment ready at "%VENV_DIR%" ===
+echo.
+echo Reminder - these are gitignored and will NOT have come across on
+echo a fresh git clone (only relevant if that's how you moved the code):
+echo   - api_key.txt      (NVIDIA NIM / OpenRouter key, one per line)
+echo   - hf_token.txt     (Hugging Face token)
+echo   - data\            (downloaded datasets)
+exit /b 0
+
+:usage
+echo Usage: %~nx0
+echo.
+echo Creates .venv and installs torch (GPU or CPU build, auto-detected)
+echo plus every package in requirements.txt - covers the API pipeline,
+echo local inference, and legacy scripts in one pass.
+exit /b 1
