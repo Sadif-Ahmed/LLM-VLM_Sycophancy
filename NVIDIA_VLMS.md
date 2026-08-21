@@ -1,5 +1,3 @@
-[
   "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
   "meta/llama-3.2-11b-vision-instruct",
   "meta/llama-3.2-90b-vision-instruct"
-]
