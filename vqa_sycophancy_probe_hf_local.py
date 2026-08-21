@@ -51,15 +51,13 @@ Note: this is a multi-turn conversation (up to 10 pushback turns), so the
 KV cache / activation memory keeps growing turn over turn — a model that
 just barely fits at turn 0 can still OOM by turn 8-10. Leave VRAM headroom.
 
-Output lands under transcripts/local_hf/<model>/<dataset>[_no_pres|_grounded]/
+Output lands under transcripts/local_hf/<dataset>[_no_pres|_grounded]/<model>/
 <prompt_set>/<runner>/ and results/local_hf/... (same layout), kept separate
-from every other script's output folders so nothing collides. Grouped by
-model first (not dataset first) so every condition you've run for one model
-lives together in one folder, rather than scattered across three separate
-dataset-named folders. <runner> (default: auto-detected "username@hostname",
-override with --runner) keeps two people - or the same person on two
-machines - from clobbering each other's transcripts/RESULTS.txt when both
-push runs of the same model/dataset/persona combo to the shared repo.
+from every other script's output folders so nothing collides. <runner>
+(default: auto-detected "username@hostname", override with --runner) keeps
+two people - or the same person on two machines - from clobbering each
+other's transcripts/RESULTS.txt when both push runs of the same model/
+dataset/persona combo to the shared repo.
 
 Reuses the flip detector, refusal tracking, checkpointing, and RESULTS.txt
 logging helpers from sycophancy_probe.py — nothing in that file is touched.
@@ -437,7 +435,7 @@ def build_arg_parser() -> argparse.ArgumentParser:
     p.add_argument("--seed", type=int, default=42)
     p.add_argument("--temperature", type=float, default=0.2)
     p.add_argument("--max-tokens", type=int, default=512)
-    p.add_argument("--output", default=None, help="Output JSON path (default: results/local_hf/<model>/<dataset>[...]/<prompt_set>/<runner>/<uuid>.json)")
+    p.add_argument("--output", default=None, help="Output JSON path (default: results/local_hf/<dataset>[...]/<model>/<prompt_set>/<runner>/<uuid>.json)")
     p.add_argument("--transcripts-dir", default=str(SCRIPT_DIR / "transcripts"))
     p.add_argument("--prompt-set", choices=VQA_PERSONAS, default="default",
                     help="Persona for both system prompt and pushback wording")
@@ -511,7 +509,7 @@ def main() -> None:
     pushback_templates = prompt_set_all["pushback_templates"][:args.pushback_turns]
     prompt_set = {"system_prompt": prompt_set_all["system_prompt"], "pushback_templates": pushback_templates}
 
-    transcripts_dir = Path(args.transcripts_dir) / "local_hf" / model_tag / dataset_name / args.prompt_set / runner_tag
+    transcripts_dir = Path(args.transcripts_dir) / "local_hf" / dataset_name / model_tag / args.prompt_set / runner_tag
     transcripts_dir.mkdir(parents=True, exist_ok=True)
 
     completed = load_completed(transcripts_dir)
@@ -553,7 +551,7 @@ def main() -> None:
     args.provider = f"local_hf({device}/{str(dtype).split('.')[-1]}{'+4bit' if args.load_in_4bit else ''})"  # append_results_log's header line expects args.provider
     append_results_log(transcripts_dir, args, summary, results)
 
-    results_dir = SCRIPT_DIR / "results" / "local_hf" / model_tag / dataset_name / args.prompt_set / runner_tag
+    results_dir = SCRIPT_DIR / "results" / "local_hf" / dataset_name / model_tag / args.prompt_set / runner_tag
     results_dir.mkdir(parents=True, exist_ok=True)
     output_path = Path(args.output) if args.output else results_dir / f"{uuid.uuid4()}.json"
     output_path.write_text(json.dumps({
