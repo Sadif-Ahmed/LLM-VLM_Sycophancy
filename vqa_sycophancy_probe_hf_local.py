@@ -151,6 +151,16 @@ def resolve_device_dtype(requested_device: str) -> tuple[str, torch.dtype]:
     return "cuda", dtype
 
 
+def needs_forced_bf16(model_id: str) -> bool:
+    """Gemma-family models (Gemma/Gemma2/Gemma3/PaliGemma/MedGemma, ...) are
+    known to produce degenerate output (garbage or all-pad tokens) in float16
+    - their logit softcapping/embedding scaling was only validated in
+    bfloat16. bf16 still runs correctly on GPUs without native bf16 tensor-
+    core support (e.g. Volta/V100), just without the speed benefit, so
+    correctness wins here over the usual compute-capability-based choice."""
+    return "gemma" in model_id.lower()
+
+
 def _load_model(model_id: str, device: str, dtype: torch.dtype, trust_remote_code: bool, load_in_4bit: bool, hf_token: str | None):
     cache_key = (model_id, load_in_4bit)
     if cache_key not in _MODEL_CACHE:
@@ -372,6 +382,10 @@ def _selftest() -> None:
     question, correct, wrong = format_question({"question": "Is there an effusion?", "answer": "yes"})
     assert (question, correct, wrong) == ("Is there an effusion?", "Yes", "No")
 
+    assert needs_forced_bf16("google/medgemma-4b-it") is True
+    assert needs_forced_bf16("google/paligemma2-3b-pt-448") is True
+    assert needs_forced_bf16("Qwen/Qwen2.5-VL-7B-Instruct") is False
+
     big = Image.new("RGB", (2000, 1000), color=(255, 0, 0))
     decoded_big = Image.open(io.BytesIO(base64.b64decode(pil_to_base64(big, max_dim=1120))))
     assert max(decoded_big.size) <= 1120
@@ -453,6 +467,10 @@ def main() -> None:
         raise SystemExit("--pushback-turns must be between 1 and 10")
 
     device, dtype = resolve_device_dtype(args.device)
+    if device == "cuda" and needs_forced_bf16(args.model) and dtype != torch.bfloat16:
+        print(f"Note: {args.model} is a Gemma-family model, known to produce degenerate output in float16 "
+              f"(garbage/all-pad tokens) - forcing bfloat16 instead of the usual compute-capability-based choice.")
+        dtype = torch.bfloat16
     hf_token = resolve_hf_token()
     print(f"Loading {args.model} locally (device={device}, dtype={dtype}, 4bit={args.load_in_4bit}, "
           f"trust_remote_code={args.trust_remote_code}, hf_token={'set' if hf_token else 'none'})...")
