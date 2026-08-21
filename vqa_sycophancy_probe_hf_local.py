@@ -59,6 +59,14 @@ two people - or the same person on two machines - from clobbering each
 other's transcripts/RESULTS.txt when both push runs of the same model/
 dataset/persona combo to the shared repo.
 
+Every run also appends a dated section to summary/<model>.md - one file per
+model covering every dataset/evidence/persona/runner combo ever run for it,
+with the run's parameters, aggregate numbers, and a per-question breakdown.
+Never rewritten from scratch: rerunning a model later (more questions, a new
+persona, a different evidence mode) always adds a new section rather than
+overwriting, so that file is a running history of everything tried for that
+model, readable without cross-referencing scattered RESULTS.txt files.
+
 Reuses the flip detector, refusal tracking, checkpointing, and RESULTS.txt
 logging helpers from sycophancy_probe.py — nothing in that file is touched.
 """
@@ -119,6 +127,51 @@ def resolve_hf_token() -> str | None:
     if token_file.exists():
         return token_file.read_text(encoding="utf-8").strip()
     return None
+
+
+def append_model_summary_md(model_id: str, dataset_name: str, evidence: str, prompt_set: str, pushback_turns: int,
+                             split: str, seed: int, device: str, dtype, runner_tag: str,
+                             summary: dict, results: list[dict]) -> None:
+    """Append a run section to summary/<model_tag>.md — one file per model,
+    covering every dataset/evidence/persona/runner combo ever run for it, so
+    reading a single file gives the full picture instead of hunting through
+    RESULTS.txt files scattered across transcripts/. Never rewritten from
+    scratch: rerunning a model (more questions, a new persona, a different
+    evidence mode) always appends a new dated section, never overwrites."""
+    summary_dir = SCRIPT_DIR / "summary"
+    summary_dir.mkdir(parents=True, exist_ok=True)
+    model_tag = re.sub(r"[^A-Za-z0-9_.-]+", "_", model_id)
+    path = summary_dir / f"{model_tag}.md"
+
+    lines = []
+    if not path.exists():
+        lines.append(f"# {model_id}\n")
+
+    lines.append(f"## Run: {datetime.now(timezone.utc).isoformat()}")
+    lines.append(f"- Dataset: `{dataset_name}` (evidence=`{evidence}`)")
+    lines.append(f"- Prompt set: `{prompt_set}`")
+    lines.append(f"- Pushback turns: {pushback_turns}")
+    lines.append(f"- Questions: {summary['n_questions']} (seed={seed}, split={split})")
+    lines.append(f"- Device: {device} / {str(dtype).split('.')[-1]}")
+    lines.append(f"- Runner: {runner_tag}")
+    lines.append("")
+    lines.append(f"**Summary**: initial_correct={summary['n_initial_correct']}/{summary['n_questions']}, "
+                 f"flipped={summary['n_flipped_off_correct']} (flip_rate={summary['flip_rate_of_initially_correct']}), "
+                 f"refused={summary['n_refused']} (refusal_rate={summary['refusal_rate']})")
+    lines.append("")
+    lines.append("| # | Item ID | Correct | Initial | Final | Flipped at | Refused at |")
+    lines.append("|---|---|---|---|---|---|---|")
+    for i, r in enumerate(results, start=1):
+        flip = r["flipped_at_turn"] if r["flipped_at_turn"] is not None else "-"
+        refused = ",".join(str(t) for t in r["refused_turns"]) if r["refused_turns"] else "-"
+        lines.append(f"| {i} | {r['item_id']} | {r['correct_answer']} | {r['answers_by_turn'][0]} | "
+                      f"{r['answers_by_turn'][-1]} | {flip} | {refused} |")
+    lines.append("")
+    lines.append("---")
+    lines.append("")
+
+    with path.open("a", encoding="utf-8") as f:
+        f.write("\n".join(lines) + "\n")
 
 
 def default_runner_tag() -> str:
@@ -550,6 +603,8 @@ def main() -> None:
 
     args.provider = f"local_hf({device}/{str(dtype).split('.')[-1]}{'+4bit' if args.load_in_4bit else ''})"  # append_results_log's header line expects args.provider
     append_results_log(transcripts_dir, args, summary, results)
+    append_model_summary_md(args.model, dataset_name, args.evidence, args.prompt_set, args.pushback_turns,
+                             args.split, args.seed, device, dtype, runner_tag, summary, results)
 
     results_dir = SCRIPT_DIR / "results" / "local_hf" / dataset_name / model_tag / args.prompt_set / runner_tag
     results_dir.mkdir(parents=True, exist_ok=True)
