@@ -1,0 +1,79 @@
+RUNNING COMMANDS — LLM-VLM_Sycophancy
+======================================
+Run everything from the repo root, in PowerShell/cmd.
+
+--------------------------------------------------------------
+0. ONE-TIME SETUP
+--------------------------------------------------------------
+Creates/reuses .venv, installs CUDA or CPU torch (auto-detected)
++ everything in requirements.txt:
+
+    scripts\setup_env.bat
+
+--------------------------------------------------------------
+1. NIM / OpenRouter probe scripts (VQA-RAD, vision models)
+--------------------------------------------------------------
+Each loops all 3 prompt-sets (default / neighbor_nurse_doctor /
+generic) automatically, n=20/persona.
+
+Image-evidence condition (fake prescription flashes turn 1):
+    scripts\run_vqa_probe.bat --model meta/llama-3.2-90b-vision-instruct
+    scripts\run_vqa_probe.bat --model meta/llama-3.2-11b-vision-instruct
+
+Grounded condition (fake image turn 1, REAL image restored turns 2-3):
+    scripts\run_vqa_grounded.bat --model meta/llama-3.2-90b-vision-instruct
+    scripts\run_vqa_grounded.bat --model meta/llama-3.2-11b-vision-instruct
+
+No-evidence condition (pure language pressure, no second image ever):
+    scripts\run_vqa_without_pres.bat --model meta/llama-3.2-90b-vision-instruct
+    scripts\run_vqa_without_pres.bat --model meta/llama-3.2-11b-vision-instruct
+
+Optional flags on any of the three: --n 20  --provider {nvidia,openrouter}
+--split {train,test}  --seed 42  --pushback-turns 1-10  --rpm N  --dry-run
+
+--------------------------------------------------------------
+2. Text-only MedMCQA probe (no images)
+--------------------------------------------------------------
+Runs a fixed preset model list (edit the MODEL[N]/PROVIDER[N] block
+inside the .bat to add/change models), n=5/model by default:
+
+    scripts\model_text_only.bat
+
+--------------------------------------------------------------
+3. Local in-process inference (your own GPU, any HF Hub VLM)
+--------------------------------------------------------------
+vqa_sycophancy_probe_hf_local.py — one script, all 3 evidence modes
+via --evidence {image,none,grounded}. Requires --proof-yes-image /
+--proof-no-image for image/grounded.
+
+Validate the pipeline first (cheap model):
+    .venv\Scripts\python.exe vqa_sycophancy_probe_hf_local.py --model Qwen/Qwen2.5-VL-3B-Instruct --evidence none --n 5 --prompt-set default
+
+Qwen2.5-VL-7B-Instruct (already run once, full 3x3 grid) — image evidence:
+    .venv\Scripts\python.exe vqa_sycophancy_probe_hf_local.py --model Qwen/Qwen2.5-VL-7B-Instruct --evidence image --n 20 --prompt-set default --proof-yes-image prescriptions\pres_yes.png --proof-no-image prescriptions\pres_no.png
+
+Grounded:
+    .venv\Scripts\python.exe vqa_sycophancy_probe_hf_local.py --model Qwen/Qwen2.5-VL-7B-Instruct --evidence grounded --n 20 --prompt-set default --proof-yes-image prescriptions\pres_yes.png --proof-no-image prescriptions\pres_no.png
+
+No-evidence:
+    .venv\Scripts\python.exe vqa_sycophancy_probe_hf_local.py --model Qwen/Qwen2.5-VL-7B-Instruct --evidence none --n 20 --prompt-set default
+
+Swap --prompt-set to neighbor_nurse_doctor / generic to cover the other
+two personas. Swap --model for any other Hub VLM; add --load-in-4bit to
+fit bigger models in less VRAM, --trust-remote-code for models with
+custom Hub code, --runner NAME to override the auto-detected
+username@hostname output-folder tag.
+
+Gemma-family models (medgemma-4b-it etc.) are auto-forced to bfloat16
+regardless of GPU — no flag needed, the script detects "gemma" in the
+model name itself.
+
+--------------------------------------------------------------
+Notes
+--------------------------------------------------------------
+- NIM output: transcripts/<dataset>[_no_pres|_grounded]/<model>/<persona>/
+  and results/<dataset>.../<uuid>.json
+- Local output: transcripts/local_hf/... and results/local_hf/... (extra
+  <runner> folder level), plus a running summary/<model>.md history file
+- All scripts checkpoint/resume automatically — safe to re-run the same
+  command after an interruption, already-done items are skipped
