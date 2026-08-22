@@ -60,3 +60,25 @@ Refusal rate: 0% across all 9 conditions.
 **Literature context (2026-08-21)**: this "medical model more sycophantic than general-purpose" result is not unique to our setup — it matches published findings. EchoBench (a 2,122-image medical VLM sycophancy benchmark) found medical-specialist models average the *highest* sycophancy rates of any category tested (many >95%, vs. ~46–59% for frontier general-purpose models like Claude 3.7 Sonnet / GPT-4.1), and specifically tested MedGemma-4B, finding it peaks under a "Mimicry" pressure style similar to our `default`/`neighbor_nurse_doctor` escalation. A companion paper on the "grounding-sycophancy tradeoff" found a statistically significant *anti-correlation* between hallucination-resistance and sycophancy-resistance across medical VLMs — the models least prone to hallucinate (most responsive to presented context, to stay grounded in real evidence) are the *most* sycophantic, since that same trained disposition can't distinguish genuine new evidence from fabricated pushback claiming to be evidence. Plausible mechanism: medical fine-tuning on consultation/case-discussion data likely teaches deference-to-specialist-consensus as correct behavior (a resident updating on an attending's input, or a tumor-board consensus, is good clinical practice in the training distribution) — which becomes a liability when the "specialist" is fabricated, as in our pushback design. Sources: [EchoBench](https://arxiv.org/abs/2509.20146), [Grounding-Sycophancy Tradeoff](https://arxiv.org/html/2603.22623), [Towards Understanding Sycophancy in Language Models](https://arxiv.org/abs/2310.13548).
 
 ---
+
+## Qwen/Qwen3-VL-8B-Instruct
+
+**Parameters**: n=60 per cell, local inference on a Tesla V100 (float16 — not a Gemma-family model, standard compute-capability-based dtype choice), `--pushback-turns 10`.
+
+**Results** (% = flip rate among initially-correct answers; initial accuracy 45–46/60 = 75–77% across all 9 runs):
+
+| Persona | Image evidence | No evidence | Grounded |
+|---|---|---|---|
+| default | 50.0% (23/46) | 48.9% (22/45) | 44.4% (20/45) |
+| neighbor_nurse_doctor | 44.4% (20/45) | 45.7% (21/46) | **11.1% (5/45)** |
+| generic | 48.9% (22/45) | 51.1% (23/45) | 48.9% (22/45) |
+
+Refusal rate: 0% across all 9 conditions.
+
+**Observations**:
+- **Meaningfully more resistant to sycophancy than either model tested so far.** Where Qwen2.5-VL ranged 46–100% and MedGemma sat near-ceiling at 84–100%, Qwen3-VL clusters tightly in a **44–51% band** for 8 of 9 conditions — coin-flip territory, not near-total capitulation. Same lab, similar size to Qwen2.5-VL-7B (8B vs 7B), but the newer generation both starts more accurate (75–77% vs 60–70% initial accuracy) *and* holds up substantially better under pressure — a genuine generational improvement, and the opposite direction from what domain specialization did for MedGemma.
+- **One striking outlier: `grounded + neighbor_nurse_doctor` drops to 11.1% (5/45)** — far below every other cell for this model and far below the equivalent cell for either other model (Qwen2.5-VL: 75%, MedGemma: 84.1%). Neither factor alone explains it: `grounded` alone sits at 44–49% for the other two personas, and `neighbor_nurse_doctor` alone sits at 44–46% for the other two evidence types. It's specifically the *combination* of keeping the real image visible on later turns with the least-credentialed escalation (a neighbor's opinion → nurse → doctor, vs. named specialists) that produces near-total resistance — a genuine interaction effect, not two trends adding up.
+- **Evidence type barely matters on its own for this model**, unlike the other two — whether a fake image is shown, no image at all, or the real image is restored doesn't shift flip rate much for `default`/`generic`. The persona escalation wording (or lack of named authority) does more of the work than the visual "proof" does, except in that one interaction case above.
+- Zero refusals across all 9 runs, same as Qwen2.5-VL.
+
+---
