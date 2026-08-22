@@ -31,12 +31,14 @@ permission, from either the HF_TOKEN env var or a local hf_token.txt file
 (same fallback pattern as NVIDIA's api_key.txt, kept in its own file/function
 here rather than editing conversation_sim.py's resolve_api_key).
 
-Output for this script always lands under transcripts/hf_files/ and
-results/hf_files/ (further split by evidence mode, same "<dataset>" /
-"<dataset>_no_pres" suffix vqa_sycophancy_probe.py and
-vqa_sycophancy_probe_without_pres.py use) — kept separate from those two
-scripts' output folders. RESULTS.txt's header still records provider/model
-per run, so results are easy to cross-reference even across folders.
+Output lands under the same results/<model>/<variant>/<prompt>/ layout every
+probe script uses (see sycophancy_probe.output_paths) — variant is "image"
+or "no_pres" depending on --evidence. No source/runner disambiguation:
+running the same model through this script and, say, vqa_sycophancy_probe.py
+lands in the identical folder, so stick to one backend per model. Unlike the
+other scripts, this one does NOT checkpoint/resume (next_seq-based sequential
+transcript filenames instead of item_id-keyed ones) — every invocation
+processes its full --n sample and appends fresh transcripts/RESULTS.txt.
 
 Reuses provider/call/retry plumbing from conversation_sim.py and the flip
 detector + connection test + logging helpers from sycophancy_probe.py.
@@ -49,15 +51,13 @@ import logging
 import os
 import random
 import re
-import uuid
-from datetime import datetime, timezone
 from pathlib import Path
 
 from datasets import load_from_disk
 from PIL import Image
 
 from conversation_sim import PROVIDERS as BASE_PROVIDERS, call_llm, resolve_api_key
-from sycophancy_probe import detect_flip, next_seq, append_results_log
+from sycophancy_probe import detect_flip, next_seq, append_results_log, refused_turns, build_summary, output_paths, write_results_json
 
 SCRIPT_DIR = Path(__file__).parent
 
@@ -230,6 +230,7 @@ def run_probe(item_id, item, provider_cfg, api_key, model, temperature, max_toke
         "initial_correct": answers[0] == correct,
         "final_correct": answers[-1] == correct,
         "flipped_at_turn": flip_turn,
+        "refused_turns": refused_turns(answers),
         "stopped_early": flip_turn is not None and len(answers) < len(pushback_templates) + 1,
         "turns": turns,
         "messages": messages,
@@ -304,8 +305,6 @@ def build_arg_parser() -> argparse.ArgumentParser:
     p.add_argument("--max-tokens", type=int, default=512)
     p.add_argument("--rpm", type=int, default=None)
     p.add_argument("--timeout", type=float, default=600.0, help="Read timeout in seconds")
-    p.add_argument("--output", default=None, help="Output JSON path (default: results/hf_files/<dataset>[_no_pres]/vqa_sycophancy_probe_hf_<uuid>.json)")
-    p.add_argument("--transcripts-dir", default=str(SCRIPT_DIR / "transcripts"))
     p.add_argument("--prompt-set", choices=VQA_PERSONAS, default="default",
                     help="Persona for both system prompt and pushback wording — see system_prompts.json['vqa'] / "
                          "pushback_prompts.json['vqa' or 'vqa_no_pres']")
@@ -349,16 +348,9 @@ def main() -> None:
     rng = random.Random(args.seed)
     indices = rng.sample(range(len(ds)), min(args.n, len(ds)))
 
-    # Nested under transcripts/hf_files/ (and results/hf_files/) so this
-    # script's output stays organized separately, still split by evidence
-    # mode the same way vqa_sycophancy_probe.py ("<dataset>") and
-    # vqa_sycophancy_probe_without_pres.py ("<dataset>_no_pres") do —
-    # RESULTS.txt's header still records provider/model per run.
-    dataset_name = Path(args.dataset_dir).name + ("" if args.evidence == "image" else "_no_pres")
-    transcripts_dir = Path(args.transcripts_dir) / "hf_files" / dataset_name
-    transcripts_dir.mkdir(parents=True, exist_ok=True)
-    model_tag = re.sub(r"[^A-Za-z0-9_.-]+", "_", args.model)
-    seq = next_seq(transcripts_dir, model_tag)
+    variant = "image" if args.evidence == "image" else "no_pres"
+    leaf_dir, transcripts_dir = output_paths(args.model, variant, args.prompt_set)
+    seq = next_seq(transcripts_dir)
     prompt_set = load_prompt_sets(args.evidence)[args.prompt_set]
 
     results = []
@@ -377,7 +369,7 @@ def main() -> None:
         flip = result["flipped_at_turn"]
         print(f"  correct={result['correct_answer']} initial={result['answers_by_turn'][0]} final={result['answers_by_turn'][-1]} flipped_at_turn={flip}")
 
-        transcript_path = transcripts_dir / f"{model_tag}__{seq:03d}.json"
+        transcript_path = transcripts_dir / f"{seq:03d}.json"
         transcript_path.write_text(json.dumps({
             "item_id": result["item_id"], "model": args.model, "provider": args.provider,
             "prompt_set": args.prompt_set, "evidence": args.evidence,
@@ -389,28 +381,15 @@ def main() -> None:
 
         results.append(result)
 
-    n_started_correct = sum(1 for r in results if r["initial_correct"])
-    n_flipped = sum(1 for r in results if r["flipped_at_turn"] is not None)
-    summary = {
-        "n_questions": len(results),
-        "n_initial_correct": n_started_correct,
-        "n_flipped_off_correct": n_flipped,
-        "flip_rate_of_initially_correct": (n_flipped / n_started_correct) if n_started_correct else None,
-    }
+    summary = build_summary(results)
     print(f"Summary: {summary}")
 
-    append_results_log(transcripts_dir, args, summary, results)
-
-    results_dir = SCRIPT_DIR / "results" / "hf_files" / dataset_name
-    results_dir.mkdir(parents=True, exist_ok=True)
-    output_path = Path(args.output) if args.output else results_dir / f"vqa_sycophancy_probe_hf_{uuid.uuid4()}.json"
-    output_path.write_text(json.dumps({
-        "started_at": datetime.now(timezone.utc).isoformat(),
+    append_results_log(leaf_dir, args, summary, results)
+    output_path = write_results_json(leaf_dir, {
         "provider": args.provider, "model": args.model, "split": args.split, "seed": args.seed,
         "prompt_set": args.prompt_set, "evidence": args.evidence,
         "proof_yes_image": args.proof_yes_image, "proof_no_image": args.proof_no_image,
-        "summary": summary, "results": results,
-    }, indent=2), encoding="utf-8")
+    }, summary, results)
     print(f"Saved to {output_path}")
 
 

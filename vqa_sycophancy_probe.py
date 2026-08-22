@@ -15,15 +15,13 @@ import json
 import logging
 import random
 import re
-import uuid
-from datetime import datetime, timezone
 from pathlib import Path
 
 from datasets import load_from_disk
 from PIL import Image
 
 from conversation_sim import PROVIDERS, call_llm, resolve_api_key
-from sycophancy_probe import detect_flip, test_connection, append_results_log, load_prompt_set, select_pushback_turns, refused_turns, build_summary, load_completed
+from sycophancy_probe import detect_flip, test_connection, append_results_log, load_prompt_set, select_pushback_turns, refused_turns, build_summary, load_completed, output_paths, write_results_json
 
 SCRIPT_DIR = Path(__file__).parent
 VQA_PROMPTS = load_prompt_set("vqa")
@@ -191,8 +189,6 @@ def build_arg_parser() -> argparse.ArgumentParser:
     p.add_argument("--max-tokens", type=int, default=512)
     p.add_argument("--rpm", type=int, default=None)
     p.add_argument("--timeout", type=float, default=600.0, help="Read timeout in seconds")
-    p.add_argument("--output", default=None, help="Output JSON path (default: results/vqa_sycophancy_probe_<uuid>.json)")
-    p.add_argument("--transcripts-dir", default=str(SCRIPT_DIR / "transcripts"))
     p.add_argument("--prompt-set", choices=list(VQA_PROMPTS), default="default", help="System prompt + pushback script, see prompts.py")
     p.add_argument("--pushback-turns", type=int, default=10, help="Number of escalating pushback turns to run, 1-10 (default: 10, the full authored escalation)")
     p.add_argument("--proof-yes-image", default=None, help="Path to fake 'confirmed Yes case' proof image (required unless --selftest)")
@@ -233,10 +229,7 @@ def main() -> None:
     rng = random.Random(args.seed)
     indices = rng.sample(range(len(ds)), min(args.n, len(ds)))
 
-    dataset_name = Path(args.dataset_dir).name
-    model_tag = re.sub(r"[^A-Za-z0-9_.-]+", "_", args.model)
-    transcripts_dir = Path(args.transcripts_dir) / dataset_name / model_tag / args.prompt_set
-    transcripts_dir.mkdir(parents=True, exist_ok=True)
+    leaf_dir, transcripts_dir = output_paths(args.model, "image", args.prompt_set)
     try:
         prompt_set = select_pushback_turns(VQA_PROMPTS[args.prompt_set], args.pushback_turns)
     except ValueError as e:
@@ -273,18 +266,12 @@ def main() -> None:
         print(f"Nothing new or repaired in {transcripts_dir} — all {len(results)} item(s) already checkpointed, skipping RESULTS.txt/results.json rewrite.")
         return
 
-    append_results_log(transcripts_dir, args, summary, results)
-
-    results_dir = SCRIPT_DIR / "results" / dataset_name / model_tag / args.prompt_set
-    results_dir.mkdir(parents=True, exist_ok=True)
-    output_path = Path(args.output) if args.output else results_dir / f"{uuid.uuid4()}.json"
-    output_path.write_text(json.dumps({
-        "started_at": datetime.now(timezone.utc).isoformat(),
+    append_results_log(leaf_dir, args, summary, results)
+    output_path = write_results_json(leaf_dir, {
         "provider": args.provider, "model": args.model, "split": args.split, "seed": args.seed,
         "prompt_set": args.prompt_set,
         "proof_yes_image": args.proof_yes_image, "proof_no_image": args.proof_no_image,
-        "summary": summary, "results": results,
-    }, indent=2), encoding="utf-8")
+    }, summary, results)
     print(f"Saved to {output_path}")
 
 

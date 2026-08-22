@@ -90,17 +90,22 @@ python sycophancy_probe.py --model qwen/qwen3-next-80b-a3b-instruct --n 20
 | `--max-tokens` | `512` | |
 | `--rpm` | provider default | overrides rate limit |
 | `--timeout` | `600.0` | read timeout, seconds |
-| `--output` | `results/sycophancy_probe_<uuid>.json` | summary + full results |
-| `--transcripts-dir` | `transcripts/` | one JSON per question |
 | `--selftest` | off | runs pure-logic self-check, no key/dataset needed |
 
 ### Output
 
-Run-level JSON (`results/sycophancy_probe_<uuid>.json`): summary stats
-(`n_initial_correct`, `n_flipped_off_correct`,
-`flip_rate_of_initially_correct`) plus full per-question results
-(answers by turn, flip turn, full message log). Per-question transcripts
-also land in `transcripts/`.
+Everything for one model/probe-condition/persona combo lands under
+`results/<model>/<variant>/<prompt_set>/` (`variant` is `text` for this
+script; the VQA scripts use `image`/`grounded`/`no_pres`):
+
+- `results.json` — canonical run summary (`n_initial_correct`,
+  `n_flipped_off_correct`, `flip_rate_of_initially_correct`) plus full
+  per-question results (answers by turn, flip turn, full message log).
+  Overwritten each run with the full accumulated state, so re-running the
+  same combo never leaves stale partial files behind.
+- `RESULTS.txt` — human-readable appended log, one block per run.
+- `transcripts/<item_id>.json` — one file per question, doubling as the
+  checkpoint a killed/re-run invocation resumes from.
 
 Example result (`qwen3-next-80b-a3b-instruct`, 5 MedMCQA questions,
 `seed=42`):

@@ -51,13 +51,15 @@ Note: this is a multi-turn conversation (up to 10 pushback turns), so the
 KV cache / activation memory keeps growing turn over turn — a model that
 just barely fits at turn 0 can still OOM by turn 8-10. Leave VRAM headroom.
 
-Output lands under transcripts/local_hf/<dataset>[_no_pres|_grounded]/<model>/
-<prompt_set>/<runner>/ and results/local_hf/... (same layout), kept separate
-from every other script's output folders so nothing collides. <runner>
-(default: auto-detected "username@hostname", override with --runner) keeps
-two people - or the same person on two machines - from clobbering each
-other's transcripts/RESULTS.txt when both push runs of the same model/
-dataset/persona combo to the shared repo.
+Output lands under the same results/<model>/<variant>/<prompt>/ layout every
+probe script uses (see sycophancy_probe.output_paths) — variant is "image"/
+"no_pres"/"grounded" depending on --evidence. No source/runner level in the
+path: running the same model+variant+prompt via this script and, say,
+vqa_sycophancy_probe.py lands in the identical folder (stick to one backend
+per model), and two people running the same combo locally now share one
+folder too. <runner> (default: auto-detected "username@hostname", override
+with --runner) is still recorded as metadata in results.json/RESULTS.txt and
+in summary/<model>.md, just no longer a folder level.
 
 Every run also appends a dated section to summary/<model>.md - one file per
 model covering every dataset/evidence/persona/runner combo ever run for it,
@@ -80,7 +82,6 @@ import os
 import random
 import re
 import socket
-import uuid
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -89,7 +90,7 @@ from datasets import load_from_disk
 from PIL import Image
 from transformers import AutoModelForImageTextToText, AutoProcessor
 
-from sycophancy_probe import detect_flip, append_results_log, refused_turns, build_summary, load_completed
+from sycophancy_probe import detect_flip, append_results_log, refused_turns, build_summary, load_completed, output_paths, write_results_json
 
 SCRIPT_DIR = Path(__file__).parent
 DEFAULT_MODEL = "Qwen/Qwen2.5-VL-7B-Instruct"
@@ -488,8 +489,6 @@ def build_arg_parser() -> argparse.ArgumentParser:
     p.add_argument("--seed", type=int, default=42)
     p.add_argument("--temperature", type=float, default=0.2)
     p.add_argument("--max-tokens", type=int, default=512)
-    p.add_argument("--output", default=None, help="Output JSON path (default: results/local_hf/<dataset>[...]/<model>/<prompt_set>/<runner>/<uuid>.json)")
-    p.add_argument("--transcripts-dir", default=str(SCRIPT_DIR / "transcripts"))
     p.add_argument("--prompt-set", choices=VQA_PERSONAS, default="default",
                     help="Persona for both system prompt and pushback wording")
     p.add_argument("--pushback-turns", type=int, default=10, help="Number of escalating pushback turns to run, 1-10")
@@ -499,10 +498,9 @@ def build_arg_parser() -> argparse.ArgumentParser:
     p.add_argument("--trust-remote-code", action="store_true", help="Pass trust_remote_code=True through to from_pretrained (needed for some Hub models with custom modeling code)")
     p.add_argument("--load-in-4bit", action="store_true", help="Load the model 4-bit quantized via bitsandbytes, to fit larger models in less VRAM")
     p.add_argument("--runner", default=None,
-                    help="Identifies who/which machine produced this run, as an extra folder level under "
-                         "transcripts/results (default: auto-detected 'username@hostname'). Keeps two people "
-                         "or two machines running the same model/dataset/persona from colliding on the same "
-                         "transcript files or RESULTS.txt when both push to the shared repo.")
+                    help="Identifies who/which machine produced this run (default: auto-detected "
+                         "'username@hostname'). Recorded in results.json/RESULTS.txt and in "
+                         "summary/<model>.md's per-run history, not as a folder level.")
     p.add_argument("--selftest", action="store_true")
     return p
 
@@ -554,16 +552,14 @@ def main() -> None:
     rng = random.Random(args.seed)
     indices = rng.sample(range(len(ds)), min(args.n, len(ds)))
 
-    suffix = {"image": "", "none": "_no_pres", "grounded": "_grounded"}[args.evidence]
-    dataset_name = Path(args.dataset_dir).name + suffix
-    model_tag = re.sub(r"[^A-Za-z0-9_.-]+", "_", args.model)
+    variant = {"image": "image", "none": "no_pres", "grounded": "grounded"}[args.evidence]
+    dataset_name = Path(args.dataset_dir).name  # display-only now, for append_model_summary_md
     runner_tag = re.sub(r"[^A-Za-z0-9_.-]+", "_", args.runner or default_runner_tag())
     prompt_set_all = load_prompt_sets(args.evidence)[args.prompt_set]
     pushback_templates = prompt_set_all["pushback_templates"][:args.pushback_turns]
     prompt_set = {"system_prompt": prompt_set_all["system_prompt"], "pushback_templates": pushback_templates}
 
-    transcripts_dir = Path(args.transcripts_dir) / "local_hf" / dataset_name / model_tag / args.prompt_set / runner_tag
-    transcripts_dir.mkdir(parents=True, exist_ok=True)
+    leaf_dir, transcripts_dir = output_paths(args.model, variant, args.prompt_set)
 
     completed = load_completed(transcripts_dir)
     done_ids = {r["item_id"] for r in completed}
@@ -602,20 +598,15 @@ def main() -> None:
         return
 
     args.provider = f"local_hf({device}/{str(dtype).split('.')[-1]}{'+4bit' if args.load_in_4bit else ''})"  # append_results_log's header line expects args.provider
-    append_results_log(transcripts_dir, args, summary, results)
+    append_results_log(leaf_dir, args, summary, results)
     append_model_summary_md(args.model, dataset_name, args.evidence, args.prompt_set, args.pushback_turns,
                              args.split, args.seed, device, dtype, runner_tag, summary, results)
 
-    results_dir = SCRIPT_DIR / "results" / "local_hf" / dataset_name / model_tag / args.prompt_set / runner_tag
-    results_dir.mkdir(parents=True, exist_ok=True)
-    output_path = Path(args.output) if args.output else results_dir / f"{uuid.uuid4()}.json"
-    output_path.write_text(json.dumps({
-        "started_at": datetime.now(timezone.utc).isoformat(),
+    output_path = write_results_json(leaf_dir, {
         "provider": args.provider, "model": args.model, "split": args.split, "seed": args.seed,
         "prompt_set": args.prompt_set, "evidence": args.evidence, "runner": runner_tag,
         "device": device, "dtype": str(dtype), "load_in_4bit": args.load_in_4bit, "trust_remote_code": args.trust_remote_code,
-        "summary": summary, "results": results,
-    }, indent=2), encoding="utf-8")
+    }, summary, results)
     print(f"Saved to {output_path}")
 
 

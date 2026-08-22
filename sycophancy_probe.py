@@ -10,7 +10,6 @@ import json
 import logging
 import random
 import re
-import uuid
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -220,8 +219,6 @@ def build_arg_parser() -> argparse.ArgumentParser:
     p.add_argument("--max-tokens", type=int, default=512)
     p.add_argument("--rpm", type=int, default=None)
     p.add_argument("--timeout", type=float, default=600.0, help="Read timeout in seconds")
-    p.add_argument("--output", default=None, help="Output JSON path (default: results/sycophancy_probe_<uuid>.json)")
-    p.add_argument("--transcripts-dir", default=str(SCRIPT_DIR / "transcripts"))
     p.add_argument("--prompt-set", choices=list(TEXT_PROMPTS), default="default", help="System prompt + pushback script, see prompts.py")
     p.add_argument("--selftest", action="store_true")
     return p
@@ -261,9 +258,42 @@ def load_completed(transcripts_dir: Path) -> list[dict]:
     return completed
 
 
-def append_results_log(transcripts_dir: Path, args, summary: dict, results: list[dict]) -> None:
-    """Append a compact, human-readable run summary to RESULTS.txt in this dataset's
-    transcripts folder — an instant viewer that doesn't require opening the JSON files."""
+def output_paths(model: str, variant: str, prompt_set: str) -> tuple[Path, Path]:
+    """results/<model_tag>/<variant>/<prompt_set>/ is the leaf directory for
+    everything one model/probe-condition/persona combo ever produces:
+    RESULTS.txt and results.json live directly in it, per-item checkpoint
+    transcripts in its transcripts/ subfolder. No source/runner level —
+    running the same model+variant+prompt through two different backends
+    (NIM vs OpenRouter vs local GPU vs HF Inference Providers) intentionally
+    lands in the same place; stick to one backend per model, since
+    checkpointing keys on item_id and would otherwise treat one backend's
+    completed item as covering another's."""
+    model_tag = re.sub(r"[^A-Za-z0-9_.-]+", "_", model)
+    leaf_dir = SCRIPT_DIR / "results" / model_tag / variant / prompt_set
+    transcripts_dir = leaf_dir / "transcripts"
+    transcripts_dir.mkdir(parents=True, exist_ok=True)
+    return leaf_dir, transcripts_dir
+
+
+def write_results_json(leaf_dir: Path, meta: dict, summary: dict, results: list[dict]) -> Path:
+    """Overwrite the single canonical results.json for this model/variant/
+    prompt leaf with the full accumulated state (already-checkpointed items
+    plus any new ones this run added) — every run replaces it in place, so
+    re-running a model never leaves stale partial snapshots (e.g. an early
+    pilot's n=2 file) sitting next to the current complete one."""
+    output_path = leaf_dir / "results.json"
+    output_path.write_text(json.dumps({
+        "started_at": datetime.now(timezone.utc).isoformat(),
+        **meta,
+        "summary": summary, "results": results,
+    }, indent=2), encoding="utf-8")
+    return output_path
+
+
+def append_results_log(leaf_dir: Path, args, summary: dict, results: list[dict]) -> None:
+    """Append a compact, human-readable run summary to RESULTS.txt in this
+    model/variant/prompt leaf — an instant viewer that doesn't require
+    opening the JSON files."""
     lines = [
         f"=== {datetime.now(timezone.utc).isoformat()} | model={args.model} | provider={args.provider} "
         f"| split={args.split} n={summary['n_questions']} seed={args.seed} prompt_set={args.prompt_set} ===",
@@ -279,7 +309,7 @@ def append_results_log(transcripts_dir: Path, args, summary: dict, results: list
             f"initial={r['answers_by_turn'][0]} final={r['answers_by_turn'][-1]} flipped_at={flip} refused_at={refused}"
         )
     lines.append("")  # blank separator before the next run's block
-    with (transcripts_dir / "RESULTS.txt").open("a", encoding="utf-8") as f:
+    with (leaf_dir / "RESULTS.txt").open("a", encoding="utf-8") as f:
         f.write("\n".join(lines) + "\n")
 
 
@@ -317,10 +347,7 @@ def main() -> None:
     rng = random.Random(args.seed)
     indices = rng.sample(range(len(ds)), min(args.n, len(ds)))
 
-    dataset_name = Path(args.dataset_dir).name
-    model_tag = re.sub(r"[^A-Za-z0-9_.-]+", "_", args.model)
-    transcripts_dir = Path(args.transcripts_dir) / dataset_name / model_tag / args.prompt_set
-    transcripts_dir.mkdir(parents=True, exist_ok=True)
+    leaf_dir, transcripts_dir = output_paths(args.model, "text", args.prompt_set)
     prompt_set = TEXT_PROMPTS[args.prompt_set]
 
     completed = load_completed(transcripts_dir)
@@ -354,16 +381,11 @@ def main() -> None:
         print(f"Nothing new or repaired in {transcripts_dir} — all {len(results)} item(s) already checkpointed, skipping RESULTS.txt/results.json rewrite.")
         return
 
-    append_results_log(transcripts_dir, args, summary, results)
-
-    results_dir = SCRIPT_DIR / "results" / dataset_name / model_tag / args.prompt_set
-    results_dir.mkdir(parents=True, exist_ok=True)
-    output_path = Path(args.output) if args.output else results_dir / f"{uuid.uuid4()}.json"
-    output_path.write_text(json.dumps({
-        "started_at": datetime.now(timezone.utc).isoformat(),
+    append_results_log(leaf_dir, args, summary, results)
+    output_path = write_results_json(leaf_dir, {
         "provider": args.provider, "model": args.model, "split": args.split, "seed": args.seed,
-        "prompt_set": args.prompt_set, "summary": summary, "results": results,
-    }, indent=2), encoding="utf-8")
+        "prompt_set": args.prompt_set,
+    }, summary, results)
     print(f"Saved to {output_path}")
 
 
