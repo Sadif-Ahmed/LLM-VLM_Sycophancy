@@ -35,10 +35,10 @@ Output lands under the same results/<model>/<variant>/<prompt>/ layout every
 probe script uses (see sycophancy_probe.output_paths) — variant is "image"
 or "no_pres" depending on --evidence. No source/runner disambiguation:
 running the same model through this script and, say, vqa_sycophancy_probe.py
-lands in the identical folder, so stick to one backend per model. Unlike the
-other scripts, this one does NOT checkpoint/resume (next_seq-based sequential
-transcript filenames instead of item_id-keyed ones) — every invocation
-processes its full --n sample and appends fresh transcripts/RESULTS.txt.
+lands in the identical folder, so stick to one backend per model. Checkpoints
+and resumes the same way every other probe script does: item_id-keyed
+transcripts in transcripts/, load_completed() skips whatever's already there
+on rerun.
 
 Reuses provider/call/retry plumbing from conversation_sim.py and the flip
 detector + connection test + logging helpers from sycophancy_probe.py.
@@ -57,7 +57,7 @@ from datasets import load_from_disk
 from PIL import Image
 
 from conversation_sim import PROVIDERS as BASE_PROVIDERS, call_llm, resolve_api_key
-from sycophancy_probe import detect_flip, next_seq, append_results_log, refused_turns, build_summary, output_paths, write_results_json
+from sycophancy_probe import detect_flip, load_completed, append_results_log, refused_turns, build_summary, output_paths, write_results_json
 
 SCRIPT_DIR = Path(__file__).parent
 
@@ -350,11 +350,17 @@ def main() -> None:
 
     variant = "image" if args.evidence == "image" else "no_pres"
     leaf_dir, transcripts_dir = output_paths(args.model, variant, args.prompt_set)
-    seq = next_seq(transcripts_dir)
     prompt_set = load_prompt_sets(args.evidence)[args.prompt_set]
+
+    completed = load_completed(transcripts_dir)
+    done_ids = {r["item_id"] for r in completed}
+    if completed:
+        print(f"Resuming: {len(completed)} item(s) already done in {transcripts_dir}, skipping those.")
 
     results = []
     for i, idx in enumerate(indices, start=1):
+        if idx in done_ids:
+            continue
         item = ds[idx]
         print(f"[{i}/{len(indices)}] [{idx}] {item['question'][:80]}...")
         try:
@@ -369,20 +375,22 @@ def main() -> None:
         flip = result["flipped_at_turn"]
         print(f"  correct={result['correct_answer']} initial={result['answers_by_turn'][0]} final={result['answers_by_turn'][-1]} flipped_at_turn={flip}")
 
-        transcript_path = transcripts_dir / f"{seq:03d}.json"
+        transcript_path = transcripts_dir / f"{idx}.json"
         transcript_path.write_text(json.dumps({
-            "item_id": result["item_id"], "model": args.model, "provider": args.provider,
+            **result, "model": args.model, "provider": args.provider,
             "prompt_set": args.prompt_set, "evidence": args.evidence,
-            "correct_answer": result["correct_answer"], "pushed_toward": result["pushed_toward"],
-            "flipped_at_turn": result["flipped_at_turn"], "stopped_early": result["stopped_early"],
-            "messages": result["messages"],
         }, indent=2), encoding="utf-8")
-        seq += 1
 
         results.append(result)
 
+    new_count = len(results)
+    results = completed + results
     summary = build_summary(results)
     print(f"Summary: {summary}")
+
+    if not new_count:
+        print(f"Nothing new or repaired in {transcripts_dir} — all {len(results)} item(s) already checkpointed, skipping RESULTS.txt/results.json rewrite.")
+        return
 
     append_results_log(leaf_dir, args, summary, results)
     output_path = write_results_json(leaf_dir, {
