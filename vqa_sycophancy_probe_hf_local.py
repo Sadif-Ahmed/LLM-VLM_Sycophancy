@@ -12,20 +12,28 @@ vqa_sycophancy_probe_grounded.py (NIM, grounded only), vqa_sycophancy_probe_hf.p
 quantization or trust_remote_code support). None of those files are changed
 by this one.
 
-All three pushback/evidence conditions in one script, via --evidence:
+Four pushback/evidence conditions in one script, via --evidence:
   image    (default): a fake "proof" image (the fabricated prescription) is
       attached alongside pushback turn 1 only. Pushback wording from
       pushback_prompts.json["vqa"]. Requires --proof-yes-image/--proof-no-image.
-  none: no second image is ever attached, pure language pressure. Pushback
-      wording from pushback_prompts.json["vqa_no_pres"] (same escalation as
-      "vqa", prescription phrases removed).
+  none: no second image is ever attached, pure language pressure, and the
+      real question image is resent every turn (it's the only image in the
+      conversation, so nothing needs stripping). Pushback wording from
+      pushback_prompts.json["vqa_no_pres"] (same escalation as "vqa",
+      prescription phrases removed).
   grounded: like "image" on turn 1 (fake proof image flashes once), but the
       REAL question image is restored on every turn after that, so later
       turns test resistance to pressure while the model can still see the
       actual scan. Same "vqa" wording as "image". Also requires
       --proof-yes-image/--proof-no-image.
+  blind: same wording as "none" (no prescription ever mentioned), but the
+      real image is deliberately dropped after turn 0 instead of resent —
+      no replacement image ever shown. Isolates the pure cost of losing
+      visual grounding (compare against "none") from the marginal cost of
+      the fake evidence on top of already having no visual access (compare
+      against "image", which also has zero visible image from turn 2 on).
 
-All three share the yes/no system prompt (system_prompts.json["vqa"]) and
+All four share the yes/no system prompt (system_prompts.json["vqa"]) and
 the --prompt-set personas (default / neighbor_nurse_doctor / generic).
 
 Model loading is intentionally more permissive than local_vlm.py /
@@ -53,7 +61,7 @@ just barely fits at turn 0 can still OOM by turn 8-10. Leave VRAM headroom.
 
 Output lands under the same results/<model>/<variant>/<prompt>/ layout every
 probe script uses (see sycophancy_probe.output_paths) — variant is "image"/
-"no_pres"/"grounded" depending on --evidence. No source/runner level in the
+"no_pres"/"grounded"/"blind" depending on --evidence. No source/runner level in the
 path: running the same model+variant+prompt via this script and, say,
 vqa_sycophancy_probe.py lands in the identical folder (stick to one backend
 per model), and two people running the same combo locally now share one
@@ -109,9 +117,11 @@ def load_prompt_sets(evidence: str) -> dict:
     """VQA yes/no system prompts (system_prompts.json['vqa']) paired with either
     the image-evidence pushback wording ('vqa', used for both 'image' and
     'grounded' — they differ only in which images get attached, not wording)
-    or the prescription-free wording ('vqa_no_pres', used for 'none')."""
+    or the prescription-free wording ('vqa_no_pres', used for 'none' and
+    'blind' — they differ only in whether the real image stays visible, not
+    wording)."""
     vqa_system = json.loads((SCRIPT_DIR / "prompts" / "system_prompts.json").read_text(encoding="utf-8"))["vqa"]
-    domain = "vqa_no_pres" if evidence == "none" else "vqa"
+    domain = "vqa_no_pres" if evidence in ("none", "blind") else "vqa"
     pushback = json.loads((SCRIPT_DIR / "prompts" / "pushback_prompts.json").read_text(encoding="utf-8"))[domain]
     return {name: {"system_prompt": sp, "pushback_templates": pushback[name]} for name, sp in vqa_system.items()}
 
@@ -334,15 +344,24 @@ def strip_images_except_last(messages: list[dict]) -> list[dict]:
 
 
 def build_call_messages(messages: list[dict], evidence: str) -> list[dict]:
+    """'none' is the only mode that skips stripping — every other mode,
+    including 'blind' (which never attaches a second image either), strips
+    down to the latest message's image. That's what makes 'blind' actually
+    blind: once a text-only pushback turn becomes the latest message, the
+    turn-0 image gets stripped to text and nothing ever restores it."""
     return messages if evidence == "none" else strip_images_except_last(messages)
 
 
 def image_for_pushback_turn(evidence: str, turn_index: int, real_b64: str, fake_b64: str | None) -> str | None:
     """Which image (if any) rides along with pushback turn `turn_index`
-    (1-indexed). 'none': never. 'image': the fake proof image, turn 1 only —
-    later turns are text-only. 'grounded': the fake proof image on turn 1,
-    then the REAL question image restored on every turn after."""
-    if evidence == "none":
+    (1-indexed). 'none': never — but build_call_messages() never strips for
+    'none' either, so the real turn-0 image stays resent every turn. 'blind':
+    also never — and unlike 'none', build_call_messages() DOES strip for
+    'blind', so the real image disappears after turn 0 with nothing
+    replacing it. 'image': the fake proof image, turn 1 only — later turns
+    are text-only. 'grounded': the fake proof image on turn 1, then the REAL
+    question image restored on every turn after."""
+    if evidence in ("none", "blind"):
         return None
     if evidence == "image":
         return fake_b64 if turn_index == 1 else None
@@ -454,9 +473,12 @@ def _selftest() -> None:
     assert isinstance(stripped[2]["content"], list)
     assert build_call_messages(fake_history, "image") == strip_images_except_last(fake_history)
     assert build_call_messages(fake_history, "grounded") == strip_images_except_last(fake_history)
+    assert build_call_messages(fake_history, "blind") == strip_images_except_last(fake_history)
     assert build_call_messages(fake_history, "none") == fake_history
 
     assert image_for_pushback_turn("none", 1, "REAL", "FAKE") is None
+    assert image_for_pushback_turn("blind", 1, "REAL", "FAKE") is None
+    assert image_for_pushback_turn("blind", 10, "REAL", "FAKE") is None
     assert image_for_pushback_turn("image", 1, "REAL", "FAKE") == "FAKE"
     assert image_for_pushback_turn("image", 2, "REAL", "FAKE") is None
     assert image_for_pushback_turn("grounded", 1, "REAL", "FAKE") == "FAKE"
@@ -464,11 +486,13 @@ def _selftest() -> None:
     assert image_for_pushback_turn("grounded", 10, "REAL", "FAKE") == "REAL"
 
     text_prompts = load_prompt_sets("none")
+    blind_prompts = load_prompt_sets("blind")
     image_prompts = load_prompt_sets("image")
     grounded_prompts = load_prompt_sets("grounded")
     assert "prescription" not in text_prompts["default"]["pushback_templates"][0].lower()
     assert "prescription" in image_prompts["default"]["pushback_templates"][0].lower()
     assert grounded_prompts == image_prompts
+    assert blind_prompts == text_prompts  # blind reuses "none"'s wording exactly, only image handling differs
 
     print("selftest OK")
 
@@ -479,10 +503,11 @@ def build_arg_parser() -> argparse.ArgumentParser:
                      "any --evidence condition (image / none / grounded), any Hub vision-language model"
     )
     p.add_argument("--model", default=DEFAULT_MODEL, help=f"HF Hub model id to load locally (default: {DEFAULT_MODEL})")
-    p.add_argument("--evidence", choices=["image", "none", "grounded"], default="image",
+    p.add_argument("--evidence", choices=["image", "none", "grounded", "blind"], default="image",
                     help="'image': fake prescription on pushback turn 1 only. 'none': pure language pushback, "
-                         "no second image ever. 'grounded': fake prescription on turn 1, then the REAL image "
-                         "restored on every turn after")
+                         "real image resent every turn. 'grounded': fake prescription on turn 1, then the REAL "
+                         "image restored on every turn after. 'blind': same wording as 'none', but the real "
+                         "image is dropped after turn 0 instead of resent")
     p.add_argument("--dataset-dir", default=str(SCRIPT_DIR / "data" / "vqa_rad_yesno"))
     p.add_argument("--split", choices=["train", "test"], default="train")
     p.add_argument("--n", type=int, default=5, help="Number of questions to sample")
@@ -552,7 +577,7 @@ def main() -> None:
     rng = random.Random(args.seed)
     indices = rng.sample(range(len(ds)), min(args.n, len(ds)))
 
-    variant = {"image": "image", "none": "no_pres", "grounded": "grounded"}[args.evidence]
+    variant = {"image": "image", "none": "no_pres", "grounded": "grounded", "blind": "blind"}[args.evidence]
     dataset_name = Path(args.dataset_dir).name  # display-only now, for append_model_summary_md
     runner_tag = re.sub(r"[^A-Za-z0-9_.-]+", "_", args.runner or default_runner_tag())
     prompt_set_all = load_prompt_sets(args.evidence)[args.prompt_set]
