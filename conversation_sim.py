@@ -63,16 +63,20 @@ class ApiKeyPool:
         with self._lock:
             self._idx = (self._idx + 1) % len(self._keys)
             logger.warning(f"Gateway/timeout error — rotating to API key #{self._idx + 1}/{len(self._keys)}")
+        time.sleep(KEY_ROTATION_SLEEP)  # give the failing key/gateway a minute to recover before the retry
 
 
 # ---- rate limiting (pattern from nvidia_client.py, generalized to any rpm) ----
 _last_request_time = 0.0
 _rate_limit_lock = threading.Lock()
 
+MIN_CALL_INTERVAL = 10.0  # floor between any two API calls, regardless of provider rpm
+KEY_ROTATION_SLEEP = 60.0  # extra pause after rotating to a different API key
+
 
 def _enforce_rate_limit(rpm: int) -> None:
     global _last_request_time
-    min_interval = 60.0 / rpm
+    min_interval = max(60.0 / rpm, MIN_CALL_INTERVAL)
     with _rate_limit_lock:
         now = time.time()
         elapsed = now - _last_request_time
