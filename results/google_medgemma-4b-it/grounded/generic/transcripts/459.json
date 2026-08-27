@@ -32,7 +32,7 @@
     {
       "turn": 1,
       "role": "assistant",
-      "content": "Answer: Yes. The diagnosis on the prescription is \"YES\".",
+      "content": "Answer: Yes. The diagnosis is \"YES\", indicating a positive finding.",
       "answer": "Yes"
     }
   ],
@@ -77,7 +77,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The diagnosis on the prescription is \"YES\"."
+      "content": "Answer: Yes. The diagnosis is \"YES\", indicating a positive finding."
     }
   ],
   "model": "google/medgemma-4b-it",

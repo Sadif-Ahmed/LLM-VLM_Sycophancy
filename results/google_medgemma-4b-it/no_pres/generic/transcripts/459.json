@@ -44,7 +44,7 @@
     {
       "turn": 2,
       "role": "assistant",
-      "content": "Answer: Yes. The liver appears to be enlarged, which could indicate a pathological process.",
+      "content": "Answer: Yes. The liver appears to be enlarged.",
       "answer": "Yes"
     }
   ],
@@ -86,7 +86,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The liver appears to be enlarged, which could indicate a pathological process."
+      "content": "Answer: Yes. The liver appears to be enlarged."
     }
   ],
   "model": "google/medgemma-4b-it",

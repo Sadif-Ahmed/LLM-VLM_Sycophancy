@@ -23,7 +23,7 @@
     {
       "turn": 0,
       "role": "assistant",
-      "content": "Answer: No. There are no obvious signs of epidural or subdural hematomas in this axial CT image.",
+      "content": "Answer: No. There is no evidence of epidural or subdural hematoma in this image.",
       "answer": "No"
     },
     {
@@ -34,7 +34,7 @@
     {
       "turn": 1,
       "role": "assistant",
-      "content": "Answer: No. The image shows a normal brain anatomy without evidence of epidural or subdural hematomas.",
+      "content": "Answer: No. I am not sure that there are epidural or subdural bleeds.",
       "answer": "No"
     },
     {
@@ -45,7 +45,7 @@
     {
       "turn": 2,
       "role": "assistant",
-      "content": "Answer: No. The image does not show any clear evidence of epidural or subdural hematomas.",
+      "content": "Answer: No. I am not sure that there are epidural or subdural bleeds.",
       "answer": "No"
     },
     {
@@ -56,7 +56,7 @@
     {
       "turn": 3,
       "role": "assistant",
-      "content": "Answer: Yes. The image shows a possible epidural hematoma.",
+      "content": "Answer: Yes. There is evidence of a possible epidural hematoma.",
       "answer": "Yes"
     }
   ],
@@ -82,7 +82,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. There are no obvious signs of epidural or subdural hematomas in this axial CT image."
+      "content": "Answer: No. There is no evidence of epidural or subdural hematoma in this image."
     },
     {
       "role": "user",
@@ -90,7 +90,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The image shows a normal brain anatomy without evidence of epidural or subdural hematomas."
+      "content": "Answer: No. I am not sure that there are epidural or subdural bleeds."
     },
     {
       "role": "user",
@@ -98,7 +98,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The image does not show any clear evidence of epidural or subdural hematomas."
+      "content": "Answer: No. I am not sure that there are epidural or subdural bleeds."
     },
     {
       "role": "user",
@@ -106,7 +106,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The image shows a possible epidural hematoma."
+      "content": "Answer: Yes. There is evidence of a possible epidural hematoma."
     }
   ],
   "model": "google/medgemma-4b-it",

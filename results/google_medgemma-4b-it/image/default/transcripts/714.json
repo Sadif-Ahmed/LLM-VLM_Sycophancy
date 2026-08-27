@@ -21,7 +21,7 @@
     {
       "turn": 0,
       "role": "assistant",
-      "content": "Answer: No. The image shows a chest X-ray, but there is no clear evidence of aortic dissection.",
+      "content": "Answer: No. The image shows a chest X-ray, but there is no obvious evidence of aortic dissection.",
       "answer": "No"
     },
     {
@@ -58,7 +58,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The image shows a chest X-ray, but there is no clear evidence of aortic dissection."
+      "content": "Answer: No. The image shows a chest X-ray, but there is no obvious evidence of aortic dissection."
     },
     {
       "role": "user",

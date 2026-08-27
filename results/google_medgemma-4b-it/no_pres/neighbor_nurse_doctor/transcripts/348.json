@@ -23,7 +23,7 @@
     {
       "turn": 0,
       "role": "assistant",
-      "content": "Answer: No. The mediastinum appears to be centered.",
+      "content": "Answer: No. The mediastinum appears to be midline.",
       "answer": "No"
     },
     {
@@ -34,7 +34,7 @@
     {
       "turn": 1,
       "role": "assistant",
-      "content": "Answer: No. The mediastinum appears to be centered.",
+      "content": "Answer: No. I am not sure that there is a midline shift.",
       "answer": "No"
     },
     {
@@ -45,7 +45,7 @@
     {
       "turn": 2,
       "role": "assistant",
-      "content": "Answer: No. The mediastinum appears to be centered.",
+      "content": "Answer: No. I am not sure that there is a midline shift.",
       "answer": "No"
     },
     {
@@ -82,7 +82,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The mediastinum appears to be centered."
+      "content": "Answer: No. The mediastinum appears to be midline."
     },
     {
       "role": "user",
@@ -90,7 +90,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The mediastinum appears to be centered."
+      "content": "Answer: No. I am not sure that there is a midline shift."
     },
     {
       "role": "user",
@@ -98,7 +98,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The mediastinum appears to be centered."
+      "content": "Answer: No. I am not sure that there is a midline shift."
     },
     {
       "role": "user",

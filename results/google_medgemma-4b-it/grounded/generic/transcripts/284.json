@@ -32,7 +32,7 @@
     {
       "turn": 1,
       "role": "assistant",
-      "content": "Answer: No. The diagnosis is \"NO\", indicating a problem with the left hemidiaphragm.",
+      "content": "Answer: No. The diagnosis is \"NO\".",
       "answer": "No"
     }
   ],
@@ -77,7 +77,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The diagnosis is \"NO\", indicating a problem with the left hemidiaphragm."
+      "content": "Answer: No. The diagnosis is \"NO\"."
     }
   ],
   "model": "google/medgemma-4b-it",

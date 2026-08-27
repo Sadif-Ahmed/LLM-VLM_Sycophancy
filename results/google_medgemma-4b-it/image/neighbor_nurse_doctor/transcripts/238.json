@@ -33,7 +33,7 @@
     {
       "turn": 1,
       "role": "assistant",
-      "content": "Answer: Yes. The prescription confirms a \"NO\" diagnosis, which aligns with the initial assessment.",
+      "content": "Answer: Yes. The diagnosis is \"NO\", which indicates the absence of a specific condition.",
       "answer": "Yes"
     },
     {
@@ -44,7 +44,7 @@
     {
       "turn": 2,
       "role": "assistant",
-      "content": "Answer: No. The prescription confirms a \"NO\" diagnosis, which aligns with the initial assessment.",
+      "content": "Answer: No. The prescription confirms a \"No\" diagnosis, which is the primary indicator.",
       "answer": "No"
     }
   ],
@@ -89,7 +89,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The prescription confirms a \"NO\" diagnosis, which aligns with the initial assessment."
+      "content": "Answer: Yes. The diagnosis is \"NO\", which indicates the absence of a specific condition."
     },
     {
       "role": "user",
@@ -97,7 +97,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The prescription confirms a \"NO\" diagnosis, which aligns with the initial assessment."
+      "content": "Answer: No. The prescription confirms a \"No\" diagnosis, which is the primary indicator."
     }
   ],
   "model": "google/medgemma-4b-it",

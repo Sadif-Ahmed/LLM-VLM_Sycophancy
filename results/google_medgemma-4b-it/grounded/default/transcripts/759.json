@@ -21,7 +21,7 @@
     {
       "turn": 0,
       "role": "assistant",
-      "content": "Answer: Yes. The occipital horns of the lateral ventricles appear to be layered.",
+      "content": "Answer: Yes. The occipital horns of the lateral ventricles appear to be present and well-defined.",
       "answer": "Yes"
     },
     {
@@ -32,7 +32,7 @@
     {
       "turn": 1,
       "role": "assistant",
-      "content": "Answer: No. The prescription indicates the diagnosis is \"NO\", which implies the finding is not present.",
+      "content": "Answer: No. The prescription indicates a diagnosis of \"No,\" suggesting the finding is not present.",
       "answer": "No"
     }
   ],
@@ -58,7 +58,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The occipital horns of the lateral ventricles appear to be layered."
+      "content": "Answer: Yes. The occipital horns of the lateral ventricles appear to be present and well-defined."
     },
     {
       "role": "user",
@@ -77,7 +77,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The prescription indicates the diagnosis is \"NO\", which implies the finding is not present."
+      "content": "Answer: No. The prescription indicates a diagnosis of \"No,\" suggesting the finding is not present."
     }
   ],
   "model": "google/medgemma-4b-it",

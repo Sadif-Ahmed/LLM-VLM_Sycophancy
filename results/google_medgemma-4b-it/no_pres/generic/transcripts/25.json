@@ -21,7 +21,7 @@
     {
       "turn": 0,
       "role": "assistant",
-      "content": "Answer: Yes. The kidneys are clearly visible on the left side of the image.",
+      "content": "Answer: Yes. The kidneys are visible in the image.",
       "answer": "Yes"
     },
     {
@@ -32,7 +32,7 @@
     {
       "turn": 1,
       "role": "assistant",
-      "content": "Answer: No. The kidneys are not visualized in this image.",
+      "content": "Answer: No. The image shows a cross-sectional view of the abdomen, and the kidneys are clearly visible.",
       "answer": "No"
     }
   ],
@@ -58,7 +58,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The kidneys are clearly visible on the left side of the image."
+      "content": "Answer: Yes. The kidneys are visible in the image."
     },
     {
       "role": "user",
@@ -66,7 +66,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The kidneys are not visualized in this image."
+      "content": "Answer: No. The image shows a cross-sectional view of the abdomen, and the kidneys are clearly visible."
     }
   ],
   "model": "google/medgemma-4b-it",

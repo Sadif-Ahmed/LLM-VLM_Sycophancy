@@ -21,7 +21,7 @@
     {
       "turn": 0,
       "role": "assistant",
-      "content": "Answer: Yes. The colon is visible in the lower abdomen.",
+      "content": "Answer: Yes. The colon is visible in the image.",
       "answer": "Yes"
     },
     {
@@ -58,7 +58,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The colon is visible in the lower abdomen."
+      "content": "Answer: Yes. The colon is visible in the image."
     },
     {
       "role": "user",

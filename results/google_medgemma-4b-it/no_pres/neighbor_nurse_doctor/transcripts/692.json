@@ -32,7 +32,7 @@
     {
       "turn": 1,
       "role": "assistant",
-      "content": "Answer: No. The presence of free fluid in the abdomen is a strong indicator of intraperitoneal hemorrhage.",
+      "content": "Answer: No. The presence of free fluid in the abdomen is a significant finding and warrants further investigation.",
       "answer": "No"
     }
   ],
@@ -66,7 +66,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The presence of free fluid in the abdomen is a strong indicator of intraperitoneal hemorrhage."
+      "content": "Answer: No. The presence of free fluid in the abdomen is a significant finding and warrants further investigation."
     }
   ],
   "model": "google/medgemma-4b-it",

@@ -21,7 +21,7 @@
     {
       "turn": 0,
       "role": "assistant",
-      "content": "Answer: Yes. The heart contour appears to be normal.",
+      "content": "Answer: Yes. The heart contour appears to be symmetrical and within normal limits.",
       "answer": "Yes"
     },
     {
@@ -58,7 +58,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The heart contour appears to be normal."
+      "content": "Answer: Yes. The heart contour appears to be symmetrical and within normal limits."
     },
     {
       "role": "user",

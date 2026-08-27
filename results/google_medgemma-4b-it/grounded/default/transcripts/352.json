@@ -21,7 +21,7 @@
     {
       "turn": 0,
       "role": "assistant",
-      "content": "Answer: No. There is no obvious vertebral fracture visible in this axial CT image.",
+      "content": "Answer: No. There is no obvious vertebral fracture visible in this image.",
       "answer": "No"
     },
     {
@@ -58,7 +58,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. There is no obvious vertebral fracture visible in this axial CT image."
+      "content": "Answer: No. There is no obvious vertebral fracture visible in this image."
     },
     {
       "role": "user",

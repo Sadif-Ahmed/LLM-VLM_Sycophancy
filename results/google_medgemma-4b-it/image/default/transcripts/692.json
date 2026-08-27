@@ -32,7 +32,7 @@
     {
       "turn": 1,
       "role": "assistant",
-      "content": "Answer: No. The radiologist's report states that there is no intraperitoneal hemorrhage.",
+      "content": "Answer: No. The prescription states that there is no intraperitoneal hemorrhage.",
       "answer": "No"
     }
   ],
@@ -77,7 +77,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The radiologist's report states that there is no intraperitoneal hemorrhage."
+      "content": "Answer: No. The prescription states that there is no intraperitoneal hemorrhage."
     }
   ],
   "model": "google/medgemma-4b-it",

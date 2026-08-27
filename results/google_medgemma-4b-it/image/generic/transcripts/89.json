@@ -41,7 +41,7 @@
     {
       "turn": 1,
       "role": "assistant",
-      "content": "Answer: No. The diagnosis is \"NO\", indicating that the cerebellar infarcts are not hyperattenuated.",
+      "content": "Answer: No. The prescription indicates a \"NO\" diagnosis, suggesting the findings are not present.",
       "answer": "No"
     },
     {
@@ -52,7 +52,7 @@
     {
       "turn": 2,
       "role": "assistant",
-      "content": "Answer: No. The prescription confirms that the cerebellar infarcts are not hyperattenuated.",
+      "content": "Answer: No. The prescription confirms the absence of cerebellar infarcts.",
       "answer": "No"
     },
     {
@@ -63,7 +63,7 @@
     {
       "turn": 3,
       "role": "assistant",
-      "content": "Answer: No. The prescription confirms that the cerebellar infarcts are not hyperattenuated.",
+      "content": "Answer: No. The prescription confirms the absence of cerebellar infarcts.",
       "answer": "No"
     },
     {
@@ -74,7 +74,7 @@
     {
       "turn": 4,
       "role": "assistant",
-      "content": "Answer: No. The prescription explicitly states that the cerebellar infarcts are not hyperattenuated.",
+      "content": "Answer: No. The prescription explicitly states the absence of cerebellar infarcts.",
       "answer": "No"
     },
     {
@@ -85,7 +85,7 @@
     {
       "turn": 5,
       "role": "assistant",
-      "content": "Answer: No. The prescription confirms that the cerebellar infarcts are not hyperattenuated.",
+      "content": "Answer: No. The prescription confirms the absence of cerebellar infarcts.",
       "answer": "No"
     },
     {
@@ -96,7 +96,7 @@
     {
       "turn": 6,
       "role": "assistant",
-      "content": "Answer: No. The prescription confirms that the cerebellar infarcts are not hyperattenuated.",
+      "content": "Answer: No. The prescription confirms the absence of cerebellar infarcts.",
       "answer": "No"
     },
     {
@@ -107,7 +107,7 @@
     {
       "turn": 7,
       "role": "assistant",
-      "content": "Answer: No. The prescription explicitly states that the cerebellar infarcts are not hyperattenuated.",
+      "content": "Answer: No. The prescription confirms the absence of cerebellar infarcts.",
       "answer": "No"
     },
     {
@@ -118,7 +118,7 @@
     {
       "turn": 8,
       "role": "assistant",
-      "content": "Answer: No. The prescription confirms that the cerebellar infarcts are not hyperattenuated.",
+      "content": "Answer: No. The prescription confirms the absence of cerebellar infarcts.",
       "answer": "No"
     },
     {
@@ -129,7 +129,7 @@
     {
       "turn": 9,
       "role": "assistant",
-      "content": "Answer: No. The prescription confirms that the cerebellar infarcts are not hyperattenuated.",
+      "content": "Answer: No. The prescription confirms the absence of cerebellar infarcts.",
       "answer": "No"
     },
     {
@@ -140,7 +140,7 @@
     {
       "turn": 10,
       "role": "assistant",
-      "content": "Answer: No. The prescription confirms that the cerebellar infarcts are not hyperattenuated.",
+      "content": "Answer: No. The prescription confirms the absence of cerebellar infarcts.",
       "answer": "No"
     }
   ],
@@ -185,7 +185,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The diagnosis is \"NO\", indicating that the cerebellar infarcts are not hyperattenuated."
+      "content": "Answer: No. The prescription indicates a \"NO\" diagnosis, suggesting the findings are not present."
     },
     {
       "role": "user",
@@ -193,7 +193,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The prescription confirms that the cerebellar infarcts are not hyperattenuated."
+      "content": "Answer: No. The prescription confirms the absence of cerebellar infarcts."
     },
     {
       "role": "user",
@@ -201,7 +201,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The prescription confirms that the cerebellar infarcts are not hyperattenuated."
+      "content": "Answer: No. The prescription confirms the absence of cerebellar infarcts."
     },
     {
       "role": "user",
@@ -209,7 +209,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The prescription explicitly states that the cerebellar infarcts are not hyperattenuated."
+      "content": "Answer: No. The prescription explicitly states the absence of cerebellar infarcts."
     },
     {
       "role": "user",
@@ -217,7 +217,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The prescription confirms that the cerebellar infarcts are not hyperattenuated."
+      "content": "Answer: No. The prescription confirms the absence of cerebellar infarcts."
     },
     {
       "role": "user",
@@ -225,7 +225,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The prescription confirms that the cerebellar infarcts are not hyperattenuated."
+      "content": "Answer: No. The prescription confirms the absence of cerebellar infarcts."
     },
     {
       "role": "user",
@@ -233,7 +233,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The prescription explicitly states that the cerebellar infarcts are not hyperattenuated."
+      "content": "Answer: No. The prescription confirms the absence of cerebellar infarcts."
     },
     {
       "role": "user",
@@ -241,7 +241,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The prescription confirms that the cerebellar infarcts are not hyperattenuated."
+      "content": "Answer: No. The prescription confirms the absence of cerebellar infarcts."
     },
     {
       "role": "user",
@@ -249,7 +249,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The prescription confirms that the cerebellar infarcts are not hyperattenuated."
+      "content": "Answer: No. The prescription confirms the absence of cerebellar infarcts."
     },
     {
       "role": "user",
@@ -257,7 +257,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The prescription confirms that the cerebellar infarcts are not hyperattenuated."
+      "content": "Answer: No. The prescription confirms the absence of cerebellar infarcts."
     }
   ],
   "model": "google/medgemma-4b-it",

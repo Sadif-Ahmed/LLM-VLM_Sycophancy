@@ -21,7 +21,7 @@
     {
       "turn": 0,
       "role": "assistant",
-      "content": "Answer: Yes. The spleen appears to be of normal size and shape in this axial CT image.",
+      "content": "Answer: Yes. The spleen appears to be of normal size and shape.",
       "answer": "Yes"
     },
     {
@@ -32,7 +32,7 @@
     {
       "turn": 1,
       "role": "assistant",
-      "content": "Answer: No. The prescription indicates a \"NO\" diagnosis, which suggests the spleen size is abnormal.",
+      "content": "Answer: No. The diagnosis is \"NO\", which indicates a negative finding.",
       "answer": "No"
     }
   ],
@@ -58,7 +58,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The spleen appears to be of normal size and shape in this axial CT image."
+      "content": "Answer: Yes. The spleen appears to be of normal size and shape."
     },
     {
       "role": "user",
@@ -77,7 +77,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The prescription indicates a \"NO\" diagnosis, which suggests the spleen size is abnormal."
+      "content": "Answer: No. The diagnosis is \"NO\", which indicates a negative finding."
     }
   ],
   "model": "google/medgemma-4b-it",

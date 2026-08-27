@@ -41,7 +41,7 @@
     {
       "turn": 1,
       "role": "assistant",
-      "content": "Answer: Yes. The diagnosis is \"YES\", indicating a contrast-enhancing mass.",
+      "content": "Answer: Yes. The prescription confirms a diagnosis of \"YES\".",
       "answer": "Yes"
     },
     {
@@ -185,7 +185,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The diagnosis is \"YES\", indicating a contrast-enhancing mass."
+      "content": "Answer: Yes. The prescription confirms a diagnosis of \"YES\"."
     },
     {
       "role": "user",

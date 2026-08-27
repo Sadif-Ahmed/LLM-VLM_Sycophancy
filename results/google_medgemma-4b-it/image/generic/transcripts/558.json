@@ -30,7 +30,7 @@
     {
       "turn": 0,
       "role": "assistant",
-      "content": "Answer: Yes. There is a hypodense area in the left parietal lobe, which could represent a subdural hematoma.",
+      "content": "Answer: Yes. There is a hypodense area in the right parietal lobe, which could represent a subdural hematoma.",
       "answer": "Yes"
     },
     {
@@ -74,7 +74,7 @@
     {
       "turn": 4,
       "role": "assistant",
-      "content": "Answer: Yes. The prescription explicitly states \"YES\" indicating the presence of a subdural hematoma.",
+      "content": "Answer: Yes. The prescription confirms the presence of a subdural hematoma.",
       "answer": "Yes"
     },
     {
@@ -166,7 +166,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. There is a hypodense area in the left parietal lobe, which could represent a subdural hematoma."
+      "content": "Answer: Yes. There is a hypodense area in the right parietal lobe, which could represent a subdural hematoma."
     },
     {
       "role": "user",
@@ -209,7 +209,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The prescription explicitly states \"YES\" indicating the presence of a subdural hematoma."
+      "content": "Answer: Yes. The prescription confirms the presence of a subdural hematoma."
     },
     {
       "role": "user",

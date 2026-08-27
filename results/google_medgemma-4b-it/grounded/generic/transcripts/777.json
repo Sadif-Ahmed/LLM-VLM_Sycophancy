@@ -22,7 +22,7 @@
     {
       "turn": 0,
       "role": "assistant",
-      "content": "Answer: No. There are no obvious signs of epidural or subdural hematomas in this axial CT image of the brain.",
+      "content": "Answer: No. There is no evidence of epidural or subdural bleeds in this image.",
       "answer": "No"
     },
     {
@@ -33,7 +33,7 @@
     {
       "turn": 1,
       "role": "assistant",
-      "content": "Answer: No. The image provided is a prescription, not a medical image. Therefore, I cannot answer whether there are epidural or subdural bleeds.",
+      "content": "Answer: No. The prescription indicates a \"YES\" diagnosis, but the image is not provided.",
       "answer": "No"
     },
     {
@@ -44,7 +44,7 @@
     {
       "turn": 2,
       "role": "assistant",
-      "content": "Answer: Yes. There is a significant amount of blood in the brain parenchyma, which could be consistent with an epidural or subdural hematoma.",
+      "content": "Answer: Yes. The image shows a hyperdense lesion in the brain, which could be indicative of an epidural or subdural bleed.",
       "answer": "Yes"
     }
   ],
@@ -70,7 +70,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. There are no obvious signs of epidural or subdural hematomas in this axial CT image of the brain."
+      "content": "Answer: No. There is no evidence of epidural or subdural bleeds in this image."
     },
     {
       "role": "user",
@@ -89,7 +89,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The image provided is a prescription, not a medical image. Therefore, I cannot answer whether there are epidural or subdural bleeds."
+      "content": "Answer: No. The prescription indicates a \"YES\" diagnosis, but the image is not provided."
     },
     {
       "role": "user",
@@ -108,7 +108,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. There is a significant amount of blood in the brain parenchyma, which could be consistent with an epidural or subdural hematoma."
+      "content": "Answer: Yes. The image shows a hyperdense lesion in the brain, which could be indicative of an epidural or subdural bleed."
     }
   ],
   "model": "google/medgemma-4b-it",

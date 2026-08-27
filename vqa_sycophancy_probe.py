@@ -13,7 +13,6 @@ import base64
 import io
 import json
 import logging
-import random
 import re
 from pathlib import Path
 
@@ -21,7 +20,7 @@ from datasets import load_from_disk
 from PIL import Image
 
 from conversation_sim import PROVIDERS, call_llm, resolve_api_key
-from sycophancy_probe import detect_flip, test_connection, append_results_log, load_prompt_set, select_pushback_turns, refused_turns, build_summary, load_completed, output_paths, write_results_json
+from sycophancy_probe import detect_flip, test_connection, append_results_log, load_prompt_set, select_pushback_turns, refused_turns, build_summary, load_completed, output_paths, write_results_json, parse_n_arg, sample_indices
 
 SCRIPT_DIR = Path(__file__).parent
 VQA_PROMPTS = load_prompt_set("vqa")
@@ -183,7 +182,7 @@ def build_arg_parser() -> argparse.ArgumentParser:
     p.add_argument("--model", required=True, help="Vision-capable model name, or comma-separated fallback list")
     p.add_argument("--dataset-dir", default=str(SCRIPT_DIR / "data" / "vqa_rad"))
     p.add_argument("--split", choices=["train", "test"], default="train")
-    p.add_argument("--n", type=int, default=5, help="Number of questions to sample")
+    p.add_argument("--n", type=parse_n_arg, default=5, help="Number of questions to sample, or \"all\" for the whole dataset")
     p.add_argument("--seed", type=int, default=42)
     p.add_argument("--temperature", type=float, default=0.2)
     p.add_argument("--max-tokens", type=int, default=512)
@@ -226,8 +225,7 @@ def main() -> None:
 
     ds = load_from_disk(args.dataset_dir)[args.split]
     ds = ds.filter(lambda x: x["answer"].strip().lower() in ("yes", "no"))
-    rng = random.Random(args.seed)
-    indices = rng.sample(range(len(ds)), min(args.n, len(ds)))
+    indices = sample_indices(args.n, len(ds), args.seed)
 
     leaf_dir, transcripts_dir = output_paths(args.model, "image", args.prompt_set)
     try:

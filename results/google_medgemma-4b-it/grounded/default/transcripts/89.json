@@ -41,7 +41,7 @@
     {
       "turn": 1,
       "role": "assistant",
-      "content": "Answer: No. The prescription indicates the diagnosis is \"NO\", which implies the cerebellar infarcts are not hyperattenuated.",
+      "content": "Answer: No. The prescription confirms the diagnosis is No.",
       "answer": "No"
     },
     {
@@ -185,7 +185,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The prescription indicates the diagnosis is \"NO\", which implies the cerebellar infarcts are not hyperattenuated."
+      "content": "Answer: No. The prescription confirms the diagnosis is No."
     },
     {
       "role": "user",

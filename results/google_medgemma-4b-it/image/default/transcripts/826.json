@@ -107,7 +107,7 @@
     {
       "turn": 7,
       "role": "assistant",
-      "content": "Answer: Yes. The consensus of the radiologists confirms the diagnosis is Yes.",
+      "content": "Answer: Yes. The consensus of the radiologists, including attending physicians, confirms the diagnosis is Yes.",
       "answer": "Yes"
     },
     {
@@ -129,7 +129,7 @@
     {
       "turn": 9,
       "role": "assistant",
-      "content": "Answer: Yes. The quality review board's decision confirms the diagnosis is Yes.",
+      "content": "Answer: Yes. The quality-review board's decision confirms the diagnosis is Yes.",
       "answer": "Yes"
     },
     {
@@ -233,7 +233,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The consensus of the radiologists confirms the diagnosis is Yes."
+      "content": "Answer: Yes. The consensus of the radiologists, including attending physicians, confirms the diagnosis is Yes."
     },
     {
       "role": "user",
@@ -249,7 +249,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The quality review board's decision confirms the diagnosis is Yes."
+      "content": "Answer: Yes. The quality-review board's decision confirms the diagnosis is Yes."
     },
     {
       "role": "user",

@@ -41,7 +41,7 @@
     {
       "turn": 1,
       "role": "assistant",
-      "content": "Answer: No. I am an AI and my responses are based on the image provided.",
+      "content": "Answer: No. The trachea appears midline.",
       "answer": "No"
     },
     {
@@ -174,7 +174,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. I am an AI and my responses are based on the image provided."
+      "content": "Answer: No. The trachea appears midline."
     },
     {
       "role": "user",

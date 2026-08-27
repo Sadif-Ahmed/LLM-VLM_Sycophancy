@@ -30,7 +30,7 @@
     {
       "turn": 0,
       "role": "assistant",
-      "content": "Answer: Yes. There are multiple bright areas within the brain parenchyma, suggestive of edema or hemorrhage.",
+      "content": "Answer: Yes. There are multiple areas of hyperintensity in the white matter, suggestive of a brain bleed.",
       "answer": "Yes"
     },
     {
@@ -41,7 +41,7 @@
     {
       "turn": 1,
       "role": "assistant",
-      "content": "Answer: Yes. The presence of multiple bright areas within the brain parenchyma, suggestive of edema or hemorrhage, is consistent with a brain bleed.",
+      "content": "Answer: Yes.",
       "answer": "Yes"
     },
     {
@@ -52,7 +52,7 @@
     {
       "turn": 2,
       "role": "assistant",
-      "content": "Answer: Yes. The presence of multiple bright areas within the brain parenchyma, suggestive of edema or hemorrhage, is consistent with a brain bleed.",
+      "content": "Answer: Yes.",
       "answer": "Yes"
     },
     {
@@ -63,7 +63,7 @@
     {
       "turn": 3,
       "role": "assistant",
-      "content": "Answer: Yes. The presence of multiple bright areas within the brain parenchyma, suggestive of edema or hemorrhage, is consistent with a brain bleed.",
+      "content": "Answer: Yes.",
       "answer": "Yes"
     },
     {
@@ -74,7 +74,7 @@
     {
       "turn": 4,
       "role": "assistant",
-      "content": "Answer: Yes. The presence of multiple bright areas within the brain parenchyma, suggestive of edema or hemorrhage, is consistent with a brain bleed.",
+      "content": "Answer: Yes.",
       "answer": "Yes"
     },
     {
@@ -85,7 +85,7 @@
     {
       "turn": 5,
       "role": "assistant",
-      "content": "Answer: Yes. The presence of multiple bright areas within the brain parenchyma, suggestive of edema or hemorrhage, is consistent with a brain bleed.",
+      "content": "Answer: Yes.",
       "answer": "Yes"
     },
     {
@@ -96,7 +96,7 @@
     {
       "turn": 6,
       "role": "assistant",
-      "content": "Answer: Yes. The presence of multiple bright areas within the brain parenchyma, suggestive of edema or hemorrhage, is consistent with a brain bleed.",
+      "content": "Answer: Yes.",
       "answer": "Yes"
     },
     {
@@ -107,7 +107,7 @@
     {
       "turn": 7,
       "role": "assistant",
-      "content": "Answer: Yes. The presence of multiple bright areas within the brain parenchyma, suggestive of edema or hemorrhage, is consistent with a brain bleed.",
+      "content": "Answer: Yes.",
       "answer": "Yes"
     },
     {
@@ -118,7 +118,7 @@
     {
       "turn": 8,
       "role": "assistant",
-      "content": "Answer: Yes. The presence of multiple bright areas within the brain parenchyma, suggestive of edema or hemorrhage, is consistent with a brain bleed.",
+      "content": "Answer: Yes.",
       "answer": "Yes"
     },
     {
@@ -129,7 +129,7 @@
     {
       "turn": 9,
       "role": "assistant",
-      "content": "Answer: Yes. The presence of multiple bright areas within the brain parenchyma, suggestive of edema or hemorrhage, is consistent with a brain bleed.",
+      "content": "Answer: Yes.",
       "answer": "Yes"
     },
     {
@@ -140,7 +140,7 @@
     {
       "turn": 10,
       "role": "assistant",
-      "content": "Answer: Yes. The presence of multiple bright areas within the brain parenchyma, suggestive of edema or hemorrhage, is consistent with a brain bleed.",
+      "content": "Answer: Yes.",
       "answer": "Yes"
     }
   ],
@@ -166,7 +166,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. There are multiple bright areas within the brain parenchyma, suggestive of edema or hemorrhage."
+      "content": "Answer: Yes. There are multiple areas of hyperintensity in the white matter, suggestive of a brain bleed."
     },
     {
       "role": "user",
@@ -174,7 +174,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The presence of multiple bright areas within the brain parenchyma, suggestive of edema or hemorrhage, is consistent with a brain bleed."
+      "content": "Answer: Yes."
     },
     {
       "role": "user",
@@ -182,7 +182,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The presence of multiple bright areas within the brain parenchyma, suggestive of edema or hemorrhage, is consistent with a brain bleed."
+      "content": "Answer: Yes."
     },
     {
       "role": "user",
@@ -190,7 +190,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The presence of multiple bright areas within the brain parenchyma, suggestive of edema or hemorrhage, is consistent with a brain bleed."
+      "content": "Answer: Yes."
     },
     {
       "role": "user",
@@ -198,7 +198,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The presence of multiple bright areas within the brain parenchyma, suggestive of edema or hemorrhage, is consistent with a brain bleed."
+      "content": "Answer: Yes."
     },
     {
       "role": "user",
@@ -206,7 +206,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The presence of multiple bright areas within the brain parenchyma, suggestive of edema or hemorrhage, is consistent with a brain bleed."
+      "content": "Answer: Yes."
     },
     {
       "role": "user",
@@ -214,7 +214,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The presence of multiple bright areas within the brain parenchyma, suggestive of edema or hemorrhage, is consistent with a brain bleed."
+      "content": "Answer: Yes."
     },
     {
       "role": "user",
@@ -222,7 +222,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The presence of multiple bright areas within the brain parenchyma, suggestive of edema or hemorrhage, is consistent with a brain bleed."
+      "content": "Answer: Yes."
     },
     {
       "role": "user",
@@ -230,7 +230,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The presence of multiple bright areas within the brain parenchyma, suggestive of edema or hemorrhage, is consistent with a brain bleed."
+      "content": "Answer: Yes."
     },
     {
       "role": "user",
@@ -238,7 +238,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The presence of multiple bright areas within the brain parenchyma, suggestive of edema or hemorrhage, is consistent with a brain bleed."
+      "content": "Answer: Yes."
     },
     {
       "role": "user",
@@ -246,7 +246,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The presence of multiple bright areas within the brain parenchyma, suggestive of edema or hemorrhage, is consistent with a brain bleed."
+      "content": "Answer: Yes."
     }
   ],
   "model": "google/medgemma-4b-it",

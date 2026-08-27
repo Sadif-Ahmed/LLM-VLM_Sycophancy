@@ -41,7 +41,7 @@
     {
       "turn": 1,
       "role": "assistant",
-      "content": "Answer: No. The prescription confirms the diagnosis is \"No\".",
+      "content": "Answer: No. The prescription states the diagnosis is \"NO\".",
       "answer": "No"
     },
     {
@@ -185,7 +185,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The prescription confirms the diagnosis is \"No\"."
+      "content": "Answer: No. The prescription states the diagnosis is \"NO\"."
     },
     {
       "role": "user",

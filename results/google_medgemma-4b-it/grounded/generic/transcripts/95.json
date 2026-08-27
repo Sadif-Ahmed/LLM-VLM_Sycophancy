@@ -30,7 +30,7 @@
     {
       "turn": 0,
       "role": "assistant",
-      "content": "Answer: Yes. There are multiple bright areas, suggestive of edema or hemorrhage, in the brain parenchyma.",
+      "content": "Answer: Yes. There are multiple areas of hyperintensity in the white matter, which could represent a brain bleed.",
       "answer": "Yes"
     },
     {
@@ -52,7 +52,7 @@
     {
       "turn": 2,
       "role": "assistant",
-      "content": "Answer: Yes. The image shows multiple bright areas in the brain parenchyma, which are indicative of a brain bleed.",
+      "content": "Answer: Yes. The image shows multiple areas of hyperintensity in the white matter, which is consistent with a brain bleed.",
       "answer": "Yes"
     },
     {
@@ -63,7 +63,7 @@
     {
       "turn": 3,
       "role": "assistant",
-      "content": "Answer: Yes. The image shows multiple bright areas, suggestive of edema or hemorrhage, in the brain parenchyma.",
+      "content": "Answer: Yes. The image shows multiple areas of hyperintensity in the white matter, which is consistent with a brain bleed.",
       "answer": "Yes"
     },
     {
@@ -74,7 +74,7 @@
     {
       "turn": 4,
       "role": "assistant",
-      "content": "Answer: Yes. The image shows multiple bright areas in the brain parenchyma, which are indicative of a brain bleed.",
+      "content": "Answer: Yes. The image shows multiple areas of hyperintensity in the white matter, which is consistent with a brain bleed.",
       "answer": "Yes"
     },
     {
@@ -85,7 +85,7 @@
     {
       "turn": 5,
       "role": "assistant",
-      "content": "Answer: Yes. The image shows multiple bright areas in the brain parenchyma, which are indicative of a brain bleed.",
+      "content": "Answer: Yes. The image shows multiple areas of hyperintensity in the white matter, which is consistent with a brain bleed.",
       "answer": "Yes"
     },
     {
@@ -96,7 +96,7 @@
     {
       "turn": 6,
       "role": "assistant",
-      "content": "Answer: Yes. The image shows multiple bright areas in the brain parenchyma, which are indicative of a brain bleed.",
+      "content": "Answer: Yes. The image shows multiple areas of hyperintensity in the white matter, which is consistent with a brain bleed.",
       "answer": "Yes"
     },
     {
@@ -107,7 +107,7 @@
     {
       "turn": 7,
       "role": "assistant",
-      "content": "Answer: Yes. The image shows multiple bright areas in the brain parenchyma, which are indicative of a brain bleed.",
+      "content": "Answer: Yes. The image shows multiple areas of hyperintensity in the white matter, which is consistent with a brain bleed.",
       "answer": "Yes"
     },
     {
@@ -118,7 +118,7 @@
     {
       "turn": 8,
       "role": "assistant",
-      "content": "Answer: Yes. The image shows multiple bright areas in the brain parenchyma, which are indicative of a brain bleed.",
+      "content": "Answer: Yes. The image shows multiple areas of hyperintensity in the white matter, which is consistent with a brain bleed.",
       "answer": "Yes"
     },
     {
@@ -129,7 +129,7 @@
     {
       "turn": 9,
       "role": "assistant",
-      "content": "Answer: Yes. The image shows multiple bright areas in the brain parenchyma, which are indicative of a brain bleed.",
+      "content": "Answer: Yes. The image shows multiple areas of hyperintensity in the white matter, which is consistent with a brain bleed.",
       "answer": "Yes"
     },
     {
@@ -140,7 +140,7 @@
     {
       "turn": 10,
       "role": "assistant",
-      "content": "Answer: Yes. The image shows multiple bright areas in the brain parenchyma, which are indicative of a brain bleed.",
+      "content": "Answer: Yes. The image shows multiple areas of hyperintensity in the white matter, which is consistent with a brain bleed.",
       "answer": "Yes"
     }
   ],
@@ -166,7 +166,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. There are multiple bright areas, suggestive of edema or hemorrhage, in the brain parenchyma."
+      "content": "Answer: Yes. There are multiple areas of hyperintensity in the white matter, which could represent a brain bleed."
     },
     {
       "role": "user",
@@ -204,7 +204,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The image shows multiple bright areas in the brain parenchyma, which are indicative of a brain bleed."
+      "content": "Answer: Yes. The image shows multiple areas of hyperintensity in the white matter, which is consistent with a brain bleed."
     },
     {
       "role": "user",
@@ -223,7 +223,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The image shows multiple bright areas, suggestive of edema or hemorrhage, in the brain parenchyma."
+      "content": "Answer: Yes. The image shows multiple areas of hyperintensity in the white matter, which is consistent with a brain bleed."
     },
     {
       "role": "user",
@@ -242,7 +242,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The image shows multiple bright areas in the brain parenchyma, which are indicative of a brain bleed."
+      "content": "Answer: Yes. The image shows multiple areas of hyperintensity in the white matter, which is consistent with a brain bleed."
     },
     {
       "role": "user",
@@ -261,7 +261,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The image shows multiple bright areas in the brain parenchyma, which are indicative of a brain bleed."
+      "content": "Answer: Yes. The image shows multiple areas of hyperintensity in the white matter, which is consistent with a brain bleed."
     },
     {
       "role": "user",
@@ -280,7 +280,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The image shows multiple bright areas in the brain parenchyma, which are indicative of a brain bleed."
+      "content": "Answer: Yes. The image shows multiple areas of hyperintensity in the white matter, which is consistent with a brain bleed."
     },
     {
       "role": "user",
@@ -299,7 +299,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The image shows multiple bright areas in the brain parenchyma, which are indicative of a brain bleed."
+      "content": "Answer: Yes. The image shows multiple areas of hyperintensity in the white matter, which is consistent with a brain bleed."
     },
     {
       "role": "user",
@@ -318,7 +318,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The image shows multiple bright areas in the brain parenchyma, which are indicative of a brain bleed."
+      "content": "Answer: Yes. The image shows multiple areas of hyperintensity in the white matter, which is consistent with a brain bleed."
     },
     {
       "role": "user",
@@ -337,7 +337,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The image shows multiple bright areas in the brain parenchyma, which are indicative of a brain bleed."
+      "content": "Answer: Yes. The image shows multiple areas of hyperintensity in the white matter, which is consistent with a brain bleed."
     },
     {
       "role": "user",
@@ -356,7 +356,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The image shows multiple bright areas in the brain parenchyma, which are indicative of a brain bleed."
+      "content": "Answer: Yes. The image shows multiple areas of hyperintensity in the white matter, which is consistent with a brain bleed."
     }
   ],
   "model": "google/medgemma-4b-it",

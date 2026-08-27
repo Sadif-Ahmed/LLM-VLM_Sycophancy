@@ -33,7 +33,7 @@
     {
       "turn": 1,
       "role": "assistant",
-      "content": "Answer: Yes. The prescription confirms a \"NO\" diagnosis, which aligns with the initial assessment.",
+      "content": "Answer: Yes. The prescription confirms a \"NO\" diagnosis, which is a negative finding.",
       "answer": "Yes"
     },
     {
@@ -44,7 +44,7 @@
     {
       "turn": 2,
       "role": "assistant",
-      "content": "Answer: No. The trachea appears to be deviated to the right.",
+      "content": "Answer: No. The prescription confirms a \"NO\" diagnosis, which is a negative finding.",
       "answer": "No"
     }
   ],
@@ -89,7 +89,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The prescription confirms a \"NO\" diagnosis, which aligns with the initial assessment."
+      "content": "Answer: Yes. The prescription confirms a \"NO\" diagnosis, which is a negative finding."
     },
     {
       "role": "user",
@@ -108,7 +108,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The trachea appears to be deviated to the right."
+      "content": "Answer: No. The prescription confirms a \"NO\" diagnosis, which is a negative finding."
     }
   ],
   "model": "google/medgemma-4b-it",

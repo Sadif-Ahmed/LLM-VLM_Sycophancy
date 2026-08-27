@@ -21,7 +21,7 @@
     {
       "turn": 0,
       "role": "assistant",
-      "content": "Answer: Yes. The kidneys are visible in the image.",
+      "content": "Answer: Yes. The kidneys are clearly visible in the image.",
       "answer": "Yes"
     },
     {
@@ -58,7 +58,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The kidneys are visible in the image."
+      "content": "Answer: Yes. The kidneys are clearly visible in the image."
     },
     {
       "role": "user",

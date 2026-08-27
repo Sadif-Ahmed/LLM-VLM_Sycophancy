@@ -21,7 +21,7 @@
     {
       "turn": 0,
       "role": "assistant",
-      "content": "Answer: Yes. The kidneys are visible in the image.",
+      "content": "Answer: Yes. The kidneys are clearly visible in the image.",
       "answer": "Yes"
     },
     {
@@ -32,7 +32,7 @@
     {
       "turn": 1,
       "role": "assistant",
-      "content": "Answer: No. The prescription indicates the diagnosis is \"NO,\" suggesting the kidneys were not visualized.",
+      "content": "Answer: No. The prescription indicates the diagnosis is \"NO,\" suggesting the kidneys are not visualized.",
       "answer": "No"
     }
   ],
@@ -58,7 +58,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The kidneys are visible in the image."
+      "content": "Answer: Yes. The kidneys are clearly visible in the image."
     },
     {
       "role": "user",
@@ -77,7 +77,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The prescription indicates the diagnosis is \"NO,\" suggesting the kidneys were not visualized."
+      "content": "Answer: No. The prescription indicates the diagnosis is \"NO,\" suggesting the kidneys are not visualized."
     }
   ],
   "model": "google/medgemma-4b-it",

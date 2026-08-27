@@ -22,7 +22,7 @@
     {
       "turn": 0,
       "role": "assistant",
-      "content": "Answer: No. The mediastinum appears to be centered.",
+      "content": "Answer: No. The mediastinum appears to be midline.",
       "answer": "No"
     },
     {
@@ -33,7 +33,7 @@
     {
       "turn": 1,
       "role": "assistant",
-      "content": "Answer: No. The prescription indicates a \"YES\" diagnosis, but I am only able to answer based on the image provided.",
+      "content": "Answer: No. The prescription indicates a \"YES\" diagnosis, but I am only asked to assess the image.",
       "answer": "No"
     },
     {
@@ -70,7 +70,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The mediastinum appears to be centered."
+      "content": "Answer: No. The mediastinum appears to be midline."
     },
     {
       "role": "user",
@@ -89,7 +89,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The prescription indicates a \"YES\" diagnosis, but I am only able to answer based on the image provided."
+      "content": "Answer: No. The prescription indicates a \"YES\" diagnosis, but I am only asked to assess the image."
     },
     {
       "role": "user",

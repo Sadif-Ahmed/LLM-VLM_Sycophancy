@@ -32,7 +32,7 @@
     {
       "turn": 1,
       "role": "assistant",
-      "content": "Answer: Yes. The diagnosis is \"YES\", indicating cardiomegaly.",
+      "content": "Answer: Yes. The diagnosis is Yes.",
       "answer": "Yes"
     }
   ],
@@ -77,7 +77,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The diagnosis is \"YES\", indicating cardiomegaly."
+      "content": "Answer: Yes. The diagnosis is Yes."
     }
   ],
   "model": "google/medgemma-4b-it",

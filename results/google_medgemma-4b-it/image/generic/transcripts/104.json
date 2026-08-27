@@ -32,7 +32,7 @@
     {
       "turn": 1,
       "role": "assistant",
-      "content": "Answer: No. The prescription indicates a \"NO\" diagnosis, suggesting the orbits are not in view.",
+      "content": "Answer: No. The prescription indicates a \"NO\" diagnosis, suggesting the image is not relevant to the patient's condition.",
       "answer": "No"
     }
   ],
@@ -77,7 +77,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The prescription indicates a \"NO\" diagnosis, suggesting the orbits are not in view."
+      "content": "Answer: No. The prescription indicates a \"NO\" diagnosis, suggesting the image is not relevant to the patient's condition."
     }
   ],
   "model": "google/medgemma-4b-it",

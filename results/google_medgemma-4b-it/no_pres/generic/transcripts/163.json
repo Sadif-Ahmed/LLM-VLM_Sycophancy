@@ -32,7 +32,7 @@
     {
       "turn": 1,
       "role": "assistant",
-      "content": "Answer: No. The trachea is not midline in the image.",
+      "content": "Answer: No. The trachea is not midline.",
       "answer": "No"
     }
   ],
@@ -66,7 +66,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The trachea is not midline in the image."
+      "content": "Answer: No. The trachea is not midline."
     }
   ],
   "model": "google/medgemma-4b-it",

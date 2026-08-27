@@ -5,8 +5,9 @@ Run everything from the repo root, in PowerShell/cmd.
 --------------------------------------------------------------
 0. ONE-TIME SETUP
 --------------------------------------------------------------
-Creates/reuses .venv, installs CUDA or CPU torch (auto-detected)
-+ everything in requirements.txt:
+Creates/reuses .venv, installs CUDA or CPU torch (auto-detected,
+force-reinstalls if a prior CPU-only torch is stuck in place) +
+everything in requirements.txt:
 
     scripts\setup_env.bat
 
@@ -19,16 +20,25 @@ generic) automatically, n=20/persona.
 Image-evidence condition (fake prescription flashes turn 1):
     scripts\run_vqa_probe.bat --model meta/llama-3.2-90b-vision-instruct
     scripts\run_vqa_probe.bat --model meta/llama-3.2-11b-vision-instruct
+    scripts\run_vqa_probe.bat --model nvidia/nemotron-3-nano-omni-30b-a3b-reasoning
 
 Grounded condition (fake image turn 1, REAL image restored turns 2-3):
     scripts\run_vqa_grounded.bat --model meta/llama-3.2-90b-vision-instruct
     scripts\run_vqa_grounded.bat --model meta/llama-3.2-11b-vision-instruct
+    scripts\run_vqa_grounded.bat --model nvidia/nemotron-3-nano-omni-30b-a3b-reasoning
 
-No-evidence condition (pure language pressure, no second image ever):
+No-evidence condition (pure language pressure, real image resent every turn):
     scripts\run_vqa_without_pres.bat --model meta/llama-3.2-90b-vision-instruct
     scripts\run_vqa_without_pres.bat --model meta/llama-3.2-11b-vision-instruct
+    scripts\run_vqa_without_pres.bat --model nvidia/nemotron-3-nano-omni-30b-a3b-reasoning
 
-Optional flags on any of the three: --n 20  --provider {nvidia,openrouter}
+Blind condition (same wording as no-evidence, but real image dropped
+after turn 0 instead of resent — isolates pure cost of losing grounding):
+    scripts\run_vqa_blind.bat --model meta/llama-3.2-90b-vision-instruct
+    scripts\run_vqa_blind.bat --model meta/llama-3.2-11b-vision-instruct
+    scripts\run_vqa_blind.bat --model nvidia/nemotron-3-nano-omni-30b-a3b-reasoning
+
+Optional flags on any of the four: --n 20  --provider {nvidia,openrouter}
 --split {train,test}  --seed 42  --pushback-turns 1-10  --rpm N  --dry-run
 
 --------------------------------------------------------------
@@ -42,27 +52,39 @@ inside the .bat to add/change models), n=5/model by default:
 --------------------------------------------------------------
 3. Local in-process inference (your own GPU, any HF Hub VLM)
 --------------------------------------------------------------
-vqa_sycophancy_probe_hf_local.py — one script, all 3 evidence modes
-via --evidence {image,none,grounded}. Requires --proof-yes-image /
---proof-no-image for image/grounded.
+vqa_sycophancy_probe_hf_local.py — one script, all 4 evidence modes
+via --evidence {image,grounded,none,blind}. --proof-yes-image /
+--proof-no-image required for image/grounded only.
 
-Validate the pipeline first (cheap model):
+Recommended: run_vqa_hf_local_all.bat loops all 4 evidence modes x
+all 3 personas = 12 runs for one --model in a single command:
+
+    scripts\run_vqa_hf_local_all.bat --model google/medgemma-4b-it --n 50 --load-in-4bit
+
+--load-in-4bit is not optional on an 8GB card for a ~4B+ model like
+medgemma-4b-it — bf16 weights alone are already ~8GB before any KV
+cache growth across the 10-turn conversation. 4-bit quantized brings
+it down to roughly 3-4GB total, comfortable headroom.
+
+Other flags: --dataset-dir --split --seed --pushback-turns --device
+{auto,cuda,cpu} --trust-remote-code --runner NAME --dry-run (prints
+all 12 commands without running them).
+
+Single-combo manual invocation, if you only want one cell instead of
+the full 12:
     .venv\Scripts\python.exe vqa_sycophancy_probe_hf_local.py --model Qwen/Qwen2.5-VL-3B-Instruct --evidence none --n 5 --prompt-set default
 
-Qwen2.5-VL-7B-Instruct (already run once, full 3x3 grid) — image evidence:
     .venv\Scripts\python.exe vqa_sycophancy_probe_hf_local.py --model Qwen/Qwen2.5-VL-7B-Instruct --evidence image --n 20 --prompt-set default --proof-yes-image prescriptions\pres_yes.png --proof-no-image prescriptions\pres_no.png
-
-Grounded:
     .venv\Scripts\python.exe vqa_sycophancy_probe_hf_local.py --model Qwen/Qwen2.5-VL-7B-Instruct --evidence grounded --n 20 --prompt-set default --proof-yes-image prescriptions\pres_yes.png --proof-no-image prescriptions\pres_no.png
-
-No-evidence:
     .venv\Scripts\python.exe vqa_sycophancy_probe_hf_local.py --model Qwen/Qwen2.5-VL-7B-Instruct --evidence none --n 20 --prompt-set default
+    .venv\Scripts\python.exe vqa_sycophancy_probe_hf_local.py --model Qwen/Qwen2.5-VL-7B-Instruct --evidence blind --n 20 --prompt-set default
 
 Swap --prompt-set to neighbor_nurse_doctor / generic to cover the other
 two personas. Swap --model for any other Hub VLM; add --load-in-4bit to
 fit bigger models in less VRAM, --trust-remote-code for models with
 custom Hub code, --runner NAME to override the auto-detected
-username@hostname output-folder tag.
+username@hostname metadata tag (no longer a folder level, just recorded
+in results.json/RESULTS.txt/summary/<model>.md).
 
 Gemma-family models (medgemma-4b-it etc.) are auto-forced to bfloat16
 regardless of GPU — no flag needed, the script detects "gemma" in the
@@ -71,9 +93,13 @@ model name itself.
 --------------------------------------------------------------
 Notes
 --------------------------------------------------------------
-- NIM output: transcripts/<dataset>[_no_pres|_grounded]/<model>/<persona>/
-  and results/<dataset>.../<uuid>.json
-- Local output: transcripts/local_hf/... and results/local_hf/... (extra
-  <runner> folder level), plus a running summary/<model>.md history file
-- All scripts checkpoint/resume automatically — safe to re-run the same
-  command after an interruption, already-done items are skipped
+- Output layout (every script, NIM or local): results/<model>/<variant>/<prompt>/
+    results.json       - canonical summary + full results, overwritten each run
+    RESULTS.txt         - human-readable appended log
+    transcripts/<id>.json - per-item checkpoint
+  <variant> is image / grounded / no_pres / blind. No separate top-level
+  transcripts/ tree anymore, and no <runner> folder level for local runs -
+  runner is recorded as metadata inside results.json/RESULTS.txt instead.
+- All scripts checkpoint/resume automatically, including vqa_sycophancy_probe_hf.py
+  now - safe to re-run the same command after an interruption, already-done
+  items are skipped.

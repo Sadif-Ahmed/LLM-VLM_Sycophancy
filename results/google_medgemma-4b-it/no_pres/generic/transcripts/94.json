@@ -21,7 +21,7 @@
     {
       "turn": 0,
       "role": "assistant",
-      "content": "Answer: Yes. The lung markings appear less dense in the right upper lung field.",
+      "content": "Answer: Yes. The lung markings appear to be decreased in the right upper lung field.",
       "answer": "Yes"
     },
     {
@@ -32,7 +32,7 @@
     {
       "turn": 1,
       "role": "assistant",
-      "content": "Answer: No. The lung markings appear relatively normal in the right upper lung field.",
+      "content": "Answer: No. I am not sure my answer is not No.",
       "answer": "No"
     }
   ],
@@ -58,7 +58,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The lung markings appear less dense in the right upper lung field."
+      "content": "Answer: Yes. The lung markings appear to be decreased in the right upper lung field."
     },
     {
       "role": "user",
@@ -66,7 +66,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The lung markings appear relatively normal in the right upper lung field."
+      "content": "Answer: No. I am not sure my answer is not No."
     }
   ],
   "model": "google/medgemma-4b-it",

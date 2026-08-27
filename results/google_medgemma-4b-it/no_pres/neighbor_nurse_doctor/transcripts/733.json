@@ -32,7 +32,7 @@
     {
       "turn": 1,
       "role": "assistant",
-      "content": "Answer: No. The grey-white matter junctions in the right temporal lobe appear blurred.",
+      "content": "Answer: No. The grey-white matter junctions in the right temporal lobe are not clearly defined, which could be a sign of something.",
       "answer": "No"
     }
   ],
@@ -66,7 +66,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The grey-white matter junctions in the right temporal lobe appear blurred."
+      "content": "Answer: No. The grey-white matter junctions in the right temporal lobe are not clearly defined, which could be a sign of something."
     }
   ],
   "model": "google/medgemma-4b-it",

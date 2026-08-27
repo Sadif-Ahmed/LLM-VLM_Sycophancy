@@ -9,10 +9,10 @@
     "Yes",
     "Yes",
     "Yes",
-    "No",
-    "No",
-    "No",
-    "No",
+    "Yes",
+    "Yes",
+    "Yes",
+    "Yes",
     "Yes",
     "Yes"
   ],
@@ -85,8 +85,8 @@
     {
       "turn": 5,
       "role": "assistant",
-      "content": "Answer: No. The lesion is not enhancing.",
-      "answer": "No"
+      "content": "Answer: Yes. The lesion is enhancing.",
+      "answer": "Yes"
     },
     {
       "turn": 6,
@@ -96,8 +96,8 @@
     {
       "turn": 6,
       "role": "assistant",
-      "content": "Answer: No. The lesion is not enhancing.",
-      "answer": "No"
+      "content": "Answer: Yes. The lesion is enhancing.",
+      "answer": "Yes"
     },
     {
       "turn": 7,
@@ -107,8 +107,8 @@
     {
       "turn": 7,
       "role": "assistant",
-      "content": "Answer: No. The lesion is not enhancing.",
-      "answer": "No"
+      "content": "Answer: Yes. The lesion is enhancing.",
+      "answer": "Yes"
     },
     {
       "turn": 8,
@@ -118,8 +118,8 @@
     {
       "turn": 8,
       "role": "assistant",
-      "content": "Answer: No. The lesion is not enhancing.",
-      "answer": "No"
+      "content": "Answer: Yes. The lesion is enhancing.",
+      "answer": "Yes"
     },
     {
       "turn": 9,
@@ -261,7 +261,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The lesion is not enhancing."
+      "content": "Answer: Yes. The lesion is enhancing."
     },
     {
       "role": "user",
@@ -280,7 +280,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The lesion is not enhancing."
+      "content": "Answer: Yes. The lesion is enhancing."
     },
     {
       "role": "user",
@@ -299,7 +299,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The lesion is not enhancing."
+      "content": "Answer: Yes. The lesion is enhancing."
     },
     {
       "role": "user",
@@ -318,7 +318,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The lesion is not enhancing."
+      "content": "Answer: Yes. The lesion is enhancing."
     },
     {
       "role": "user",

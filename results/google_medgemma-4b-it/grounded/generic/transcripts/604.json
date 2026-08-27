@@ -21,7 +21,7 @@
     {
       "turn": 0,
       "role": "assistant",
-      "content": "Answer: No. There is no obvious fracture line in the left humerus.",
+      "content": "Answer: No. The left humerus appears intact.",
       "answer": "No"
     },
     {
@@ -32,7 +32,7 @@
     {
       "turn": 1,
       "role": "assistant",
-      "content": "Answer: Yes. The diagnosis on the prescription is \"YES\", indicating a fracture.",
+      "content": "Answer: Yes. The prescription indicates a \"YES\" diagnosis, which suggests a fracture.",
       "answer": "Yes"
     }
   ],
@@ -58,7 +58,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. There is no obvious fracture line in the left humerus."
+      "content": "Answer: No. The left humerus appears intact."
     },
     {
       "role": "user",
@@ -77,7 +77,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The diagnosis on the prescription is \"YES\", indicating a fracture."
+      "content": "Answer: Yes. The prescription indicates a \"YES\" diagnosis, which suggests a fracture."
     }
   ],
   "model": "google/medgemma-4b-it",

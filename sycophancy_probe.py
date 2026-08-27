@@ -45,6 +45,26 @@ def select_pushback_turns(prompt_set: dict, n: int) -> dict:
     return {"system_prompt": prompt_set["system_prompt"], "pushback_templates": available[:n]}
 
 
+def parse_n_arg(value: str) -> int | str:
+    """argparse type for --n: either a positive int sample size, or the
+    literal "all" (case-insensitive) to run every item in the dataset."""
+    if value.strip().lower() == "all":
+        return "all"
+    return int(value)
+
+
+def sample_indices(n: int | str, population_size: int, seed: int) -> list[int]:
+    """--n "all" runs every item in the dataset once, in its natural order —
+    no random sampling needed since nothing is being left out, so the seed
+    doesn't affect coverage (only which order items are attempted in, which
+    only matters if a run gets interrupted partway through). Otherwise, a
+    seeded random sample of n items (or fewer, if the dataset is smaller)."""
+    if n == "all":
+        return list(range(population_size))
+    rng = random.Random(seed)
+    return rng.sample(range(population_size), min(int(n), population_size))
+
+
 def extract_letter(text: str) -> str | None:
     m = re.search(r"\b([ABCD])\b", text)
     return m.group(1) if m else None
@@ -158,6 +178,21 @@ def _selftest() -> None:
     assert refused_turns(["C", "C", "C", "C"]) == []
     assert refused_turns(["C", None, "C", None]) == [1, 3]
 
+    assert parse_n_arg("20") == 20
+    assert parse_n_arg("all") == "all"
+    assert parse_n_arg("ALL") == "all"  # case-insensitive
+    try:
+        parse_n_arg("twenty")
+        assert False, "non-numeric, non-'all' --n should raise"
+    except ValueError:
+        pass
+
+    assert sample_indices("all", 5, seed=1) == [0, 1, 2, 3, 4]  # every item, natural order, no shuffling
+    assert sorted(sample_indices(3, 5, seed=1)) == sorted(set(sample_indices(3, 5, seed=1)))  # no duplicates
+    assert len(sample_indices(3, 5, seed=1)) == 3
+    assert len(sample_indices(100, 5, seed=1)) == 5  # n larger than dataset caps at dataset size, doesn't error
+    assert sample_indices(3, 5, seed=1) == sample_indices(3, 5, seed=1)  # same seed -> same sample
+
     fake_results = [
         {"initial_correct": True, "flipped_at_turn": 2, "refused_turns": []},
         {"initial_correct": True, "flipped_at_turn": None, "refused_turns": [1]},
@@ -213,7 +248,7 @@ def build_arg_parser() -> argparse.ArgumentParser:
     p.add_argument("--model", required=True, help="Model name, or comma-separated fallback list")
     p.add_argument("--dataset-dir", default=str(SCRIPT_DIR / "data" / "medmcqa"))
     p.add_argument("--split", choices=["train", "test", "validation"], default="train")
-    p.add_argument("--n", type=int, default=5, help="Number of questions to sample")
+    p.add_argument("--n", type=parse_n_arg, default=5, help="Number of questions to sample, or \"all\" for the whole dataset")
     p.add_argument("--seed", type=int, default=42)
     p.add_argument("--temperature", type=float, default=0.2)
     p.add_argument("--max-tokens", type=int, default=512)
@@ -344,8 +379,8 @@ def main() -> None:
 
     ds = load_from_disk(args.dataset_dir)[args.split]
     ds = ds.filter(lambda x: x["choice_type"] == "single")
-    rng = random.Random(args.seed)
-    indices = rng.sample(range(len(ds)), min(args.n, len(ds)))
+    rng = random.Random(args.seed)  # still needed below for format_question()'s wrong-letter choice
+    indices = sample_indices(args.n, len(ds), args.seed)
 
     leaf_dir, transcripts_dir = output_paths(args.model, "text", args.prompt_set)
     prompt_set = TEXT_PROMPTS[args.prompt_set]

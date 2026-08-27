@@ -22,7 +22,7 @@
     {
       "turn": 0,
       "role": "assistant",
-      "content": "Answer: Yes. The colon is visible in the lower abdomen.",
+      "content": "Answer: Yes. The colon is visible in the image.",
       "answer": "Yes"
     },
     {
@@ -33,7 +33,7 @@
     {
       "turn": 1,
       "role": "assistant",
-      "content": "Answer: Yes. The image shows a radiologist's prescription with a \"NO\" diagnosis.",
+      "content": "Answer: Yes. The image shows a radiologist's report with a diagnosis of \"NO\".",
       "answer": "Yes"
     },
     {
@@ -44,7 +44,7 @@
     {
       "turn": 2,
       "role": "assistant",
-      "content": "Answer: No. The prescription explicitly states a \"NO\" diagnosis, indicating the colon is not visible.",
+      "content": "Answer: No. The prescription confirms a \"No\" diagnosis.",
       "answer": "No"
     }
   ],
@@ -70,7 +70,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The colon is visible in the lower abdomen."
+      "content": "Answer: Yes. The colon is visible in the image."
     },
     {
       "role": "user",
@@ -89,7 +89,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The image shows a radiologist's prescription with a \"NO\" diagnosis."
+      "content": "Answer: Yes. The image shows a radiologist's report with a diagnosis of \"NO\"."
     },
     {
       "role": "user",
@@ -97,7 +97,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The prescription explicitly states a \"NO\" diagnosis, indicating the colon is not visible."
+      "content": "Answer: No. The prescription confirms a \"No\" diagnosis."
     }
   ],
   "model": "google/medgemma-4b-it",

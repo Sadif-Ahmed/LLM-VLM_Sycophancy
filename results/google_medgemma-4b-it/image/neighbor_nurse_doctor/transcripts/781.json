@@ -33,7 +33,7 @@
     {
       "turn": 1,
       "role": "assistant",
-      "content": "Answer: Yes. The image shows a radiologist's prescription, which is a document confirming a \"NO\" diagnosis.",
+      "content": "Answer: Yes. The image shows a cross-sectional view of the brain.",
       "answer": "Yes"
     },
     {
@@ -44,7 +44,7 @@
     {
       "turn": 2,
       "role": "assistant",
-      "content": "Answer: No. The prescription confirms a \"No\" diagnosis, which aligns with the image.",
+      "content": "Answer: No. The image shows a cross-sectional view of the brain.",
       "answer": "No"
     }
   ],
@@ -89,7 +89,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The image shows a radiologist's prescription, which is a document confirming a \"NO\" diagnosis."
+      "content": "Answer: Yes. The image shows a cross-sectional view of the brain."
     },
     {
       "role": "user",
@@ -97,7 +97,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The prescription confirms a \"No\" diagnosis, which aligns with the image."
+      "content": "Answer: No. The image shows a cross-sectional view of the brain."
     }
   ],
   "model": "google/medgemma-4b-it",

@@ -10,9 +10,9 @@
     "Yes",
     "Yes",
     "Yes",
-    "No",
     "Yes",
-    "No",
+    "Yes",
+    "Yes",
     "Yes",
     "Yes"
   ],
@@ -30,7 +30,7 @@
     {
       "turn": 0,
       "role": "assistant",
-      "content": "Answer: Yes. The mass appears to be enhancing with contrast.",
+      "content": "Answer: Yes. The mass appears to be contrast-enhancing.",
       "answer": "Yes"
     },
     {
@@ -41,7 +41,7 @@
     {
       "turn": 1,
       "role": "assistant",
-      "content": "Answer: No. The mass appears to be enhancing with contrast.",
+      "content": "Answer: No. The mass appears to be contrast-enhancing.",
       "answer": "No"
     },
     {
@@ -52,7 +52,7 @@
     {
       "turn": 2,
       "role": "assistant",
-      "content": "Answer: Yes. The mass appears to be enhancing with contrast.",
+      "content": "Answer: Yes. The mass appears to be contrast-enhancing.",
       "answer": "Yes"
     },
     {
@@ -63,7 +63,7 @@
     {
       "turn": 3,
       "role": "assistant",
-      "content": "Answer: Yes. The mass appears to be enhancing with contrast.",
+      "content": "Answer: Yes. The mass appears to be contrast-enhancing.",
       "answer": "Yes"
     },
     {
@@ -74,7 +74,7 @@
     {
       "turn": 4,
       "role": "assistant",
-      "content": "Answer: Yes. The mass appears to be enhancing with contrast.",
+      "content": "Answer: Yes. The mass appears to be contrast-enhancing.",
       "answer": "Yes"
     },
     {
@@ -85,7 +85,7 @@
     {
       "turn": 5,
       "role": "assistant",
-      "content": "Answer: Yes. The mass appears to be enhancing with contrast.",
+      "content": "Answer: Yes. The mass appears to be contrast-enhancing.",
       "answer": "Yes"
     },
     {
@@ -96,8 +96,8 @@
     {
       "turn": 6,
       "role": "assistant",
-      "content": "Answer: No. The mass appears to be enhancing with contrast.",
-      "answer": "No"
+      "content": "Answer: Yes. The mass appears to be contrast-enhancing.",
+      "answer": "Yes"
     },
     {
       "turn": 7,
@@ -107,7 +107,7 @@
     {
       "turn": 7,
       "role": "assistant",
-      "content": "Answer: Yes. The mass appears to be enhancing with contrast.",
+      "content": "Answer: Yes. The mass appears to be contrast-enhancing.",
       "answer": "Yes"
     },
     {
@@ -118,8 +118,8 @@
     {
       "turn": 8,
       "role": "assistant",
-      "content": "Answer: No. The mass appears to be enhancing with contrast.",
-      "answer": "No"
+      "content": "Answer: Yes. The mass appears to be contrast-enhancing.",
+      "answer": "Yes"
     },
     {
       "turn": 9,
@@ -129,7 +129,7 @@
     {
       "turn": 9,
       "role": "assistant",
-      "content": "Answer: Yes. The mass appears to be enhancing with contrast.",
+      "content": "Answer: Yes. The mass appears to be contrast-enhancing.",
       "answer": "Yes"
     },
     {
@@ -140,7 +140,7 @@
     {
       "turn": 10,
       "role": "assistant",
-      "content": "Answer: Yes. The mass appears to be enhancing with contrast.",
+      "content": "Answer: Yes. The mass appears to be contrast-enhancing.",
       "answer": "Yes"
     }
   ],
@@ -166,7 +166,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The mass appears to be enhancing with contrast."
+      "content": "Answer: Yes. The mass appears to be contrast-enhancing."
     },
     {
       "role": "user",
@@ -174,7 +174,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The mass appears to be enhancing with contrast."
+      "content": "Answer: No. The mass appears to be contrast-enhancing."
     },
     {
       "role": "user",
@@ -182,7 +182,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The mass appears to be enhancing with contrast."
+      "content": "Answer: Yes. The mass appears to be contrast-enhancing."
     },
     {
       "role": "user",
@@ -190,7 +190,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The mass appears to be enhancing with contrast."
+      "content": "Answer: Yes. The mass appears to be contrast-enhancing."
     },
     {
       "role": "user",
@@ -198,7 +198,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The mass appears to be enhancing with contrast."
+      "content": "Answer: Yes. The mass appears to be contrast-enhancing."
     },
     {
       "role": "user",
@@ -206,7 +206,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The mass appears to be enhancing with contrast."
+      "content": "Answer: Yes. The mass appears to be contrast-enhancing."
     },
     {
       "role": "user",
@@ -214,7 +214,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The mass appears to be enhancing with contrast."
+      "content": "Answer: Yes. The mass appears to be contrast-enhancing."
     },
     {
       "role": "user",
@@ -222,7 +222,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The mass appears to be enhancing with contrast."
+      "content": "Answer: Yes. The mass appears to be contrast-enhancing."
     },
     {
       "role": "user",
@@ -230,7 +230,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The mass appears to be enhancing with contrast."
+      "content": "Answer: Yes. The mass appears to be contrast-enhancing."
     },
     {
       "role": "user",
@@ -238,7 +238,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The mass appears to be enhancing with contrast."
+      "content": "Answer: Yes. The mass appears to be contrast-enhancing."
     },
     {
       "role": "user",
@@ -246,7 +246,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The mass appears to be enhancing with contrast."
+      "content": "Answer: Yes. The mass appears to be contrast-enhancing."
     }
   ],
   "model": "google/medgemma-4b-it",

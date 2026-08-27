@@ -21,7 +21,7 @@
     {
       "turn": 0,
       "role": "assistant",
-      "content": "Answer: Yes. The celiac trunk is visible as a vessel branching off the aorta.",
+      "content": "Answer: Yes. The celiac trunk is visible, and appears to be patent.",
       "answer": "Yes"
     },
     {
@@ -32,7 +32,7 @@
     {
       "turn": 1,
       "role": "assistant",
-      "content": "Answer: No. The celiac trunk is not clearly visualized in this axial slice.",
+      "content": "Answer: No. The celiac trunk is not clearly visible or assessed in this image.",
       "answer": "No"
     }
   ],
@@ -58,7 +58,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The celiac trunk is visible as a vessel branching off the aorta."
+      "content": "Answer: Yes. The celiac trunk is visible, and appears to be patent."
     },
     {
       "role": "user",
@@ -66,7 +66,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The celiac trunk is not clearly visualized in this axial slice."
+      "content": "Answer: No. The celiac trunk is not clearly visible or assessed in this image."
     }
   ],
   "model": "google/medgemma-4b-it",

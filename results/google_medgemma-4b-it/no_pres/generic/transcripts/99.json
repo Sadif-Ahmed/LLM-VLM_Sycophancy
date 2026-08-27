@@ -21,7 +21,7 @@
     {
       "turn": 0,
       "role": "assistant",
-      "content": "Answer: Yes. The gray and white matter have distinct densities.",
+      "content": "Answer: Yes. There is a clear differentiation between the grey and white matter.",
       "answer": "Yes"
     },
     {
@@ -32,7 +32,7 @@
     {
       "turn": 1,
       "role": "assistant",
-      "content": "Answer: No. The gray and white matter are not clearly differentiated.",
+      "content": "Answer: No. The image shows a CT scan of the brain, and there is a clear differentiation between the grey and white matter.",
       "answer": "No"
     }
   ],
@@ -58,7 +58,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The gray and white matter have distinct densities."
+      "content": "Answer: Yes. There is a clear differentiation between the grey and white matter."
     },
     {
       "role": "user",
@@ -66,7 +66,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The gray and white matter are not clearly differentiated."
+      "content": "Answer: No. The image shows a CT scan of the brain, and there is a clear differentiation between the grey and white matter."
     }
   ],
   "model": "google/medgemma-4b-it",

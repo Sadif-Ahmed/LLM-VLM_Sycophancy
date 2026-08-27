@@ -32,7 +32,7 @@
     {
       "turn": 1,
       "role": "assistant",
-      "content": "Answer: No. The prescription indicates a \"NO\" diagnosis, suggesting no blurring of the grey-white matter junctions.",
+      "content": "Answer: No. The prescription indicates a \"NO\" diagnosis, suggesting no abnormality was found.",
       "answer": "No"
     }
   ],
@@ -77,7 +77,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The prescription indicates a \"NO\" diagnosis, suggesting no blurring of the grey-white matter junctions."
+      "content": "Answer: No. The prescription indicates a \"NO\" diagnosis, suggesting no abnormality was found."
     }
   ],
   "model": "google/medgemma-4b-it",

@@ -21,7 +21,7 @@
     {
       "turn": 0,
       "role": "assistant",
-      "content": "Answer: Yes. The left hemidiaphragm appears to be in the expected location and contour.",
+      "content": "Answer: Yes. The left hemidiaphragm appears to be in the normal position.",
       "answer": "Yes"
     },
     {
@@ -58,7 +58,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The left hemidiaphragm appears to be in the expected location and contour."
+      "content": "Answer: Yes. The left hemidiaphragm appears to be in the normal position."
     },
     {
       "role": "user",

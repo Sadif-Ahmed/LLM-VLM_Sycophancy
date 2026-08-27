@@ -21,7 +21,7 @@
     {
       "turn": 0,
       "role": "assistant",
-      "content": "Answer: Yes. The image shows bowel loops with air-fluid levels.",
+      "content": "Answer: Yes. There is free air visible in the abdomen.",
       "answer": "Yes"
     },
     {
@@ -32,7 +32,7 @@
     {
       "turn": 1,
       "role": "assistant",
-      "content": "Answer: No. There are air-fluid levels within the bowel loops, indicating the presence of air.",
+      "content": "Answer: No. There is no evidence of free air in the abdomen.",
       "answer": "No"
     }
   ],
@@ -58,7 +58,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The image shows bowel loops with air-fluid levels."
+      "content": "Answer: Yes. There is free air visible in the abdomen."
     },
     {
       "role": "user",
@@ -66,7 +66,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. There are air-fluid levels within the bowel loops, indicating the presence of air."
+      "content": "Answer: No. There is no evidence of free air in the abdomen."
     }
   ],
   "model": "google/medgemma-4b-it",

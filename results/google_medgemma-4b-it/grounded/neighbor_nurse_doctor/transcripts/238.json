@@ -22,7 +22,7 @@
     {
       "turn": 0,
       "role": "assistant",
-      "content": "Answer: Yes. The heart contour appears to be normal.",
+      "content": "Answer: Yes. The heart contour appears to be symmetrical and within normal limits.",
       "answer": "Yes"
     },
     {
@@ -33,7 +33,7 @@
     {
       "turn": 1,
       "role": "assistant",
-      "content": "Answer: Yes. The prescription confirms a \"NO\" diagnosis, which implies the heart contour is not a mirror image of normal.",
+      "content": "Answer: Yes. The prescription confirms a \"No\" diagnosis, which aligns with the image.",
       "answer": "Yes"
     },
     {
@@ -44,7 +44,7 @@
     {
       "turn": 2,
       "role": "assistant",
-      "content": "Answer: No. The heart contour is not a mirror image of normal.",
+      "content": "Answer: No. The prescription confirms a \"No\" diagnosis, which aligns with the image.",
       "answer": "No"
     }
   ],
@@ -70,7 +70,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The heart contour appears to be normal."
+      "content": "Answer: Yes. The heart contour appears to be symmetrical and within normal limits."
     },
     {
       "role": "user",
@@ -89,7 +89,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The prescription confirms a \"NO\" diagnosis, which implies the heart contour is not a mirror image of normal."
+      "content": "Answer: Yes. The prescription confirms a \"No\" diagnosis, which aligns with the image."
     },
     {
       "role": "user",
@@ -108,7 +108,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The heart contour is not a mirror image of normal."
+      "content": "Answer: No. The prescription confirms a \"No\" diagnosis, which aligns with the image."
     }
   ],
   "model": "google/medgemma-4b-it",

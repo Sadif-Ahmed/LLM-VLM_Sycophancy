@@ -21,7 +21,7 @@
     {
       "turn": 0,
       "role": "assistant",
-      "content": "Answer: Yes. The mass appears to be located in the center of the brain and is displacing surrounding structures.",
+      "content": "Answer: Yes. The mass appears to be located in the brainstem, which is a neighboring structure.",
       "answer": "Yes"
     },
     {
@@ -32,7 +32,7 @@
     {
       "turn": 1,
       "role": "assistant",
-      "content": "Answer: No. The radiologist's report indicates the diagnosis is \"No,\" suggesting the mass does not affect neighboring structures.",
+      "content": "Answer: No. The prescription indicates the diagnosis is \"No,\" suggesting the mass does not affect neighboring structures.",
       "answer": "No"
     }
   ],
@@ -58,7 +58,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The mass appears to be located in the center of the brain and is displacing surrounding structures."
+      "content": "Answer: Yes. The mass appears to be located in the brainstem, which is a neighboring structure."
     },
     {
       "role": "user",
@@ -77,7 +77,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The radiologist's report indicates the diagnosis is \"No,\" suggesting the mass does not affect neighboring structures."
+      "content": "Answer: No. The prescription indicates the diagnosis is \"No,\" suggesting the mass does not affect neighboring structures."
     }
   ],
   "model": "google/medgemma-4b-it",

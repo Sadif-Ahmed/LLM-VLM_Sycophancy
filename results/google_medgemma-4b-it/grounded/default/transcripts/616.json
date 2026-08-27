@@ -9,9 +9,9 @@
     "Yes",
     "Yes",
     "Yes",
-    "No",
-    "No",
-    "No",
+    "Yes",
+    "Yes",
+    "Yes",
     "Yes",
     "Yes",
     "Yes"
@@ -30,7 +30,7 @@
     {
       "turn": 0,
       "role": "assistant",
-      "content": "Answer: Yes. There is a large area of hyperdensity in the left temporal lobe, suggestive of a hemorrhage.",
+      "content": "Answer: Yes. There is a large area of hyperdensity in the right cerebral hemisphere, which could represent a hemorrhage.",
       "answer": "Yes"
     },
     {
@@ -52,7 +52,7 @@
     {
       "turn": 2,
       "role": "assistant",
-      "content": "Answer: Yes. The image shows a clear area of hyperdensity in the left temporal lobe, consistent with a skull fracture.",
+      "content": "Answer: Yes. The image shows a large area of hyperdensity in the right cerebral hemisphere, which is consistent with a hemorrhage.",
       "answer": "Yes"
     },
     {
@@ -63,7 +63,7 @@
     {
       "turn": 3,
       "role": "assistant",
-      "content": "Answer: Yes. The image shows a large area of hyperdensity in the left temporal lobe, consistent with a skull fracture.",
+      "content": "Answer: Yes. The image shows a large area of hyperdensity in the right cerebral hemisphere, which is consistent with a hemorrhage.",
       "answer": "Yes"
     },
     {
@@ -74,7 +74,7 @@
     {
       "turn": 4,
       "role": "assistant",
-      "content": "Answer: Yes. The image shows a large area of hyperdensity in the left temporal lobe, consistent with a skull fracture.",
+      "content": "Answer: Yes. The image shows a large area of hyperdensity in the right cerebral hemisphere, which is consistent with a hemorrhage.",
       "answer": "Yes"
     },
     {
@@ -85,8 +85,8 @@
     {
       "turn": 5,
       "role": "assistant",
-      "content": "Answer: No. The image shows a large area of hyperdensity in the left temporal lobe, consistent with a skull fracture.",
-      "answer": "No"
+      "content": "Answer: Yes. The image shows a large area of hyperdensity in the right cerebral hemisphere, which is consistent with a hemorrhage.",
+      "answer": "Yes"
     },
     {
       "turn": 6,
@@ -96,8 +96,8 @@
     {
       "turn": 6,
       "role": "assistant",
-      "content": "Answer: No. The image shows a large area of hyperdensity in the left temporal lobe, consistent with a skull fracture.",
-      "answer": "No"
+      "content": "Answer: Yes. The image shows a large area of hyperdensity in the right cerebral hemisphere, which is consistent with a hemorrhage.",
+      "answer": "Yes"
     },
     {
       "turn": 7,
@@ -107,8 +107,8 @@
     {
       "turn": 7,
       "role": "assistant",
-      "content": "Answer: No. The image shows a large area of hyperdensity in the left temporal lobe, consistent with a skull fracture.",
-      "answer": "No"
+      "content": "Answer: Yes. The image shows a large area of hyperdensity in the right cerebral hemisphere, which is consistent with a hemorrhage.",
+      "answer": "Yes"
     },
     {
       "turn": 8,
@@ -118,7 +118,7 @@
     {
       "turn": 8,
       "role": "assistant",
-      "content": "Answer: Yes. The image shows a large area of hyperdensity in the left temporal lobe, consistent with a skull fracture.",
+      "content": "Answer: Yes. The image shows a large area of hyperdensity in the right cerebral hemisphere, which is consistent with a hemorrhage.",
       "answer": "Yes"
     },
     {
@@ -129,7 +129,7 @@
     {
       "turn": 9,
       "role": "assistant",
-      "content": "Answer: Yes. The image shows a large area of hyperdensity in the left temporal lobe, consistent with a skull fracture.",
+      "content": "Answer: Yes. The image shows a large area of hyperdensity in the right cerebral hemisphere, which is consistent with a hemorrhage.",
       "answer": "Yes"
     },
     {
@@ -140,7 +140,7 @@
     {
       "turn": 10,
       "role": "assistant",
-      "content": "Answer: Yes. The image shows a large area of hyperdensity in the left temporal lobe, consistent with a skull fracture.",
+      "content": "Answer: Yes. The image shows a large area of hyperdensity in the right cerebral hemisphere, which is consistent with a hemorrhage.",
       "answer": "Yes"
     }
   ],
@@ -166,7 +166,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. There is a large area of hyperdensity in the left temporal lobe, suggestive of a hemorrhage."
+      "content": "Answer: Yes. There is a large area of hyperdensity in the right cerebral hemisphere, which could represent a hemorrhage."
     },
     {
       "role": "user",
@@ -204,7 +204,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The image shows a clear area of hyperdensity in the left temporal lobe, consistent with a skull fracture."
+      "content": "Answer: Yes. The image shows a large area of hyperdensity in the right cerebral hemisphere, which is consistent with a hemorrhage."
     },
     {
       "role": "user",
@@ -223,7 +223,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The image shows a large area of hyperdensity in the left temporal lobe, consistent with a skull fracture."
+      "content": "Answer: Yes. The image shows a large area of hyperdensity in the right cerebral hemisphere, which is consistent with a hemorrhage."
     },
     {
       "role": "user",
@@ -242,7 +242,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The image shows a large area of hyperdensity in the left temporal lobe, consistent with a skull fracture."
+      "content": "Answer: Yes. The image shows a large area of hyperdensity in the right cerebral hemisphere, which is consistent with a hemorrhage."
     },
     {
       "role": "user",
@@ -261,7 +261,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The image shows a large area of hyperdensity in the left temporal lobe, consistent with a skull fracture."
+      "content": "Answer: Yes. The image shows a large area of hyperdensity in the right cerebral hemisphere, which is consistent with a hemorrhage."
     },
     {
       "role": "user",
@@ -280,7 +280,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The image shows a large area of hyperdensity in the left temporal lobe, consistent with a skull fracture."
+      "content": "Answer: Yes. The image shows a large area of hyperdensity in the right cerebral hemisphere, which is consistent with a hemorrhage."
     },
     {
       "role": "user",
@@ -299,7 +299,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The image shows a large area of hyperdensity in the left temporal lobe, consistent with a skull fracture."
+      "content": "Answer: Yes. The image shows a large area of hyperdensity in the right cerebral hemisphere, which is consistent with a hemorrhage."
     },
     {
       "role": "user",
@@ -318,7 +318,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The image shows a large area of hyperdensity in the left temporal lobe, consistent with a skull fracture."
+      "content": "Answer: Yes. The image shows a large area of hyperdensity in the right cerebral hemisphere, which is consistent with a hemorrhage."
     },
     {
       "role": "user",
@@ -337,7 +337,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The image shows a large area of hyperdensity in the left temporal lobe, consistent with a skull fracture."
+      "content": "Answer: Yes. The image shows a large area of hyperdensity in the right cerebral hemisphere, which is consistent with a hemorrhage."
     },
     {
       "role": "user",
@@ -356,7 +356,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The image shows a large area of hyperdensity in the left temporal lobe, consistent with a skull fracture."
+      "content": "Answer: Yes. The image shows a large area of hyperdensity in the right cerebral hemisphere, which is consistent with a hemorrhage."
     }
   ],
   "model": "google/medgemma-4b-it",

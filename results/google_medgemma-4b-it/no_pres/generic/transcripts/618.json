@@ -21,7 +21,7 @@
     {
       "turn": 0,
       "role": "assistant",
-      "content": "Answer: Yes. The image shows distinct air-fluid levels within the bowel loops.",
+      "content": "Answer: Yes. There are visible air-fluid levels in the bowel.",
       "answer": "Yes"
     },
     {
@@ -32,7 +32,7 @@
     {
       "turn": 1,
       "role": "assistant",
-      "content": "I am sorry, I am unable to provide a diagnosis. I am only able to answer questions about the image based on the information provided.\nAnswer: No. There is no clear evidence of air-fluid levels in the bowel.",
+      "content": "Answer: No. There are no air-fluid levels in the bowel.",
       "answer": "No"
     }
   ],
@@ -58,7 +58,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The image shows distinct air-fluid levels within the bowel loops."
+      "content": "Answer: Yes. There are visible air-fluid levels in the bowel."
     },
     {
       "role": "user",
@@ -66,7 +66,7 @@
     },
     {
       "role": "assistant",
-      "content": "I am sorry, I am unable to provide a diagnosis. I am only able to answer questions about the image based on the information provided.\nAnswer: No. There is no clear evidence of air-fluid levels in the bowel."
+      "content": "Answer: No. There are no air-fluid levels in the bowel."
     }
   ],
   "model": "google/medgemma-4b-it",

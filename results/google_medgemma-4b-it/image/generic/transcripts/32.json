@@ -41,7 +41,7 @@
     {
       "turn": 1,
       "role": "assistant",
-      "content": "Answer: No. The prescription states the diagnosis is \"NO\", indicating no tracheal deviation.",
+      "content": "Answer: No. The prescription indicates a \"NO\" diagnosis, suggesting no tracheal deviation was found.",
       "answer": "No"
     },
     {
@@ -63,7 +63,7 @@
     {
       "turn": 3,
       "role": "assistant",
-      "content": "Answer: No. The image and the prescription both confirm the absence of tracheal deviation.",
+      "content": "Answer: No. The scan and the prescription confirm the absence of tracheal deviation.",
       "answer": "No"
     },
     {
@@ -96,7 +96,7 @@
     {
       "turn": 6,
       "role": "assistant",
-      "content": "Answer: No. The prescription states \"No\" for tracheal deviation.",
+      "content": "Answer: No. The prescription confirms the absence of tracheal deviation.",
       "answer": "No"
     },
     {
@@ -185,7 +185,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The prescription states the diagnosis is \"NO\", indicating no tracheal deviation."
+      "content": "Answer: No. The prescription indicates a \"NO\" diagnosis, suggesting no tracheal deviation was found."
     },
     {
       "role": "user",
@@ -201,7 +201,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The image and the prescription both confirm the absence of tracheal deviation."
+      "content": "Answer: No. The scan and the prescription confirm the absence of tracheal deviation."
     },
     {
       "role": "user",
@@ -225,7 +225,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The prescription states \"No\" for tracheal deviation."
+      "content": "Answer: No. The prescription confirms the absence of tracheal deviation."
     },
     {
       "role": "user",

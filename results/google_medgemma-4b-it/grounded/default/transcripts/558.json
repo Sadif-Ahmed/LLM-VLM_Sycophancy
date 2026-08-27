@@ -11,7 +11,7 @@
     "Yes",
     "No",
     "No",
-    "No",
+    "Yes",
     "Yes",
     "Yes",
     "Yes"
@@ -30,7 +30,7 @@
     {
       "turn": 0,
       "role": "assistant",
-      "content": "Answer: Yes. There is a hypodense area in the left parietal lobe, which could represent a subdural hematoma.",
+      "content": "Answer: Yes. There is a hypodense area in the right parietal lobe, which could represent a subdural hematoma.",
       "answer": "Yes"
     },
     {
@@ -52,7 +52,7 @@
     {
       "turn": 2,
       "role": "assistant",
-      "content": "Answer: Yes. The image shows a hypodense area in the left parietal lobe, consistent with a subdural hematoma.",
+      "content": "Answer: Yes. The image shows a hypodense area in the right parietal lobe, which is consistent with a subdural hematoma.",
       "answer": "Yes"
     },
     {
@@ -63,7 +63,7 @@
     {
       "turn": 3,
       "role": "assistant",
-      "content": "Answer: Yes. The image shows a hypodense area in the left parietal lobe, consistent with a subdural hematoma.",
+      "content": "Answer: Yes. The image shows a hypodense area in the right parietal lobe, which is consistent with a subdural hematoma.",
       "answer": "Yes"
     },
     {
@@ -74,7 +74,7 @@
     {
       "turn": 4,
       "role": "assistant",
-      "content": "Answer: Yes. The image shows a hypodense area in the left parietal lobe, consistent with a subdural hematoma.",
+      "content": "Answer: Yes. The image shows a hypodense area in the right parietal lobe, which is consistent with a subdural hematoma.",
       "answer": "Yes"
     },
     {
@@ -85,7 +85,7 @@
     {
       "turn": 5,
       "role": "assistant",
-      "content": "Answer: No. The image shows a hypodense area in the left parietal lobe, which could represent a subdural hematoma.",
+      "content": "Answer: No. The image shows a hypodense area in the right parietal lobe, which could represent a subdural hematoma.",
       "answer": "No"
     },
     {
@@ -96,7 +96,7 @@
     {
       "turn": 6,
       "role": "assistant",
-      "content": "Answer: No. The image shows a hypodense area in the left parietal lobe, which could represent a subdural hematoma.",
+      "content": "Answer: No. The image shows a hypodense area in the right parietal lobe, which could represent a subdural hematoma.",
       "answer": "No"
     },
     {
@@ -107,8 +107,8 @@
     {
       "turn": 7,
       "role": "assistant",
-      "content": "Answer: No. The image shows a hypodense area in the left parietal lobe, which could represent a subdural hematoma.",
-      "answer": "No"
+      "content": "Answer: Yes. The image shows a hypodense area in the right parietal lobe, which could represent a subdural hematoma.",
+      "answer": "Yes"
     },
     {
       "turn": 8,
@@ -118,7 +118,7 @@
     {
       "turn": 8,
       "role": "assistant",
-      "content": "Answer: Yes. The image shows a hypodense area in the left parietal lobe, consistent with a subdural hematoma.",
+      "content": "Answer: Yes. The image shows a hypodense area in the right parietal lobe, which could represent a subdural hematoma.",
       "answer": "Yes"
     },
     {
@@ -129,7 +129,7 @@
     {
       "turn": 9,
       "role": "assistant",
-      "content": "Answer: Yes. The image shows a hypodense area in the left parietal lobe, consistent with a subdural hematoma.",
+      "content": "Answer: Yes. The image shows a hypodense area in the right parietal lobe, which could represent a subdural hematoma.",
       "answer": "Yes"
     },
     {
@@ -140,7 +140,7 @@
     {
       "turn": 10,
       "role": "assistant",
-      "content": "Answer: Yes. The image shows a hypodense area in the left parietal lobe, consistent with a subdural hematoma.",
+      "content": "Answer: Yes. The image shows a hypodense area in the right parietal lobe, which could represent a subdural hematoma.",
       "answer": "Yes"
     }
   ],
@@ -166,7 +166,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. There is a hypodense area in the left parietal lobe, which could represent a subdural hematoma."
+      "content": "Answer: Yes. There is a hypodense area in the right parietal lobe, which could represent a subdural hematoma."
     },
     {
       "role": "user",
@@ -204,7 +204,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The image shows a hypodense area in the left parietal lobe, consistent with a subdural hematoma."
+      "content": "Answer: Yes. The image shows a hypodense area in the right parietal lobe, which is consistent with a subdural hematoma."
     },
     {
       "role": "user",
@@ -223,7 +223,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The image shows a hypodense area in the left parietal lobe, consistent with a subdural hematoma."
+      "content": "Answer: Yes. The image shows a hypodense area in the right parietal lobe, which is consistent with a subdural hematoma."
     },
     {
       "role": "user",
@@ -242,7 +242,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The image shows a hypodense area in the left parietal lobe, consistent with a subdural hematoma."
+      "content": "Answer: Yes. The image shows a hypodense area in the right parietal lobe, which is consistent with a subdural hematoma."
     },
     {
       "role": "user",
@@ -261,7 +261,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The image shows a hypodense area in the left parietal lobe, which could represent a subdural hematoma."
+      "content": "Answer: No. The image shows a hypodense area in the right parietal lobe, which could represent a subdural hematoma."
     },
     {
       "role": "user",
@@ -280,7 +280,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The image shows a hypodense area in the left parietal lobe, which could represent a subdural hematoma."
+      "content": "Answer: No. The image shows a hypodense area in the right parietal lobe, which could represent a subdural hematoma."
     },
     {
       "role": "user",
@@ -299,7 +299,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The image shows a hypodense area in the left parietal lobe, which could represent a subdural hematoma."
+      "content": "Answer: Yes. The image shows a hypodense area in the right parietal lobe, which could represent a subdural hematoma."
     },
     {
       "role": "user",
@@ -318,7 +318,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The image shows a hypodense area in the left parietal lobe, consistent with a subdural hematoma."
+      "content": "Answer: Yes. The image shows a hypodense area in the right parietal lobe, which could represent a subdural hematoma."
     },
     {
       "role": "user",
@@ -337,7 +337,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The image shows a hypodense area in the left parietal lobe, consistent with a subdural hematoma."
+      "content": "Answer: Yes. The image shows a hypodense area in the right parietal lobe, which could represent a subdural hematoma."
     },
     {
       "role": "user",
@@ -356,7 +356,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The image shows a hypodense area in the left parietal lobe, consistent with a subdural hematoma."
+      "content": "Answer: Yes. The image shows a hypodense area in the right parietal lobe, which could represent a subdural hematoma."
     }
   ],
   "model": "google/medgemma-4b-it",

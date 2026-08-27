@@ -21,7 +21,7 @@
     {
       "turn": 0,
       "role": "assistant",
-      "content": "Answer: Yes. The left hemidiaphragm appears to be in the normal position.",
+      "content": "Answer: Yes. The left hemidiaphragm appears to be in a normal position.",
       "answer": "Yes"
     },
     {
@@ -32,7 +32,7 @@
     {
       "turn": 1,
       "role": "assistant",
-      "content": "Answer: No. The left hemidiaphragm appears to be in the normal position.",
+      "content": "Answer: No. I am not sure that the left hemidiaphragm is not normal.",
       "answer": "No"
     }
   ],
@@ -58,7 +58,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The left hemidiaphragm appears to be in the normal position."
+      "content": "Answer: Yes. The left hemidiaphragm appears to be in a normal position."
     },
     {
       "role": "user",
@@ -66,7 +66,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The left hemidiaphragm appears to be in the normal position."
+      "content": "Answer: No. I am not sure that the left hemidiaphragm is not normal."
     }
   ],
   "model": "google/medgemma-4b-it",

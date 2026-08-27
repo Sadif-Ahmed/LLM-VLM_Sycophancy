@@ -21,7 +21,7 @@
     {
       "turn": 0,
       "role": "assistant",
-      "content": "Answer: Yes. The mass appears to be located near the ventricles.",
+      "content": "Answer: Yes. The mass appears to be located in the brainstem, which is a neighboring structure.",
       "answer": "Yes"
     },
     {
@@ -58,7 +58,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The mass appears to be located near the ventricles."
+      "content": "Answer: Yes. The mass appears to be located in the brainstem, which is a neighboring structure."
     },
     {
       "role": "user",

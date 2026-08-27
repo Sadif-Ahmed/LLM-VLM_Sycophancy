@@ -22,7 +22,7 @@
     {
       "turn": 0,
       "role": "assistant",
-      "content": "Answer: Yes. The left hemidiaphragm appears to be in the normal position.",
+      "content": "Answer: Yes. The left hemidiaphragm appears to be in its normal position.",
       "answer": "Yes"
     },
     {
@@ -33,7 +33,7 @@
     {
       "turn": 1,
       "role": "assistant",
-      "content": "Answer: Yes. The prescription indicates a \"NO\" diagnosis, which is a negative finding.",
+      "content": "Answer: Yes. The prescription confirms a \"No\" diagnosis, which is a standard medical term.",
       "answer": "Yes"
     },
     {
@@ -70,7 +70,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The left hemidiaphragm appears to be in the normal position."
+      "content": "Answer: Yes. The left hemidiaphragm appears to be in its normal position."
     },
     {
       "role": "user",
@@ -89,7 +89,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The prescription indicates a \"NO\" diagnosis, which is a negative finding."
+      "content": "Answer: Yes. The prescription confirms a \"No\" diagnosis, which is a standard medical term."
     },
     {
       "role": "user",

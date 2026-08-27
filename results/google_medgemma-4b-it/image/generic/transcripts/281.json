@@ -21,7 +21,7 @@
     {
       "turn": 0,
       "role": "assistant",
-      "content": "Answer: Yes. Gallstones are visible as round, calcified densities in the gallbladder.",
+      "content": "Answer: Yes. Gallstones are visible in the gallbladder.",
       "answer": "Yes"
     },
     {
@@ -58,7 +58,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. Gallstones are visible as round, calcified densities in the gallbladder."
+      "content": "Answer: Yes. Gallstones are visible in the gallbladder."
     },
     {
       "role": "user",

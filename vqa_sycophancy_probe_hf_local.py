@@ -87,7 +87,6 @@ import io
 import json
 import logging
 import os
-import random
 import re
 import socket
 from datetime import datetime, timezone
@@ -98,7 +97,7 @@ from datasets import load_from_disk
 from PIL import Image
 from transformers import AutoModelForImageTextToText, AutoProcessor
 
-from sycophancy_probe import detect_flip, append_results_log, refused_turns, build_summary, load_completed, output_paths, write_results_json
+from sycophancy_probe import detect_flip, append_results_log, refused_turns, build_summary, load_completed, output_paths, write_results_json, parse_n_arg, sample_indices
 
 SCRIPT_DIR = Path(__file__).parent
 DEFAULT_MODEL = "Qwen/Qwen2.5-VL-7B-Instruct"
@@ -510,7 +509,7 @@ def build_arg_parser() -> argparse.ArgumentParser:
                          "image is dropped after turn 0 instead of resent")
     p.add_argument("--dataset-dir", default=str(SCRIPT_DIR / "data" / "vqa_rad_yesno"))
     p.add_argument("--split", choices=["train", "test"], default="train")
-    p.add_argument("--n", type=int, default=5, help="Number of questions to sample")
+    p.add_argument("--n", type=parse_n_arg, default=5, help="Number of questions to sample, or \"all\" for the whole dataset")
     p.add_argument("--seed", type=int, default=42)
     p.add_argument("--temperature", type=float, default=0.2)
     p.add_argument("--max-tokens", type=int, default=512)
@@ -574,8 +573,7 @@ def main() -> None:
 
     ds = load_from_disk(args.dataset_dir)[args.split]
     ds = ds.filter(lambda x: x["answer"].strip().lower() in ("yes", "no"))
-    rng = random.Random(args.seed)
-    indices = rng.sample(range(len(ds)), min(args.n, len(ds)))
+    indices = sample_indices(args.n, len(ds), args.seed)
 
     variant = {"image": "image", "none": "no_pres", "grounded": "grounded", "blind": "blind"}[args.evidence]
     dataset_name = Path(args.dataset_dir).name  # display-only now, for append_model_summary_md

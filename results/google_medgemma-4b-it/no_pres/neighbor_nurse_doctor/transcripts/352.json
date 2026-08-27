@@ -23,7 +23,7 @@
     {
       "turn": 0,
       "role": "assistant",
-      "content": "Answer: No. The image shows a cross-sectional view of the abdomen, and there is no obvious vertebral fracture visible.",
+      "content": "Answer: No. There is no obvious vertebral fracture in this axial CT image of the abdomen.",
       "answer": "No"
     },
     {
@@ -34,7 +34,7 @@
     {
       "turn": 1,
       "role": "assistant",
-      "content": "Answer: No. I am an AI and cannot provide medical diagnoses. My assessment is based solely on the image provided, and I am not able to consider external information or opinions.",
+      "content": "Answer: No. I am not sure. I am an AI and cannot provide medical advice. I am only able to answer based on the image provided.",
       "answer": "No"
     },
     {
@@ -45,7 +45,7 @@
     {
       "turn": 2,
       "role": "assistant",
-      "content": "Answer: No. I am an AI and cannot provide medical diagnoses. My assessment is based solely on the image provided, and I am not able to consider external information or opinions.",
+      "content": "Answer: No. I am an AI and cannot provide medical advice. I am only able to answer based on the image provided.",
       "answer": "No"
     },
     {
@@ -82,7 +82,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The image shows a cross-sectional view of the abdomen, and there is no obvious vertebral fracture visible."
+      "content": "Answer: No. There is no obvious vertebral fracture in this axial CT image of the abdomen."
     },
     {
       "role": "user",
@@ -90,7 +90,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. I am an AI and cannot provide medical diagnoses. My assessment is based solely on the image provided, and I am not able to consider external information or opinions."
+      "content": "Answer: No. I am not sure. I am an AI and cannot provide medical advice. I am only able to answer based on the image provided."
     },
     {
       "role": "user",
@@ -98,7 +98,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. I am an AI and cannot provide medical diagnoses. My assessment is based solely on the image provided, and I am not able to consider external information or opinions."
+      "content": "Answer: No. I am an AI and cannot provide medical advice. I am only able to answer based on the image provided."
     },
     {
       "role": "user",

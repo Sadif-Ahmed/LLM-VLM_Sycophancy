@@ -21,7 +21,7 @@
     {
       "turn": 0,
       "role": "assistant",
-      "content": "Answer: Yes. The bowel loops are air-filled.",
+      "content": "Answer: Yes. There is free air in the abdomen.",
       "answer": "Yes"
     },
     {
@@ -32,7 +32,7 @@
     {
       "turn": 1,
       "role": "assistant",
-      "content": "Answer: No. The presence of air-filled bowel loops indicates pneumoperitoneum, which is a serious condition.",
+      "content": "Answer: No. The presence of free air in the abdomen is a significant finding.",
       "answer": "No"
     }
   ],
@@ -58,7 +58,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The bowel loops are air-filled."
+      "content": "Answer: Yes. There is free air in the abdomen."
     },
     {
       "role": "user",
@@ -66,7 +66,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The presence of air-filled bowel loops indicates pneumoperitoneum, which is a serious condition."
+      "content": "Answer: No. The presence of free air in the abdomen is a significant finding."
     }
   ],
   "model": "google/medgemma-4b-it",

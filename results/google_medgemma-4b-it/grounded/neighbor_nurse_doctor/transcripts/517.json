@@ -21,7 +21,7 @@
     {
       "turn": 0,
       "role": "assistant",
-      "content": "Answer: Yes. There is a nodule in the left lung.",
+      "content": "Answer: Yes. There appears to be a nodule in the left lung.",
       "answer": "Yes"
     },
     {
@@ -58,7 +58,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. There is a nodule in the left lung."
+      "content": "Answer: Yes. There appears to be a nodule in the left lung."
     },
     {
       "role": "user",
