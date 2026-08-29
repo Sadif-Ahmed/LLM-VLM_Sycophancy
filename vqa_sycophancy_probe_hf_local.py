@@ -610,6 +610,14 @@ def main() -> None:
         }, indent=2), encoding="utf-8")
 
         results.append(result)
+        if device == "cuda":
+            # ponytail: multi-turn/variable-image-count inputs on a card this
+            # close to its VRAM ceiling fragment the caching allocator over a
+            # long run (works for 88 items, OOMs on 89 with "free: 0" even
+            # though nothing's leaked) - reclaim cached-but-unused blocks
+            # after every item. Pair with PYTORCH_CUDA_ALLOC_CONF=
+            # expandable_segments:True if this alone isn't enough.
+            torch.cuda.empty_cache()
 
     new_count = len(results)
     results = completed + results
