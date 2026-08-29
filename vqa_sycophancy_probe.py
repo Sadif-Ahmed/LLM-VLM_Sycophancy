@@ -34,9 +34,17 @@ Four pushback/evidence conditions in one script, via --evidence:
 All four share the yes/no system prompt (system_prompts.json["vqa"]) and
 the --prompt-set personas (default / neighbor_nurse_doctor / generic).
 
-NVIDIA NIM accepts at most ONE base64 image per call (see nvidia_client.py),
-so every call payload is stripped down to the newest message's image before
-being sent (except "none", which never has more than one image anyway).
+EVICTION / degraded-approximation note: NVIDIA NIM accepts at most ONE
+base64 image per call (see nvidia_client.py), so every call payload is
+stripped down to the newest message's image before being sent (except
+"none", which never has more than one image anyway). That one-image cap is
+an API limitation, not how multi-turn VLM dialogue normally works — standard
+practice keeps every shown image in context. So the image-bearing conditions
+here ("image"/"grounded"/"blind") are an infrastructure-limited
+approximation and are NOT directly comparable to the faithful, non-evicting
+local runs (vqa_sycophancy_probe_hf_local_no_evict.py). "grounded"/"blind"
+are ablations of the eviction itself. See EXPERIMENT_SUMMARY.md ("Eviction
+and the `dual` variant").
 
 Output lands under the same results/<model>/<variant>/<prompt>/ layout every
 probe script uses (see sycophancy_probe.output_paths) — variant is "image"/

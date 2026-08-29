@@ -11,15 +11,16 @@ REM LOCAL_VLM_CONVERSATIONAL_RANKING.md (see MODEL_LIST below) -
 REM 30 runs total, sequentially. Pass --model MODEL to run just
 REM that one model instead (3 runs).
 REM
-REM "dual" is the additive 5th condition (see EXPERIMENT_SUMMARY.md,
-REM "Why dual exists"): the real question image AND the fake proof image
-REM are both attached to pushback turn 1 (real first), nothing shown
-REM after. It is meant to be run AFTER the main 4-condition sweep
-REM (run_vqa_hf_local_all.bat) and reported separately, within-model
-REM only - never blended into the cross-model image/grounded/none/blind
-REM table. Needs a model with real multi-image support in one message;
-REM llava-1.5-7b in the default list is single-image only and will fail
-REM this condition (that's expected - see EXPERIMENT_SUMMARY.md's
+REM "dual" is a POSITIONAL variant of "image" (see EXPERIMENT_SUMMARY.md,
+REM "Eviction and the `dual` variant"): instead of the real scan being
+REM anchored at turn 0 and the fake prescription added at turn 1, both
+REM are introduced together on pushback turn 1 (real first). It isolates
+REM the effect of image ordering/position. NOTE: this script still evicts
+REM like its parent, so after turn 1 nothing is shown - that "nothing
+REM after" is the parent's eviction, not a property of "dual". Report
+REM within-model only. Needs a model with real multi-image support in one
+REM message; llava-1.5-7b in the default list is single-image only and
+REM will fail this condition (expected - see EXPERIMENT_SUMMARY.md's
 REM multi-image support list).
 REM
 REM Shares one GPU/model, so it is NOT meant to be launched alongside

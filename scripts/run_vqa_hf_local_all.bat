@@ -12,6 +12,14 @@ REM LOCAL_VLM_CONVERSATIONAL_RANKING.md (see MODEL_LIST below) -
 REM 120 runs total, sequentially. Pass --model MODEL to run just
 REM that one model instead (12 runs).
 REM
+REM This script EVICTS all but the newest image every turn, matching
+REM the NIM backend's one-image-per-call cap so local and NIM numbers
+REM stay comparable. That is not how multi-turn VLM dialogue normally
+REM works - for the faithful (non-evicting) "image" condition use
+REM run_vqa_hf_local_noevict.bat. "grounded"/"blind" here are ablations
+REM of the eviction itself. See EXPERIMENT_SUMMARY.md ("Eviction and
+REM the `dual` variant").
+REM
 REM Unlike the NIM run_vqa_*.bat scripts, this is NOT meant to be
 REM launched alongside anything else that also wants the GPU (there's
 REM only one device to share), so everything runs sequentially.

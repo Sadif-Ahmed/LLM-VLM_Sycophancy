@@ -52,6 +52,13 @@ vqa_sycophancy_probe_hf_local.py — one script, all 4 evidence modes
 via --evidence {image,grounded,none,blind}. --proof-yes-image /
 --proof-no-image required for image/grounded only.
 
+EVICTION: this script drops all but the newest image every turn, to
+match the NIM backend's 1-image-per-call cap (keeps local vs NIM
+comparable). That is NOT how multi-turn VLM dialogue normally works —
+for the faithful (non-evicting) "image" condition use the no-evict
+script in 3b. "grounded"/"blind" are ablations of the eviction itself.
+See EXPERIMENT_SUMMARY.md ("Eviction and the `dual` variant").
+
 Recommended: run_vqa_hf_local_all.bat loops all 4 evidence modes x
 all 3 personas = 12 runs per model.
 
@@ -94,13 +101,15 @@ custom Hub code, --runner NAME to override the auto-detected
 username@hostname metadata tag (no longer a folder level, just recorded
 in results.json/RESULTS.txt/summary/<model>.md).
 
-3a. dual-image condition (FIX2) — run AFTER the main 4-condition sweep
+3a. dual — positional variant of "image"
 --------------------------------------------------------------
 vqa_sycophancy_probe_hf_local_dual.py — copy of the above with a 5th
---evidence value, "dual": real AND fake image both on pushback turn 1
-(real first), nothing after. Report within-model only, never blended
-into the image/grounded/none/blind cross-model table. Needs a model
-with real multi-image support (NOT Llama-3.2-Vision).
+--evidence value, "dual": instead of anchoring the real scan at turn 0
+and adding the fake one at turn 1, both are introduced together on
+pushback turn 1 (real first). Isolates image ordering/position. Still
+evicts like its parent (so nothing shown after turn 1 — that's the
+parent's eviction, not "dual"). Report within-model only. Needs a
+model with real multi-image support (NOT Llama-3.2-Vision).
 
     scripts\run_vqa_hf_local_dual.bat --model Qwen/Qwen2.5-VL-7B-Instruct --n 50
     (loops dual x all 3 personas = 3 runs; proof images always required, resolved automatically)
@@ -109,12 +118,17 @@ Same --model behavior as run_vqa_hf_local_all.bat: omit it to sweep the
 same 10-model list (30 runs; llava-1.5-7b will fail dual — single-image
 only — which is expected). Same optional flags otherwise.
 
-3b. no-eviction diagnostic — NOT for real data
+3b. no-eviction — SOTA-faithful "image"
 --------------------------------------------------------------
-vqa_sycophancy_probe_hf_local_no_evict.py — never evicts old images.
-Only image/none offered; "image" becomes an accidental always-on dual.
-Output goes to *_noevict folders. Use only to inspect the eviction
-behavior, never as reportable results (see EXPERIMENT_SUMMARY.md).
+vqa_sycophancy_probe_hf_local_no_evict.py — never evicts old images,
+matching standard multi-turn VLM dialogue. "image" here = real scan
+(turn 0) + fake prescription (turn 1) both stay in context for the
+rest of the conversation — the methodologically correct "image"
+condition, and the numbers to report for it. Only image/none apply
+(grounded/blind are eviction ablations). Output goes to *_noevict
+folders so it never mixes with the NIM-comparable evicting runs of
+the same name. See EXPERIMENT_SUMMARY.md ("Eviction and the `dual`
+variant").
 
     scripts\run_vqa_hf_local_noevict.bat --model Qwen/Qwen2.5-VL-7B-Instruct --n 20
     (loops image + none x all 3 personas = 6 runs; omit --model to sweep

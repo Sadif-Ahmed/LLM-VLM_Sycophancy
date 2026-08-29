@@ -12,10 +12,24 @@ vqa_sycophancy_probe_grounded.py (NIM, grounded only), vqa_sycophancy_probe_hf.p
 quantization or trust_remote_code support). None of those files are changed
 by this one.
 
+EVICTION NOTE: this script strips all but the newest image from every call
+(build_call_messages / strip_images_except_last), matching the NVIDIA NIM
+backend, which caps API calls at one image each. That cap is an
+infrastructure limit, NOT how multi-turn VLM dialogue normally works —
+standard practice keeps every shown image in context. So the image-bearing
+conditions below ("image"/"grounded"/"blind") are a degraded approximation
+here, kept only so local runs sit on the same basis as the NIM runs. For
+the faithful (non-evicting) "image" condition, use
+vqa_sycophancy_probe_hf_local_no_evict.py; "grounded"/"blind" are ablations
+of eviction and have no faithful counterpart. See EXPERIMENT_SUMMARY.md
+("Eviction and the `dual` variant").
+
 Four pushback/evidence conditions in one script, via --evidence:
   image    (default): a fake "proof" image (the fabricated prescription) is
-      attached alongside pushback turn 1 only. Pushback wording from
-      pushback_prompts.json["vqa"]. Requires --proof-yes-image/--proof-no-image.
+      attached alongside pushback turn 1; with eviction, the real turn-0
+      image is already gone by then, so turns 2+ are text-only. Pushback
+      wording from pushback_prompts.json["vqa"]. Requires
+      --proof-yes-image/--proof-no-image.
   none: no second image is ever attached, pure language pressure, and the
       real question image is resent every turn (it's the only image in the
       conversation, so nothing needs stripping). Pushback wording from
@@ -24,7 +38,8 @@ Four pushback/evidence conditions in one script, via --evidence:
   grounded: like "image" on turn 1 (fake proof image flashes once), but the
       REAL question image is restored on every turn after that, so later
       turns test resistance to pressure while the model can still see the
-      actual scan. Same "vqa" wording as "image". Also requires
+      actual scan. Same "vqa" wording as "image". An ablation of eviction
+      (nothing to "restore" without it). Also requires
       --proof-yes-image/--proof-no-image.
   blind: same wording as "none" (no prescription ever mentioned), but the
       real image is deliberately dropped after turn 0 instead of resent —
@@ -324,12 +339,15 @@ def load_image_b64(path: str, max_dim: int = MAX_IMAGE_DIM) -> str:
 
 
 def strip_images_except_last(messages: list[dict]) -> list[dict]:
-    """Downgrade every message except the newest to text-only. Needed for
-    'image' (turn 0 real image + turn 1 fake image) and 'grounded' (a new
-    image on every pushback turn) — the processor's {"type": "image"}
-    placeholders pair positionally with the flat images list it's given, so
-    replaying stale image turns as images again would desync that pairing.
-    Not needed for 'none', which never attaches a second image at all."""
+    """Downgrade every message except the newest to text-only. This mirrors
+    the NVIDIA NIM backend's one-image-per-call cap so local and NIM runs
+    stay byte-comparable — it is NOT how multi-turn VLM dialogue normally
+    behaves (standard practice keeps every image in context; see
+    vqa_sycophancy_probe_hf_local_no_evict.py for the faithful version).
+    Mechanically it also keeps the processor's {"type": "image"} placeholders
+    paired positionally with the flat images list, since replaying stale
+    image turns as images again would desync that pairing. Not needed for
+    'none', which never attaches a second image at all."""
     last_idx = len(messages) - 1
     out = []
     for i, m in enumerate(messages):

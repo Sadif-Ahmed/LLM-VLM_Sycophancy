@@ -1,32 +1,37 @@
 """
-VLM sycophancy probe, unified local-inference edition — NO-EVICTION VARIANT.
+VLM sycophancy probe, unified local-inference edition — NO-EVICTION (SOTA-faithful) VARIANT.
 
 Fork of vqa_sycophancy_probe_hf_local.py with exactly one behavior change:
-build_call_messages() never strips old images to text anymore. Only "image"
-and "none" are offered as --evidence here — "blind" and "grounded" are
-dropped entirely, because both are defined *by* eviction and stop making
-sense once it's gone:
+build_call_messages() never strips old images to text. This matches how
+standard multi-turn VLM dialogue works — every image the model has been
+shown stays in the conversation history for all later turns. The evicting
+sibling strips images only to stay byte-comparable with the NVIDIA NIM
+backend, which caps API calls at one image each; that eviction is an
+infrastructure workaround, not a modelling choice. THIS file is therefore
+the faithful one for local runs, and its numbers are the ones to report for
+the persistent-image conditions.
+
+Only "image" and "none" are offered as --evidence here — "blind" and
+"grounded" are dropped, because both are ablations *of* eviction and stop
+making sense once it's gone:
   - "blind" (real image dropped after turn 0, nothing replaces it) has
-    nothing left to drop without eviction — it would be byte-identical to
-    "none", not a distinct condition.
+    nothing left to drop — it would be byte-identical to "none".
   - "grounded" (real image restored fresh on every turn from 2 on) re-attaches
-    an image specifically to survive eviction that no longer happens — without
-    it, that re-attachment just piles redundant duplicate copies of the
-    already-still-live real image into the message list, up to 9 by the end
-    of a 10-turn run. Broken, not a condition worth keeping around.
+    an image specifically to survive an eviction that no longer happens —
+    without it, that re-attachment just piles up to 9 redundant duplicate
+    copies of the already-still-live real image into the message list.
 What's left:
-  - none:  unaffected. Already never stripped (the real image was always
-           resent live every turn regardless).
-  - image: becomes what we've called dual_persist elsewhere — the fake proof
-           image (attached once, turn 1) and the real question image
-           (attached once, turn 0) both stay live for the rest of the
-           conversation, since neither ever gets evicted.
-Do not use this for real experimental data collection — the scoped,
-non-broken persistent dual-image condition lives in
-vqa_sycophancy_probe_hf_local_dual.py (--evidence dual), on its own isolated
-branch, leaving this file's sibling untouched; see EXPERIMENT_SUMMARY.md
-("Why dual exists"). This file is a diagnostic/limitations artifact, not a
-new condition to report results from.
+  - none:  unaffected. The real image was always resent live every turn.
+  - image: the fake proof image (added turn 1) and the real question image
+           (turn 0) both stay live for the rest of the conversation, since
+           neither is ever evicted. This is the methodologically correct
+           "image" condition for a faithful multi-turn setup, not a special
+           case.
+
+vqa_sycophancy_probe_hf_local_dual.py adds a --evidence dual that introduces
+both images on the SAME turn (turn 1) instead of anchoring the real one at
+turn 0 — a positional variant of this file's "image"; see
+EXPERIMENT_SUMMARY.md ("Eviction and the `dual` variant").
 
 The point of this file is to be the ONE script for "run a Hugging Face
 vision-language model locally, on this machine's own GPU, through the same
@@ -80,8 +85,9 @@ just barely fits at turn 0 can still OOM by turn 8-10. Leave VRAM headroom.
 Output lands under the same results/<model>/<variant>/<prompt>/ layout every
 probe script uses (see sycophancy_probe.output_paths) — variant is
 "image_noevict"/"no_pres_noevict" depending on --evidence (the _noevict
-suffix keeps this file's output out of the real experimental data's
-folders — see the top of this docstring). No source/runner level in the
+suffix keeps these faithful, non-evicting runs in their own folders,
+separate from the NIM-comparable evicting runs of the same model/persona).
+No source/runner level in the
 path: running the same model+variant+prompt via this script and, say,
 vqa_sycophancy_probe.py lands in the identical folder (stick to one backend
 per model), and two people running the same combo locally now share one
@@ -578,10 +584,10 @@ def main() -> None:
     ds = ds.filter(lambda x: x["answer"].strip().lower() in ("yes", "no"))
     indices = sample_indices(args.n, len(ds), args.seed)
 
-    # _noevict suffix on every variant: this script's output means something
+    # _noevict suffix on every variant: this script's "image" means something
     # different from the same variant name in vqa_sycophancy_probe_hf_local.py
-    # (see module docstring) - must never land in the same results/ folder as
-    # real experimental data.
+    # (faithful non-evicting vs. NIM-comparable evicting - see module
+    # docstring), so the two must not share a results/ folder.
     variant = {"image": "image_noevict", "none": "no_pres_noevict"}[args.evidence]
     dataset_name = Path(args.dataset_dir).name  # display-only now, for append_model_summary_md
     runner_tag = re.sub(r"[^A-Za-z0-9_.-]+", "_", args.runner or default_runner_tag())

@@ -12,15 +12,16 @@ REM LOCAL_VLM_CONVERSATIONAL_RANKING.md (see MODEL_LIST below) -
 REM 60 runs total, sequentially. Pass --model MODEL to run just
 REM that one model instead (6 runs).
 REM
-REM DIAGNOSTIC ONLY. The no-eviction variant never strips old images
-REM to text, so "image" here is an accidental always-on dual (fake +
-REM real both live every turn) and "grounded"/"blind" are dropped
-REM because they are defined by eviction. Its output goes to
-REM *_noevict variant folders on purpose. Do NOT report this as real
-REM experimental data - see EXPERIMENT_SUMMARY.md ("Why dual exists")
-REM and the module docstring for the scoped, non-broken persistent-dual
-REM condition (that lives in vqa_sycophancy_probe_hf_local_dual.py /
-REM run_vqa_hf_local_dual.bat).
+REM SOTA-FAITHFUL. The no-eviction variant never strips old images to
+REM text, matching how standard multi-turn VLM dialogue works - every
+REM image stays in context. So "image" here = the real scan (turn 0)
+REM and the fake prescription (turn 1) both live for the rest of the
+REM conversation, which is the methodologically correct "image"
+REM condition. "grounded"/"blind" are dropped because they are ablations
+REM of eviction and have no faithful counterpart. Output goes to
+REM *_noevict variant folders so it never mixes with the NIM-comparable
+REM (evicting) runs from run_vqa_hf_local_all.bat of the same name.
+REM See EXPERIMENT_SUMMARY.md ("Eviction and the `dual` variant").
 REM
 REM Shares one GPU/model, so it is NOT meant to be launched alongside
 REM anything else that also wants the GPU - runs everything

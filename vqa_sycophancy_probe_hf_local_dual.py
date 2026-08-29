@@ -2,26 +2,28 @@
 VLM sycophancy probe, unified local-inference edition — DUAL-IMAGE VARIANT.
 
 Copy of vqa_sycophancy_probe_hf_local.py that adds one extra --evidence
-value, "dual" (see EXPERIMENT_SUMMARY.md, "Why dual exists"). The four
-original conditions ("image"/"grounded"/"none"/"blind") are byte-for-byte
-unchanged; "dual" is purely additive. Kept as its own file, not merged into
-the sibling, to keep the additive condition on its own isolated branch — the
-sibling and vqa_sycophancy_probe_hf_local_no_evict.py are both untouched by
-this one.
+value, "dual" (see EXPERIMENT_SUMMARY.md, "Eviction and the `dual`
+variant"). The four original conditions ("image"/"grounded"/"none"/"blind")
+are byte-for-byte unchanged; "dual" is purely additive. Kept as its own
+file, not merged into the sibling, to keep the additive condition on its own
+isolated branch — the sibling and vqa_sycophancy_probe_hf_local_no_evict.py
+are both untouched by this one.
 
-"dual" is the one condition that puts the real and fake images in
-competition *within the same forward pass*: both are attached to pushback
-turn 1 (real first, then fake — the real image was established on turn 0, so
-it keeps continuity; the fake is the newly-introduced one), with turn 1's
-pushback text left byte-identical to what "image"/"grounded" already use (no
-wording change, so image count is the only thing that varies vs. "image").
-Turns 2-10 mirror "image", not "grounded": nothing is shown after turn 1, so
-"image" vs. "dual" is a clean single-variable comparison (1 vs. 2 images on
-turn 1, everything else identical). Requires a model with real multi-image
-support in one message — Llama-3.2-Vision (cross-attention) cannot take it;
-see EXPERIMENT_SUMMARY.md's multi-image support list. Report "dual"
-separately, within-model only, never blended into the 4-condition
-cross-model table.
+"dual" is a POSITIONAL variant of a faithful (non-evicting) "image"
+condition. In a faithful setup the real image (turn 0) and the fake
+prescription (added turn 1) both stay in context, so they already compete in
+every forward pass from turn 1 on — that's what
+vqa_sycophancy_probe_hf_local_no_evict.py's "image" does. "dual" differs
+only in WHERE the two images sit: instead of anchoring the real one at turn
+0, it introduces both on pushback turn 1 together (real first, then fake),
+with turn 1's pushback text left byte-identical to "image"/"grounded". It
+isolates the effect of image ordering/position, holding image content and
+wording fixed. NOTE: this file still evicts like its parent, so after turn 1
+nothing is shown; that "nothing after turn 1" is the parent's eviction
+behavior, not a property of "dual" itself. Requires a model with real
+multi-image support in one message — Llama-3.2-Vision (cross-attention)
+cannot take it; see EXPERIMENT_SUMMARY.md's multi-image support list. Report
+"dual" separately, within-model only.
 
 The point of this file is to be the ONE script for "run a Hugging Face
 vision-language model locally, on this machine's own GPU, through the same
