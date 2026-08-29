@@ -1,30 +1,37 @@
 @echo off
 REM ============================================================
-REM run_vqa_hf_local_all.bat
+REM run_vqa_hf_local_dual.bat
 REM
-REM Runs vqa_sycophancy_probe_hf_local.py across all 4 evidence
-REM conditions (image, grounded, none, blind) x all 3 prompt-set
-REM variants (default, neighbor_nurse_doctor, generic) - 12 runs
-REM per model, on this machine's own GPU.
+REM Runs vqa_sycophancy_probe_hf_local_dual.py --evidence dual
+REM across all 3 prompt-set variants (default, neighbor_nurse_doctor,
+REM generic) - 3 runs per model, on this machine's own GPU.
 REM
 REM With no --model, loops the 10 locally-runnable VLMs from
 REM LOCAL_VLM_CONVERSATIONAL_RANKING.md (see MODEL_LIST below) -
-REM 120 runs total, sequentially. Pass --model MODEL to run just
-REM that one model instead (12 runs).
+REM 30 runs total, sequentially. Pass --model MODEL to run just
+REM that one model instead (3 runs).
 REM
-REM Unlike the NIM run_vqa_*.bat scripts, this is NOT meant to be
-REM launched alongside anything else that also wants the GPU (there's
-REM only one device to share), so everything runs sequentially.
+REM "dual" is the additive 5th condition (see EXPERIMENT_SUMMARY.md,
+REM "Why dual exists"): the real question image AND the fake proof image
+REM are both attached to pushback turn 1 (real first), nothing shown
+REM after. It is meant to be run AFTER the main 4-condition sweep
+REM (run_vqa_hf_local_all.bat) and reported separately, within-model
+REM only - never blended into the cross-model image/grounded/none/blind
+REM table. Needs a model with real multi-image support in one message;
+REM llava-1.5-7b in the default list is single-image only and will fail
+REM this condition (that's expected - see EXPERIMENT_SUMMARY.md's
+REM multi-image support list).
+REM
+REM Shares one GPU/model, so it is NOT meant to be launched alongside
+REM anything else that also wants the GPU - runs everything sequentially.
 REM
 REM Usage, from anywhere:
-REM     scripts\run_vqa_hf_local_all.bat [--model MODEL] [options]
+REM     scripts\run_vqa_hf_local_dual.bat [--model MODEL] [options]
 REM
 REM Requires: .venv already created at the repo root (with torch +
 REM transformers installed - see scripts\setup_env.bat), target
 REM dataset already downloaded to disk, pres_yes.png/pres_no.png
-REM present at repo_root\prescriptions\ (only needed for the image/
-REM grounded conditions, but always resolved here since 2 of the 4
-REM conditions use them).
+REM present at repo_root\prescriptions\ (dual always uses them).
 REM ============================================================
 
 setlocal enabledelayedexpansion
@@ -32,7 +39,7 @@ setlocal enabledelayedexpansion
 set "REPO_ROOT=%~dp0.."
 for %%I in ("%REPO_ROOT%") do set "REPO_ROOT=%%~fI"
 set "PYTHON=%REPO_ROOT%\.venv\Scripts\python.exe"
-set "SCRIPT_PY=%REPO_ROOT%\vqa_sycophancy_probe_hf_local.py"
+set "SCRIPT_PY=%REPO_ROOT%\vqa_sycophancy_probe_hf_local_dual.py"
 set "PROOF_YES=%REPO_ROOT%\prescriptions\pres_yes.png"
 set "PROOF_NO=%REPO_ROOT%\prescriptions\pres_no.png"
 
@@ -82,7 +89,7 @@ if not exist "%PYTHON%" (
     exit /b 1
 )
 if not exist "%SCRIPT_PY%" (
-    echo [error] vqa_sycophancy_probe_hf_local.py not found at "%SCRIPT_PY%"
+    echo [error] vqa_sycophancy_probe_hf_local_dual.py not found at "%SCRIPT_PY%"
     exit /b 1
 )
 
@@ -99,31 +106,14 @@ for %%M in (%MODELS%) do (
     echo.
     echo ################## MODEL: %%M ##################
 
-    for %%E in (image grounded none blind) do (
-        set "NEEDS_PROOF=0"
-        if "%%E"=="image" set "NEEDS_PROOF=1"
-        if "%%E"=="grounded" set "NEEDS_PROOF=1"
-
-        for %%P in (default neighbor_nurse_doctor generic) do (
-            set /a RUN_COUNT+=1
-            if "!NEEDS_PROOF!"=="1" (
-                echo === "%PYTHON%" "%SCRIPT_PY%" --model "%%M" --evidence %%E --n %N% --dataset-dir "%DATASET_DIR%" --split %SPLIT% --seed %SEED% --prompt-set %%P --pushback-turns %PUSHBACK_TURNS% --device %DEVICE% --proof-yes-image "%PROOF_YES%" --proof-no-image "%PROOF_NO%" %TRUST_REMOTE_CODE% %LOAD_IN_4BIT% !RUNNER_ARGS! ===
-                if "!DRY_RUN!"=="0" (
-                    "%PYTHON%" "%SCRIPT_PY%" --model "%%M" --evidence %%E --n %N% --dataset-dir "%DATASET_DIR%" --split %SPLIT% --seed %SEED% --prompt-set %%P --pushback-turns %PUSHBACK_TURNS% --device %DEVICE% --proof-yes-image "%PROOF_YES%" --proof-no-image "%PROOF_NO%" %TRUST_REMOTE_CODE% %LOAD_IN_4BIT% !RUNNER_ARGS!
-                    if errorlevel 1 (
-                        set /a FAIL_COUNT+=1
-                        echo !!! FAILED: model=%%M evidence=%%E prompt-set=%%P !!!
-                    )
-                )
-            ) else (
-                echo === "%PYTHON%" "%SCRIPT_PY%" --model "%%M" --evidence %%E --n %N% --dataset-dir "%DATASET_DIR%" --split %SPLIT% --seed %SEED% --prompt-set %%P --pushback-turns %PUSHBACK_TURNS% --device %DEVICE% %TRUST_REMOTE_CODE% %LOAD_IN_4BIT% !RUNNER_ARGS! ===
-                if "!DRY_RUN!"=="0" (
-                    "%PYTHON%" "%SCRIPT_PY%" --model "%%M" --evidence %%E --n %N% --dataset-dir "%DATASET_DIR%" --split %SPLIT% --seed %SEED% --prompt-set %%P --pushback-turns %PUSHBACK_TURNS% --device %DEVICE% %TRUST_REMOTE_CODE% %LOAD_IN_4BIT% !RUNNER_ARGS!
-                    if errorlevel 1 (
-                        set /a FAIL_COUNT+=1
-                        echo !!! FAILED: model=%%M evidence=%%E prompt-set=%%P !!!
-                    )
-                )
+    for %%P in (default neighbor_nurse_doctor generic) do (
+        set /a RUN_COUNT+=1
+        echo === "%PYTHON%" "%SCRIPT_PY%" --model "%%M" --evidence dual --n %N% --dataset-dir "%DATASET_DIR%" --split %SPLIT% --seed %SEED% --prompt-set %%P --pushback-turns %PUSHBACK_TURNS% --device %DEVICE% --proof-yes-image "%PROOF_YES%" --proof-no-image "%PROOF_NO%" %TRUST_REMOTE_CODE% %LOAD_IN_4BIT% !RUNNER_ARGS! ===
+        if "!DRY_RUN!"=="0" (
+            "%PYTHON%" "%SCRIPT_PY%" --model "%%M" --evidence dual --n %N% --dataset-dir "%DATASET_DIR%" --split %SPLIT% --seed %SEED% --prompt-set %%P --pushback-turns %PUSHBACK_TURNS% --device %DEVICE% --proof-yes-image "%PROOF_YES%" --proof-no-image "%PROOF_NO%" %TRUST_REMOTE_CODE% %LOAD_IN_4BIT% !RUNNER_ARGS!
+            if errorlevel 1 (
+                set /a FAIL_COUNT+=1
+                echo !!! FAILED: model=%%M evidence=dual prompt-set=%%P !!!
             )
         )
     )
@@ -137,8 +127,8 @@ exit /b 0
 :usage
 echo Usage: %~nx0 [--model MODEL] [options]
 echo.
-echo   --model MODEL           HF Hub model id to load locally. If omitted, loops the 10
-echo                           locally-runnable VLMs from LOCAL_VLM_CONVERSATIONAL_RANKING.md
+echo   --model MODEL           HF Hub model id (must support multiple images per message). If omitted,
+echo                           loops the 10 locally-runnable VLMs from LOCAL_VLM_CONVERSATIONAL_RANKING.md
 echo   --n N                   questions per run (default: 20)
 echo   --dataset-dir DIR       default: %REPO_ROOT%\data\vqa_rad_yesno
 echo   --split train^|test      default: train

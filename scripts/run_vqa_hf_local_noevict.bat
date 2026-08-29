@@ -1,30 +1,39 @@
 @echo off
 REM ============================================================
-REM run_vqa_hf_local_all.bat
+REM run_vqa_hf_local_noevict.bat
 REM
-REM Runs vqa_sycophancy_probe_hf_local.py across all 4 evidence
-REM conditions (image, grounded, none, blind) x all 3 prompt-set
-REM variants (default, neighbor_nurse_doctor, generic) - 12 runs
+REM Runs vqa_sycophancy_probe_hf_local_no_evict.py across its 2
+REM supported evidence conditions (image, none) x all 3 prompt-set
+REM variants (default, neighbor_nurse_doctor, generic) - 6 runs
 REM per model, on this machine's own GPU.
 REM
 REM With no --model, loops the 10 locally-runnable VLMs from
 REM LOCAL_VLM_CONVERSATIONAL_RANKING.md (see MODEL_LIST below) -
-REM 120 runs total, sequentially. Pass --model MODEL to run just
-REM that one model instead (12 runs).
+REM 60 runs total, sequentially. Pass --model MODEL to run just
+REM that one model instead (6 runs).
 REM
-REM Unlike the NIM run_vqa_*.bat scripts, this is NOT meant to be
-REM launched alongside anything else that also wants the GPU (there's
-REM only one device to share), so everything runs sequentially.
+REM DIAGNOSTIC ONLY. The no-eviction variant never strips old images
+REM to text, so "image" here is an accidental always-on dual (fake +
+REM real both live every turn) and "grounded"/"blind" are dropped
+REM because they are defined by eviction. Its output goes to
+REM *_noevict variant folders on purpose. Do NOT report this as real
+REM experimental data - see EXPERIMENT_SUMMARY.md ("Why dual exists")
+REM and the module docstring for the scoped, non-broken persistent-dual
+REM condition (that lives in vqa_sycophancy_probe_hf_local_dual.py /
+REM run_vqa_hf_local_dual.bat).
+REM
+REM Shares one GPU/model, so it is NOT meant to be launched alongside
+REM anything else that also wants the GPU - runs everything
+REM sequentially.
 REM
 REM Usage, from anywhere:
-REM     scripts\run_vqa_hf_local_all.bat [--model MODEL] [options]
+REM     scripts\run_vqa_hf_local_noevict.bat [--model MODEL] [options]
 REM
 REM Requires: .venv already created at the repo root (with torch +
 REM transformers installed - see scripts\setup_env.bat), target
 REM dataset already downloaded to disk, pres_yes.png/pres_no.png
-REM present at repo_root\prescriptions\ (only needed for the image/
-REM grounded conditions, but always resolved here since 2 of the 4
-REM conditions use them).
+REM present at repo_root\prescriptions\ (only needed for the "image"
+REM condition, but always resolved here).
 REM ============================================================
 
 setlocal enabledelayedexpansion
@@ -32,7 +41,7 @@ setlocal enabledelayedexpansion
 set "REPO_ROOT=%~dp0.."
 for %%I in ("%REPO_ROOT%") do set "REPO_ROOT=%%~fI"
 set "PYTHON=%REPO_ROOT%\.venv\Scripts\python.exe"
-set "SCRIPT_PY=%REPO_ROOT%\vqa_sycophancy_probe_hf_local.py"
+set "SCRIPT_PY=%REPO_ROOT%\vqa_sycophancy_probe_hf_local_no_evict.py"
 set "PROOF_YES=%REPO_ROOT%\prescriptions\pres_yes.png"
 set "PROOF_NO=%REPO_ROOT%\prescriptions\pres_no.png"
 
@@ -82,7 +91,7 @@ if not exist "%PYTHON%" (
     exit /b 1
 )
 if not exist "%SCRIPT_PY%" (
-    echo [error] vqa_sycophancy_probe_hf_local.py not found at "%SCRIPT_PY%"
+    echo [error] vqa_sycophancy_probe_hf_local_no_evict.py not found at "%SCRIPT_PY%"
     exit /b 1
 )
 
@@ -99,10 +108,9 @@ for %%M in (%MODELS%) do (
     echo.
     echo ################## MODEL: %%M ##################
 
-    for %%E in (image grounded none blind) do (
+    for %%E in (image none) do (
         set "NEEDS_PROOF=0"
         if "%%E"=="image" set "NEEDS_PROOF=1"
-        if "%%E"=="grounded" set "NEEDS_PROOF=1"
 
         for %%P in (default neighbor_nurse_doctor generic) do (
             set /a RUN_COUNT+=1

@@ -4,13 +4,12 @@ REM run_vqa_nim_all.bat
 REM
 REM Runs all 4 evidence conditions (image, grounded, none, blind)
 REM x all 3 prompt-set variants (default, neighbor_nurse_doctor,
-REM generic) against a NIM-backed --model - 12 runs total,
+REM generic) against a NIM/OpenRouter --model - 12 runs total,
 REM sequentially, same shape as run_vqa_hf_local_all.bat but for
-REM the API-based scripts (vqa_sycophancy_probe.py /
-REM _grounded.py / _without_pres.py / _blind.py) instead of the
-REM local-GPU one. Since these hit an API rather than sharing one
-REM GPU, you can still launch this alongside another instance
-REM against a different model - just halve --rpm on each.
+REM the API-based unified script (vqa_sycophancy_probe.py --evidence)
+REM instead of the local-GPU one. Since these hit an API rather than
+REM sharing one GPU, you can still launch this alongside another
+REM instance against a different model - just halve --rpm on each.
 REM
 REM Usage, from anywhere:
 REM     scripts\run_vqa_nim_all.bat --model MODEL [options]
@@ -27,10 +26,7 @@ setlocal enabledelayedexpansion
 set "REPO_ROOT=%~dp0.."
 for %%I in ("%REPO_ROOT%") do set "REPO_ROOT=%%~fI"
 set "PYTHON=%REPO_ROOT%\.venv\Scripts\python.exe"
-set "SCRIPT_IMAGE=%REPO_ROOT%\vqa_sycophancy_probe.py"
-set "SCRIPT_GROUNDED=%REPO_ROOT%\vqa_sycophancy_probe_grounded.py"
-set "SCRIPT_NONE=%REPO_ROOT%\vqa_sycophancy_probe_without_pres.py"
-set "SCRIPT_BLIND=%REPO_ROOT%\vqa_sycophancy_probe_blind.py"
+set "SCRIPT_PY=%REPO_ROOT%\vqa_sycophancy_probe.py"
 set "PROOF_YES=%REPO_ROOT%\prescriptions\pres_yes.png"
 set "PROOF_NO=%REPO_ROOT%\prescriptions\pres_no.png"
 
@@ -68,11 +64,9 @@ if not exist "%PYTHON%" (
     echo         Create it first: python -m venv .venv, then pip install openai httpx tenacity datasets pillow
     exit /b 1
 )
-for %%S in ("%SCRIPT_IMAGE%" "%SCRIPT_GROUNDED%" "%SCRIPT_NONE%" "%SCRIPT_BLIND%") do (
-    if not exist %%S (
-        echo [error] script not found at %%S
-        exit /b 1
-    )
+if not exist "%SCRIPT_PY%" (
+    echo [error] vqa_sycophancy_probe.py not found at "%SCRIPT_PY%"
+    exit /b 1
 )
 
 set "RPM_ARGS="
@@ -82,26 +76,25 @@ set /a RUN_COUNT=0
 set /a FAIL_COUNT=0
 
 for %%E in (image grounded none blind) do (
-    if "%%E"=="image" (set "SCRIPT_PY=%SCRIPT_IMAGE%" & set "NEEDS_PROOF=1")
-    if "%%E"=="grounded" (set "SCRIPT_PY=%SCRIPT_GROUNDED%" & set "NEEDS_PROOF=1")
-    if "%%E"=="none" (set "SCRIPT_PY=%SCRIPT_NONE%" & set "NEEDS_PROOF=0")
-    if "%%E"=="blind" (set "SCRIPT_PY=%SCRIPT_BLIND%" & set "NEEDS_PROOF=0")
+    set "NEEDS_PROOF=0"
+    if "%%E"=="image" set "NEEDS_PROOF=1"
+    if "%%E"=="grounded" set "NEEDS_PROOF=1"
 
     for %%P in (default neighbor_nurse_doctor generic) do (
         set /a RUN_COUNT+=1
         if "!NEEDS_PROOF!"=="1" (
-            echo === "%PYTHON%" "!SCRIPT_PY!" --model "%MODEL%" --n %N% --dataset-dir "%DATASET_DIR%" --provider %PROVIDER% --split %SPLIT% --seed %SEED% --prompt-set %%P --pushback-turns %PUSHBACK_TURNS% --proof-yes-image "%PROOF_YES%" --proof-no-image "%PROOF_NO%" !RPM_ARGS! ===
+            echo === "%PYTHON%" "%SCRIPT_PY%" --model "%MODEL%" --evidence %%E --n %N% --dataset-dir "%DATASET_DIR%" --provider %PROVIDER% --split %SPLIT% --seed %SEED% --prompt-set %%P --pushback-turns %PUSHBACK_TURNS% --proof-yes-image "%PROOF_YES%" --proof-no-image "%PROOF_NO%" !RPM_ARGS! ===
             if "!DRY_RUN!"=="0" (
-                "%PYTHON%" "!SCRIPT_PY!" --model "%MODEL%" --n %N% --dataset-dir "%DATASET_DIR%" --provider %PROVIDER% --split %SPLIT% --seed %SEED% --prompt-set %%P --pushback-turns %PUSHBACK_TURNS% --proof-yes-image "%PROOF_YES%" --proof-no-image "%PROOF_NO%" !RPM_ARGS!
+                "%PYTHON%" "%SCRIPT_PY%" --model "%MODEL%" --evidence %%E --n %N% --dataset-dir "%DATASET_DIR%" --provider %PROVIDER% --split %SPLIT% --seed %SEED% --prompt-set %%P --pushback-turns %PUSHBACK_TURNS% --proof-yes-image "%PROOF_YES%" --proof-no-image "%PROOF_NO%" !RPM_ARGS!
                 if errorlevel 1 (
                     set /a FAIL_COUNT+=1
                     echo !!! FAILED: evidence=%%E prompt-set=%%P !!!
                 )
             )
         ) else (
-            echo === "%PYTHON%" "!SCRIPT_PY!" --model "%MODEL%" --n %N% --dataset-dir "%DATASET_DIR%" --provider %PROVIDER% --split %SPLIT% --seed %SEED% --prompt-set %%P --pushback-turns %PUSHBACK_TURNS% !RPM_ARGS! ===
+            echo === "%PYTHON%" "%SCRIPT_PY%" --model "%MODEL%" --evidence %%E --n %N% --dataset-dir "%DATASET_DIR%" --provider %PROVIDER% --split %SPLIT% --seed %SEED% --prompt-set %%P --pushback-turns %PUSHBACK_TURNS% !RPM_ARGS! ===
             if "!DRY_RUN!"=="0" (
-                "%PYTHON%" "!SCRIPT_PY!" --model "%MODEL%" --n %N% --dataset-dir "%DATASET_DIR%" --provider %PROVIDER% --split %SPLIT% --seed %SEED% --prompt-set %%P --pushback-turns %PUSHBACK_TURNS% !RPM_ARGS!
+                "%PYTHON%" "%SCRIPT_PY%" --model "%MODEL%" --evidence %%E --n %N% --dataset-dir "%DATASET_DIR%" --provider %PROVIDER% --split %SPLIT% --seed %SEED% --prompt-set %%P --pushback-turns %PUSHBACK_TURNS% !RPM_ARGS!
                 if errorlevel 1 (
                     set /a FAIL_COUNT+=1
                     echo !!! FAILED: evidence=%%E prompt-set=%%P !!!

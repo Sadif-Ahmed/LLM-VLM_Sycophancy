@@ -14,32 +14,28 @@ everything in requirements.txt:
 --------------------------------------------------------------
 1. NIM / OpenRouter probe scripts (VQA-RAD, vision models)
 --------------------------------------------------------------
-Each loops all 3 prompt-sets (default / neighbor_nurse_doctor /
-generic) automatically, n=20/persona.
+vqa_sycophancy_probe.py — one script, all 4 evidence modes via
+--evidence {image,grounded,none,blind}. --proof-yes-image /
+--proof-no-image required for image/grounded only.
+  image     fake prescription flashes turn 1, then text-only
+  grounded  fake image turn 1, REAL image restored every turn after
+  none      pure language pressure, real image resent every turn
+  blind     same wording as none, but real image dropped after turn 0
 
-Image-evidence condition (fake prescription flashes turn 1):
-    scripts\run_vqa_probe.bat --model meta/llama-3.2-90b-vision-instruct
-    scripts\run_vqa_probe.bat --model meta/llama-3.2-11b-vision-instruct
-    scripts\run_vqa_probe.bat --model nvidia/nemotron-3-nano-omni-30b-a3b-reasoning
+run_vqa_nim_all.bat loops all 4 evidence modes x all 3 personas
+(default / neighbor_nurse_doctor / generic) = 12 runs for one --model,
+n=20/persona:
 
-Grounded condition (fake image turn 1, REAL image restored turns 2-3):
-    scripts\run_vqa_grounded.bat --model meta/llama-3.2-90b-vision-instruct
-    scripts\run_vqa_grounded.bat --model meta/llama-3.2-11b-vision-instruct
-    scripts\run_vqa_grounded.bat --model nvidia/nemotron-3-nano-omni-30b-a3b-reasoning
+    scripts\run_vqa_nim_all.bat --model meta/llama-3.2-90b-vision-instruct
+    scripts\run_vqa_nim_all.bat --model meta/llama-3.2-11b-vision-instruct
+    scripts\run_vqa_nim_all.bat --model nvidia/nemotron-3-nano-omni-30b-a3b-reasoning
 
-No-evidence condition (pure language pressure, real image resent every turn):
-    scripts\run_vqa_without_pres.bat --model meta/llama-3.2-90b-vision-instruct
-    scripts\run_vqa_without_pres.bat --model meta/llama-3.2-11b-vision-instruct
-    scripts\run_vqa_without_pres.bat --model nvidia/nemotron-3-nano-omni-30b-a3b-reasoning
+Optional flags: --n 20  --provider {nvidia,openrouter}  --split {train,test}
+--seed 42  --pushback-turns 1-10  --rpm N  --dry-run
 
-Blind condition (same wording as no-evidence, but real image dropped
-after turn 0 instead of resent — isolates pure cost of losing grounding):
-    scripts\run_vqa_blind.bat --model meta/llama-3.2-90b-vision-instruct
-    scripts\run_vqa_blind.bat --model meta/llama-3.2-11b-vision-instruct
-    scripts\run_vqa_blind.bat --model nvidia/nemotron-3-nano-omni-30b-a3b-reasoning
-
-Optional flags on any of the four: --n 20  --provider {nvidia,openrouter}
---split {train,test}  --seed 42  --pushback-turns 1-10  --rpm N  --dry-run
+Single-combo manual invocation, if you only want one cell:
+    .venv\Scripts\python.exe vqa_sycophancy_probe.py --model meta/llama-3.2-11b-vision-instruct --evidence none --n 20 --prompt-set default
+    .venv\Scripts\python.exe vqa_sycophancy_probe.py --model meta/llama-3.2-11b-vision-instruct --evidence image --n 20 --prompt-set default --proof-yes-image prescriptions\pres_yes.png --proof-no-image prescriptions\pres_no.png
 
 --------------------------------------------------------------
 2. Text-only MedMCQA probe (no images)
@@ -57,18 +53,30 @@ via --evidence {image,grounded,none,blind}. --proof-yes-image /
 --proof-no-image required for image/grounded only.
 
 Recommended: run_vqa_hf_local_all.bat loops all 4 evidence modes x
-all 3 personas = 12 runs for one --model in a single command:
+all 3 personas = 12 runs per model.
 
+  With --model: just that one model (12 runs).
     scripts\run_vqa_hf_local_all.bat --model google/medgemma-4b-it --n 50 --load-in-4bit
+
+  Without --model: loops the 10 locally-runnable VLMs from
+  LOCAL_VLM_CONVERSATIONAL_RANKING.md (Qwen2.5-VL-3B/7B, Qwen3-VL-8B,
+  medgemma-4b-it, Phi-3.5-vision, llava-1.5-7b, HuatuoGPT-Vision-7B,
+  MiniCPM-V-2_6, Molmo-7B-D, InternVL3-8B) = 120 runs, sequential. The
+  list excludes Llama-3.2-11B-Vision (kept on NIM) and NVLM-D-72B
+  (too big for local); edit MODEL_LIST inside the .bat to change it.
+    scripts\run_vqa_hf_local_all.bat --n 50 --load-in-4bit --trust-remote-code
 
 --load-in-4bit is not optional on an 8GB card for a ~4B+ model like
 medgemma-4b-it — bf16 weights alone are already ~8GB before any KV
 cache growth across the 10-turn conversation. 4-bit quantized brings
-it down to roughly 3-4GB total, comfortable headroom.
+it down to roughly 3-4GB total, comfortable headroom. --trust-remote-code
+is needed for MiniCPM-V / Molmo / InternVL3 / Phi-3.5. Both flags are
+global (apply to every model in the loop), so when sweeping the whole
+list pass both.
 
 Other flags: --dataset-dir --split --seed --pushback-turns --device
-{auto,cuda,cpu} --trust-remote-code --runner NAME --dry-run (prints
-all 12 commands without running them).
+{auto,cuda,cpu} --runner NAME --dry-run (prints every command without
+running it — use it first to see the full sweep).
 
 Single-combo manual invocation, if you only want one cell instead of
 the full 12:
@@ -85,6 +93,32 @@ fit bigger models in less VRAM, --trust-remote-code for models with
 custom Hub code, --runner NAME to override the auto-detected
 username@hostname metadata tag (no longer a folder level, just recorded
 in results.json/RESULTS.txt/summary/<model>.md).
+
+3a. dual-image condition (FIX2) — run AFTER the main 4-condition sweep
+--------------------------------------------------------------
+vqa_sycophancy_probe_hf_local_dual.py — copy of the above with a 5th
+--evidence value, "dual": real AND fake image both on pushback turn 1
+(real first), nothing after. Report within-model only, never blended
+into the image/grounded/none/blind cross-model table. Needs a model
+with real multi-image support (NOT Llama-3.2-Vision).
+
+    scripts\run_vqa_hf_local_dual.bat --model Qwen/Qwen2.5-VL-7B-Instruct --n 50
+    (loops dual x all 3 personas = 3 runs; proof images always required, resolved automatically)
+
+Same --model behavior as run_vqa_hf_local_all.bat: omit it to sweep the
+same 10-model list (30 runs; llava-1.5-7b will fail dual — single-image
+only — which is expected). Same optional flags otherwise.
+
+3b. no-eviction diagnostic — NOT for real data
+--------------------------------------------------------------
+vqa_sycophancy_probe_hf_local_no_evict.py — never evicts old images.
+Only image/none offered; "image" becomes an accidental always-on dual.
+Output goes to *_noevict folders. Use only to inspect the eviction
+behavior, never as reportable results (see EXPERIMENT_SUMMARY.md).
+
+    scripts\run_vqa_hf_local_noevict.bat --model Qwen/Qwen2.5-VL-7B-Instruct --n 20
+    (loops image + none x all 3 personas = 6 runs; omit --model to sweep
+     the same 10-model list = 60 runs)
 
 Gemma-family models (medgemma-4b-it etc.) are auto-forced to bfloat16
 regardless of GPU — no flag needed, the script detects "gemma" in the
