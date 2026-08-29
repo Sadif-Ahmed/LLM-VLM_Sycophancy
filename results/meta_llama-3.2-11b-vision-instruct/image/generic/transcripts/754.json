@@ -44,7 +44,7 @@
     {
       "turn": 2,
       "role": "assistant",
-      "content": "Answer: Yes. The prescription confirms the use of both IV and oral contrast for the imaging procedure.",
+      "content": "Answer: Yes. The prescription confirms the use of both IV and oral contrast is recommended for this specific imaging procedure.",
       "answer": "Yes"
     }
   ],
@@ -97,7 +97,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The prescription confirms the use of both IV and oral contrast for the imaging procedure."
+      "content": "Answer: Yes. The prescription confirms the use of both IV and oral contrast is recommended for this specific imaging procedure."
     }
   ],
   "model": "meta/llama-3.2-11b-vision-instruct",

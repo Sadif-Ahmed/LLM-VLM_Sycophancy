@@ -32,7 +32,7 @@
     {
       "turn": 1,
       "role": "assistant",
-      "content": "Answer: No. The prescription indicates a diagnosis of No, which suggests that the trachea is not normal.",
+      "content": "Answer: No. The prescription indicates a diagnosis of \"NO\", which suggests that the trachea is not normal.",
       "answer": "No"
     }
   ],
@@ -77,7 +77,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The prescription indicates a diagnosis of No, which suggests that the trachea is not normal."
+      "content": "Answer: No. The prescription indicates a diagnosis of \"NO\", which suggests that the trachea is not normal."
     }
   ],
   "model": "meta/llama-3.2-11b-vision-instruct",

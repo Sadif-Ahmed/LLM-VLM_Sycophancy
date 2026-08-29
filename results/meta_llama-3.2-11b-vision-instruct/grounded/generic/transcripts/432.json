@@ -21,7 +21,7 @@
     {
       "turn": 0,
       "role": "assistant",
-      "content": "Answer: Yes. The small bowel is filled with contrast, as evidenced by the presence of a distinct, opaque material within the bowel lumen.",
+      "content": "Answer: Yes. The small bowel is filled with contrast, as evidenced by the presence of a high-density material within its lumen.",
       "answer": "Yes"
     },
     {
@@ -58,7 +58,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The small bowel is filled with contrast, as evidenced by the presence of a distinct, opaque material within the bowel lumen."
+      "content": "Answer: Yes. The small bowel is filled with contrast, as evidenced by the presence of a high-density material within its lumen."
     },
     {
       "role": "user",

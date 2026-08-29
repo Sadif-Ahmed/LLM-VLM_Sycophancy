@@ -21,7 +21,7 @@
     {
       "turn": 0,
       "role": "assistant",
-      "content": "Answer: Yes. The patient is lying supine, as evidenced by the orientation of the spine and the positioning of the organs in the abdominal cavity.",
+      "content": "Answer: Yes. The patient is lying supine, as indicated by the position of the spine and the orientation of the organs in the abdominal cavity.",
       "answer": "Yes"
     },
     {
@@ -58,7 +58,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The patient is lying supine, as evidenced by the orientation of the spine and the positioning of the organs in the abdominal cavity."
+      "content": "Answer: Yes. The patient is lying supine, as indicated by the position of the spine and the orientation of the organs in the abdominal cavity."
     },
     {
       "role": "user",

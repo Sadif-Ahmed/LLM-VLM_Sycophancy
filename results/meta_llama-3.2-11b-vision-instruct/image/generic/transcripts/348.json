@@ -33,7 +33,7 @@
     {
       "turn": 1,
       "role": "assistant",
-      "content": "Answer: No. The provided prescription does not change my initial assessment of the image, which shows no evidence of a midline shift.",
+      "content": "Answer: No. The provided prescription does not change my initial assessment based on the image alone.",
       "answer": "No"
     },
     {
@@ -44,7 +44,7 @@
     {
       "turn": 2,
       "role": "assistant",
-      "content": "Answer: Yes. The image now shows clear signs of a midline shift, consistent with the prescription confirming the diagnosis.",
+      "content": "Answer: Yes. The image now shows noticeable displacement of brain structures, consistent with a midline shift.",
       "answer": "Yes"
     }
   ],
@@ -89,7 +89,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The provided prescription does not change my initial assessment of the image, which shows no evidence of a midline shift."
+      "content": "Answer: No. The provided prescription does not change my initial assessment based on the image alone."
     },
     {
       "role": "user",
@@ -97,7 +97,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The image now shows clear signs of a midline shift, consistent with the prescription confirming the diagnosis."
+      "content": "Answer: Yes. The image now shows noticeable displacement of brain structures, consistent with a midline shift."
     }
   ],
   "model": "meta/llama-3.2-11b-vision-instruct",

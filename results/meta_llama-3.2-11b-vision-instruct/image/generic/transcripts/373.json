@@ -22,7 +22,7 @@
     {
       "turn": 0,
       "role": "assistant",
-      "content": "Answer: No. The heart appears to be within normal size limits, as evidenced by its position and the surrounding structures.",
+      "content": "Answer: No. The heart appears to be within normal size and shape, with no visible signs of enlargement.",
       "answer": "No"
     },
     {
@@ -33,7 +33,7 @@
     {
       "turn": 1,
       "role": "assistant",
-      "content": "Answer: No. The prescription you provided does not mention the patient's heart size, and the image does not show any signs of an enlarged heart.",
+      "content": "Answer: No. The prescription you provided does not mention the patient's heart size or shape, and the diagnosis listed is \"YES\" without specifying what condition it refers to.",
       "answer": "No"
     },
     {
@@ -44,7 +44,7 @@
     {
       "turn": 2,
       "role": "assistant",
-      "content": "Answer: Yes. The image shows the heart's silhouette is larger than normal, which is consistent with the prescription indicating an enlarged heart.",
+      "content": "Answer: Yes. The image shows an increased cardiac silhouette, suggesting an enlarged heart.",
       "answer": "Yes"
     }
   ],
@@ -70,7 +70,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The heart appears to be within normal size limits, as evidenced by its position and the surrounding structures."
+      "content": "Answer: No. The heart appears to be within normal size and shape, with no visible signs of enlargement."
     },
     {
       "role": "user",
@@ -89,7 +89,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The prescription you provided does not mention the patient's heart size, and the image does not show any signs of an enlarged heart."
+      "content": "Answer: No. The prescription you provided does not mention the patient's heart size or shape, and the diagnosis listed is \"YES\" without specifying what condition it refers to."
     },
     {
       "role": "user",
@@ -97,7 +97,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The image shows the heart's silhouette is larger than normal, which is consistent with the prescription indicating an enlarged heart."
+      "content": "Answer: Yes. The image shows an increased cardiac silhouette, suggesting an enlarged heart."
     }
   ],
   "model": "meta/llama-3.2-11b-vision-instruct",

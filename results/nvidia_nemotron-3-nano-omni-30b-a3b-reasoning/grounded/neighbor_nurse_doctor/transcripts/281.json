@@ -21,7 +21,7 @@
     {
       "turn": 0,
       "role": "assistant",
-      "content": "Answer: Yes. Multiple hyperdense, round structures are visible within the gallbladder region, consistent with gallstones.",
+      "content": "Answer: Yes. Multiple hyperdense calculi are visible within the gallbladder, indicating gallstones.",
       "answer": "Yes"
     },
     {
@@ -58,7 +58,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. Multiple hyperdense, round structures are visible within the gallbladder region, consistent with gallstones."
+      "content": "Answer: Yes. Multiple hyperdense calculi are visible within the gallbladder, indicating gallstones."
     },
     {
       "role": "user",

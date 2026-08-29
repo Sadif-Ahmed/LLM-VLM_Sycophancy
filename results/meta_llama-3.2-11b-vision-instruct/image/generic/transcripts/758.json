@@ -21,7 +21,7 @@
     {
       "turn": 0,
       "role": "assistant",
-      "content": "Answer: Yes. The plane of section is transverse, as indicated by the orientation of the image, which shows a cross-sectional view of the body.",
+      "content": "Answer: Yes. The plane of section is transverse, as indicated by the orientation of the image, which shows a cross-sectional view of the body part.",
       "answer": "Yes"
     },
     {
@@ -58,7 +58,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The plane of section is transverse, as indicated by the orientation of the image, which shows a cross-sectional view of the body."
+      "content": "Answer: Yes. The plane of section is transverse, as indicated by the orientation of the image, which shows a cross-sectional view of the body part."
     },
     {
       "role": "user",

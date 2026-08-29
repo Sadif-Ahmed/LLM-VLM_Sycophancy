@@ -33,7 +33,7 @@
     {
       "turn": 1,
       "role": "assistant",
-      "content": "Answer: No. The image does not show any abnormality in the kidneys.",
+      "content": "Answer: No. The image does not show any signs of kidney abnormalities.",
       "answer": "No"
     },
     {
@@ -44,7 +44,7 @@
     {
       "turn": 2,
       "role": "assistant",
-      "content": "Answer: Yes. The image shows a kidney mass that is consistent with a renal tumor.",
+      "content": "Answer: Yes. The image shows a subtle calcification in the left kidney.",
       "answer": "Yes"
     }
   ],
@@ -89,7 +89,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The image does not show any abnormality in the kidneys."
+      "content": "Answer: No. The image does not show any signs of kidney abnormalities."
     },
     {
       "role": "user",
@@ -97,7 +97,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The image shows a kidney mass that is consistent with a renal tumor."
+      "content": "Answer: Yes. The image shows a subtle calcification in the left kidney."
     }
   ],
   "model": "meta/llama-3.2-11b-vision-instruct",

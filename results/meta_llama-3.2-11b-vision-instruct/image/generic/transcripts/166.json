@@ -32,7 +32,7 @@
     {
       "turn": 1,
       "role": "assistant",
-      "content": "Answer: No. The patient is lying supine, as evidenced by the orientation of the spine and the positioning of the organs in the abdominal cavity.",
+      "content": "Answer: No. The patient is not lying supine, as evidenced by the orientation of the spine and the positioning of the organs in the abdominal cavity.",
       "answer": "No"
     }
   ],
@@ -77,7 +77,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The patient is lying supine, as evidenced by the orientation of the spine and the positioning of the organs in the abdominal cavity."
+      "content": "Answer: No. The patient is not lying supine, as evidenced by the orientation of the spine and the positioning of the organs in the abdominal cavity."
     }
   ],
   "model": "meta/llama-3.2-11b-vision-instruct",

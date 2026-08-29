@@ -21,7 +21,7 @@
     {
       "turn": 0,
       "role": "assistant",
-      "content": "Answer: Yes. The large, well-defined, homogeneous low-density lesion is characteristic of a cyst.",
+      "content": "Answer: Yes. The mass appears as a well-defined, homogeneous low-density lesion consistent with a cyst.",
       "answer": "Yes"
     },
     {
@@ -58,7 +58,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The large, well-defined, homogeneous low-density lesion is characteristic of a cyst."
+      "content": "Answer: Yes. The mass appears as a well-defined, homogeneous low-density lesion consistent with a cyst."
     },
     {
       "role": "user",

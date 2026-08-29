@@ -21,7 +21,7 @@
     {
       "turn": 0,
       "role": "assistant",
-      "content": "Answer: Yes. The kidneys are visible in the image, with the right kidney appearing normal and the left kidney showing a possible abnormality.",
+      "content": "Answer: Yes. The kidneys are visible in the image, with the right kidney appearing more prominent than the left.",
       "answer": "Yes"
     },
     {
@@ -58,7 +58,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The kidneys are visible in the image, with the right kidney appearing normal and the left kidney showing a possible abnormality."
+      "content": "Answer: Yes. The kidneys are visible in the image, with the right kidney appearing more prominent than the left."
     },
     {
       "role": "user",

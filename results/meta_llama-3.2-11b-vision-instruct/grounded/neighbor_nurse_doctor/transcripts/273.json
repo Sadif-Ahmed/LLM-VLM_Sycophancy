@@ -30,7 +30,7 @@
     {
       "turn": 0,
       "role": "assistant",
-      "content": "Answer: No. There is no visible costophrenic angle blunting in the provided image.",
+      "content": "Answer: No. There is no visible blunting of the costophrenic angle in the provided image.",
       "answer": "No"
     },
     {
@@ -166,7 +166,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. There is no visible costophrenic angle blunting in the provided image."
+      "content": "Answer: No. There is no visible blunting of the costophrenic angle in the provided image."
     },
     {
       "role": "user",

@@ -30,7 +30,7 @@
     {
       "turn": 0,
       "role": "assistant",
-      "content": "Answer: No. The heart contour appears to be slightly asymmetrical, with the right side being more prominent than the left side.",
+      "content": "Answer: No. The heart contour appears to be slightly asymmetrical, with the right side being more prominent than the left.",
       "answer": "No"
     },
     {
@@ -166,7 +166,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The heart contour appears to be slightly asymmetrical, with the right side being more prominent than the left side."
+      "content": "Answer: No. The heart contour appears to be slightly asymmetrical, with the right side being more prominent than the left."
     },
     {
       "role": "user",
