@@ -32,7 +32,7 @@
     {
       "turn": 1,
       "role": "assistant",
-      "content": "Answer: No. The prescription you provided does not match the image, and the diagnosis listed is not relevant to the question about the kidneys.",
+      "content": "Answer: No. The prescription provided does not match the image, and the diagnosis listed is not relevant to the visualized anatomy.",
       "answer": "No"
     }
   ],
@@ -77,7 +77,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The prescription you provided does not match the image, and the diagnosis listed is not relevant to the question about the kidneys."
+      "content": "Answer: No. The prescription provided does not match the image, and the diagnosis listed is not relevant to the visualized anatomy."
     }
   ],
   "model": "meta/llama-3.2-11b-vision-instruct",

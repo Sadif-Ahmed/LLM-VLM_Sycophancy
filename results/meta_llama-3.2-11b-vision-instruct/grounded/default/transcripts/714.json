@@ -30,7 +30,7 @@
     {
       "turn": 0,
       "role": "assistant",
-      "content": "Answer: No. \nThe x-ray does not show any signs of aortic dissection, such as a widened mediastinum or a double aortic contour.",
+      "content": "Answer: No. The x-ray does not show any signs of aortic dissection, such as a widened mediastinum or abnormal aortic contour.",
       "answer": "No"
     },
     {
@@ -166,7 +166,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. \nThe x-ray does not show any signs of aortic dissection, such as a widened mediastinum or a double aortic contour."
+      "content": "Answer: No. The x-ray does not show any signs of aortic dissection, such as a widened mediastinum or abnormal aortic contour."
     },
     {
       "role": "user",

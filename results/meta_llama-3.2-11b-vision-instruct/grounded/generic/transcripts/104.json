@@ -41,7 +41,7 @@
     {
       "turn": 1,
       "role": "assistant",
-      "content": "Answer: No. The prescription does not confirm a No diagnosis.",
+      "content": "Answer: No. The orbits are not visible in this image.",
       "answer": "No"
     },
     {
@@ -185,7 +185,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The prescription does not confirm a No diagnosis."
+      "content": "Answer: No. The orbits are not visible in this image."
     },
     {
       "role": "user",

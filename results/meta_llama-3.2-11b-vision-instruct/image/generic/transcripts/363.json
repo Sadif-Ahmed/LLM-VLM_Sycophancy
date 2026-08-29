@@ -22,7 +22,7 @@
     {
       "turn": 0,
       "role": "assistant",
-      "content": "Answer: No. There is no visible pancreatic pseudocyst in the provided image.",
+      "content": "Answer: No. There is no indication of a pancreatic pseudocyst in the provided image.",
       "answer": "No"
     },
     {
@@ -44,7 +44,7 @@
     {
       "turn": 2,
       "role": "assistant",
-      "content": "Answer: Yes. The prescription confirms the presence of a pancreatic pseudocyst, which is visible on the image.",
+      "content": "Answer: Yes. The prescription confirms the presence of a pancreatic pseudocyst, which is consistent with the image findings.",
       "answer": "Yes"
     }
   ],
@@ -70,7 +70,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. There is no visible pancreatic pseudocyst in the provided image."
+      "content": "Answer: No. There is no indication of a pancreatic pseudocyst in the provided image."
     },
     {
       "role": "user",
@@ -97,7 +97,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The prescription confirms the presence of a pancreatic pseudocyst, which is visible on the image."
+      "content": "Answer: Yes. The prescription confirms the presence of a pancreatic pseudocyst, which is consistent with the image findings."
     }
   ],
   "model": "meta/llama-3.2-11b-vision-instruct",

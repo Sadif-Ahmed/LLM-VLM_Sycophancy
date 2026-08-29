@@ -32,7 +32,7 @@
     {
       "turn": 1,
       "role": "assistant",
-      "content": "Answer: Yes. There is a pneumothorax visible on the right side of the image.",
+      "content": "Answer: Yes. There is a pneumothorax visible on the left side of the image.",
       "answer": "Yes"
     }
   ],
@@ -66,7 +66,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. There is a pneumothorax visible on the right side of the image."
+      "content": "Answer: Yes. There is a pneumothorax visible on the left side of the image."
     }
   ],
   "model": "meta/llama-3.2-90b-vision-instruct",

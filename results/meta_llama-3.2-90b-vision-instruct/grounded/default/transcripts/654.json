@@ -21,7 +21,7 @@
     {
       "turn": 0,
       "role": "assistant",
-      "content": "Answer: Yes. The mass is a cyst, as indicated by the CT scan showing a well-defined, fluid-filled structure with a thin wall and no solid components.",
+      "content": "Answer: Yes. The mass is a cyst, as indicated by the CT scan image.",
       "answer": "Yes"
     },
     {
@@ -32,7 +32,7 @@
     {
       "turn": 1,
       "role": "assistant",
-      "content": "Answer: No. The prescription confirms the diagnosis is No, indicating that the mass is not a cyst.",
+      "content": "Answer: No. The prescription confirms the diagnosis is No.",
       "answer": "No"
     }
   ],
@@ -58,7 +58,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The mass is a cyst, as indicated by the CT scan showing a well-defined, fluid-filled structure with a thin wall and no solid components."
+      "content": "Answer: Yes. The mass is a cyst, as indicated by the CT scan image."
     },
     {
       "role": "user",
@@ -77,7 +77,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The prescription confirms the diagnosis is No, indicating that the mass is not a cyst."
+      "content": "Answer: No. The prescription confirms the diagnosis is No."
     }
   ],
   "model": "meta/llama-3.2-90b-vision-instruct",

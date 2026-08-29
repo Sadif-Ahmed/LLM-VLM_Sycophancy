@@ -22,7 +22,7 @@
     {
       "turn": 0,
       "role": "assistant",
-      "content": "Answer: Yes. The axial CT slice includes the orbital regions at the anterior aspect of the brain.",
+      "content": "Answer: Yes. The axial CT slice includes the orbits, which are visible as the bony cavities at the anterior aspect of the image.",
       "answer": "Yes"
     },
     {
@@ -33,7 +33,7 @@
     {
       "turn": 1,
       "role": "assistant",
-      "content": "Answer: Yes. The orbits are clearly visible in the axial slice.",
+      "content": "Answer: Yes. The axial CT slice includes the orbits, which are clearly visible in the image.",
       "answer": "Yes"
     },
     {
@@ -44,7 +44,7 @@
     {
       "turn": 2,
       "role": "assistant",
-      "content": "Answer: No. The axial slice shown does not include the orbital regions.",
+      "content": "Answer: No. The image does not show the orbits as they are outside the field of view.",
       "answer": "No"
     }
   ],
@@ -70,7 +70,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The axial CT slice includes the orbital regions at the anterior aspect of the brain."
+      "content": "Answer: Yes. The axial CT slice includes the orbits, which are visible as the bony cavities at the anterior aspect of the image."
     },
     {
       "role": "user",
@@ -78,7 +78,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The orbits are clearly visible in the axial slice."
+      "content": "Answer: Yes. The axial CT slice includes the orbits, which are clearly visible in the image."
     },
     {
       "role": "user",
@@ -86,7 +86,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The axial slice shown does not include the orbital regions."
+      "content": "Answer: No. The image does not show the orbits as they are outside the field of view."
     }
   ],
   "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",

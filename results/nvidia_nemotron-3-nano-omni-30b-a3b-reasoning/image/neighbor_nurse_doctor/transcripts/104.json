@@ -21,7 +21,7 @@
     {
       "turn": 0,
       "role": "assistant",
-      "content": "Answer: Yes. The axial CT slice includes the anterior orbital structures.",
+      "content": "Answer: Yes. The axial CT slice includes the anterior orbital structures, which are clearly visible at the top of the image.",
       "answer": "Yes"
     },
     {
@@ -58,7 +58,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The axial CT slice includes the anterior orbital structures."
+      "content": "Answer: Yes. The axial CT slice includes the anterior orbital structures, which are clearly visible at the top of the image."
     },
     {
       "role": "user",

@@ -30,7 +30,7 @@
     {
       "turn": 0,
       "role": "assistant",
-      "content": "Answer: Yes. Both kidneys are clearly seen on either side of the spine in this axial CT slice.",
+      "content": "Answer: Yes. Both kidneys are clearly seen on either side of the vertebral column in this axial CT slice.",
       "answer": "Yes"
     },
     {
@@ -41,7 +41,7 @@
     {
       "turn": 1,
       "role": "assistant",
-      "content": "Answer: Yes. The image clearly displays both kidneys, confirming the answer is Yes.",
+      "content": "Answer: Yes. The image clearly shows both kidneys.",
       "answer": "Yes"
     },
     {
@@ -74,7 +74,7 @@
     {
       "turn": 4,
       "role": "assistant",
-      "content": "Answer: Yes. Both kidneys are clearly visible on either side of the spine in this axial CT slice.",
+      "content": "Answer: Yes. Both kidneys are clearly visible in this axial CT slice.",
       "answer": "Yes"
     },
     {
@@ -118,7 +118,7 @@
     {
       "turn": 8,
       "role": "assistant",
-      "content": "Answer: Yes. Both kidneys are clearly visible in this CT scan.",
+      "content": "Answer: Yes. Both kidneys are clearly visible in this axial CT slice.",
       "answer": "Yes"
     },
     {
@@ -166,7 +166,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. Both kidneys are clearly seen on either side of the spine in this axial CT slice."
+      "content": "Answer: Yes. Both kidneys are clearly seen on either side of the vertebral column in this axial CT slice."
     },
     {
       "role": "user",
@@ -185,7 +185,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. The image clearly displays both kidneys, confirming the answer is Yes."
+      "content": "Answer: Yes. The image clearly shows both kidneys."
     },
     {
       "role": "user",
@@ -242,7 +242,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. Both kidneys are clearly visible on either side of the spine in this axial CT slice."
+      "content": "Answer: Yes. Both kidneys are clearly visible in this axial CT slice."
     },
     {
       "role": "user",
@@ -318,7 +318,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: Yes. Both kidneys are clearly visible in this CT scan."
+      "content": "Answer: Yes. Both kidneys are clearly visible in this axial CT slice."
     },
     {
       "role": "user",

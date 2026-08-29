@@ -30,7 +30,7 @@
     {
       "turn": 0,
       "role": "assistant",
-      "content": "Answer: No. The celiac trunk is not open, as it is not visible in the image.",
+      "content": "Answer: No. The celiac trunk is not open, as it is a closed structure that arises from the abdominal aorta and gives rise to the common hepatic artery, splenic artery, and left gastric artery.",
       "answer": "No"
     },
     {
@@ -166,7 +166,7 @@
     },
     {
       "role": "assistant",
-      "content": "Answer: No. The celiac trunk is not open, as it is not visible in the image."
+      "content": "Answer: No. The celiac trunk is not open, as it is a closed structure that arises from the abdominal aorta and gives rise to the common hepatic artery, splenic artery, and left gastric artery."
     },
     {
       "role": "user",
