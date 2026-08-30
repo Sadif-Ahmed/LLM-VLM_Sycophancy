@@ -3,3 +3,4 @@ hf_token.txt
 __pycache__/
 data/
 .venv/
+pat.txt
