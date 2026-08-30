@@ -28,6 +28,27 @@ HF Hub id is the `--model` value — copy it straight into any
 | `nvidia/nemotron-3-nano-omni-30b-a3b-reasoning` | Nemotron 30B MoE (~3B active) | Strong; multi-image OK — see caveats | 4-bit only (30B won't fit bf16 in 24GB); `--trust-remote-code`, omni model — local load via the probe is **unverified**, results so far are NIM | ~15–16GB (4-bit) |
 | `nvidia/NVLM-D-72B` | Qwen2-72B-Instruct | Best-in-class chat quality | **impossible locally** (~40GB+ even at Q4) | — |
 
+## Next tier — >8B, needs a 24GB card (run after the 10-model list)
+
+All support persistent multi-image. The dense 27–32B entries need `--load-in-4bit`
+even on a 4090 (won't fit bf16 in 24GB); the small ones don't.
+
+| `--model` (HF Hub id) | Backbone | Why run it | VRAM (4-bit) |
+|---|---|---|---|
+| `Qwen/Qwen2.5-VL-32B-Instruct` | Qwen2.5-32B | **Primary pick.** Completes a 3-point scaling curve (3B → 7B → 32B) in one family, same loader / chat template — answers whether sycophancy keeps dropping with scale or plateaus after 7B. Top open model in its class on OpenVLM / MMMU. No trust-remote-code. `--load-in-4bit`. | ~19–21GB |
+| `google/gemma-3-27b-it` | Gemma3-27B | Different lineage from Qwen; native multi-image; strong benches. Run `google/gemma-3-4b-it` (plain base of MedGemma) alongside as a control — separates "medical fine-tune → more sycophantic" from Gemma3 base behavior. `--load-in-4bit` (27B); the 4B fits bf16. | ~17–19GB (27B) |
+| `moonshotai/Kimi-VL-A3B-Thinking-2506` | Kimi-VL MoE (~3B active) | Only "thinking" VLM in the set — tests whether visible reasoning traces make it hold or fold under escalating pushback. Cheap to run. `--trust-remote-code`; higher integration risk (custom modeling code). | ~6–9GB |
+
+Verify each with `--n 2` before a full sweep — 32B 4-bit + 10-turn multi-image
+context sits close to the 24GB ceiling.
+
+```bat
+scripts\run_vqa_hf_local_noevict.bat --model Qwen/Qwen2.5-VL-32B-Instruct --n 100 --load-in-4bit
+scripts\run_vqa_hf_local_noevict.bat --model google/gemma-3-27b-it --n 100 --load-in-4bit
+scripts\run_vqa_hf_local_noevict.bat --model google/gemma-3-4b-it --n 100
+scripts\run_vqa_hf_local_noevict.bat --model moonshotai/Kimi-VL-A3B-Thinking-2506 --n 100 --trust-remote-code
+```
+
 ## Excluded — no multi-image support (can't hold image history)
 
 The faithful (no-evict) design keeps every shown image live for all later turns.
@@ -48,6 +69,7 @@ These models can't, so they're out regardless of chat quality or VRAM:
 2. **`Qwen/Qwen2.5-VL-7B-Instruct`** or **`Qwen/Qwen3-VL-8B-Instruct`** next — best conversational quality that still fits, tight but workable
 3. `google/medgemma-4b-it` only if the medical-specificity is worth trading off against its clinical-narrowness caveat above
 4. `FreedomIntelligence/HuatuoGPT-Vision-7B` — second medical-fine-tune data point alongside medgemma, once its architecture class is confirmed compatible
+5. **After the list (24GB card): `Qwen/Qwen2.5-VL-32B-Instruct`** — extends the 3B/7B scaling line; then `google/gemma-3-27b-it` (+ `gemma-3-4b-it` control) and `moonshotai/Kimi-VL-A3B-Thinking-2506` (reasoning-trace axis). See "Next tier" above.
 
 ## Copy-paste — faithful (no-evict) sweep, n=100
 
