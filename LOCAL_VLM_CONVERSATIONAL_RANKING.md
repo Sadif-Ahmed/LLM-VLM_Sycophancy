@@ -25,8 +25,15 @@ HF Hub id is the `--model` value — copy it straight into any
 | `openbmb/MiniCPM-V-2_6` | Qwen2-7B | Strong — inherits Qwen's chat quality | `--load-in-4bit --trust-remote-code` | ~6–7GB |
 | `allenai/Molmo-7B-D-0924` | Qwen2-7B | Strong, same reason | `--load-in-4bit --trust-remote-code` | ~6–7GB |
 | `OpenGVLab/InternVL3-8B` | Qwen2.5-7B (most sizes) | Strong, same reason | `--load-in-4bit --trust-remote-code` | ~6–7GB |
-| `meta-llama/Llama-3.2-11B-Vision-Instruct` | Llama-3.1-8B | Very strong — heaviest RLHF of the lot, most natural chat feel | **doesn't fit 8GB** — run on NIM instead: `--model meta/llama-3.2-11b-vision-instruct` via `run_vqa_nim_all.bat` | ~8–9GB |
+| `nvidia/nemotron-3-nano-omni-30b-a3b-reasoning` | Nemotron 30B MoE (~3B active) | Strong; multi-image OK — see caveats | 4-bit only (30B won't fit bf16 in 24GB); `--trust-remote-code`, omni model — local load via the probe is **unverified**, results so far are NIM | ~15–16GB (4-bit) |
 | `nvidia/NVLM-D-72B` | Qwen2-72B-Instruct | Best-in-class chat quality | **impossible locally** (~40GB+ even at Q4) | — |
+
+## Excluded — no multi-image support (can't hold image history)
+
+The faithful (no-evict) design keeps every shown image live for all later turns.
+These models can't, so they're out regardless of chat quality or VRAM:
+
+- `meta-llama/Llama-3.2-11B-Vision-Instruct`, `meta-llama/Llama-3.2-90B-Vision-Instruct` — cross-attention vision architecture, single-image only. Conversationally very strong (heaviest RLHF of the lot), but structurally incompatible: no persistent image history, so only the retired evicting conditions ever applied. Prior results are NIM-only.
 
 ## Excluded outright — conversational prowess is the disqualifier, not size
 
@@ -65,3 +72,19 @@ scripts\run_vqa_hf_local_noevict.bat --model FreedomIntelligence/HuatuoGPT-Visio
 ```
 
 Omit `--model` from the launcher to sweep the whole 10-model list (`--load-in-4bit --trust-remote-code` become global — pass both).
+
+### On a 24GB card (RTX 4090) — no 4-bit
+
+Every model above is ≤8B and fits in bf16 on 24GB (~6GB for 3B, ~16GB for 7–8B). Drop `--load-in-4bit`, keep `--trust-remote-code` (architecture requirement, not VRAM). Matches the dtype the existing `*_noevict` results were produced at.
+
+```bat
+scripts\run_vqa_hf_local_noevict.bat --model Qwen/Qwen2.5-VL-3B-Instruct --n 100
+scripts\run_vqa_hf_local_noevict.bat --model Qwen/Qwen2.5-VL-7B-Instruct --n 100
+scripts\run_vqa_hf_local_noevict.bat --model Qwen/Qwen3-VL-8B-Instruct --n 100
+scripts\run_vqa_hf_local_noevict.bat --model google/medgemma-4b-it --n 100
+scripts\run_vqa_hf_local_noevict.bat --model microsoft/Phi-3.5-vision-instruct --n 100 --trust-remote-code
+scripts\run_vqa_hf_local_noevict.bat --model openbmb/MiniCPM-V-2_6 --n 100 --trust-remote-code
+scripts\run_vqa_hf_local_noevict.bat --model allenai/Molmo-7B-D-0924 --n 100 --trust-remote-code
+scripts\run_vqa_hf_local_noevict.bat --model OpenGVLab/InternVL3-8B --n 100 --trust-remote-code
+scripts\run_vqa_hf_local_noevict.bat --model FreedomIntelligence/HuatuoGPT-Vision-7B --n 100 --trust-remote-code
+```
