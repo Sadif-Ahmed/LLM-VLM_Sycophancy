@@ -43,6 +43,7 @@ REM --- 1. write token file, no trailing newline ---
 echo [ok] wrote %REPO_ROOT%\hf_token.txt
 
 REM --- 2. drop stale HF_TOKEN (future shells + this one) ---
+set "INHERITED_HF_TOKEN=%HF_TOKEN%"
 reg delete "HKCU\Environment" /F /V HF_TOKEN >nul 2>&1 && echo [ok] removed persistent HF_TOKEN env var
 set "HF_TOKEN="
 
@@ -56,5 +57,18 @@ echo Verifying against %MODEL% ...
 "%PYTHON%" -c "import sys; from huggingface_hub import HfApi; t=open(r'%REPO_ROOT%\hf_token.txt').read().strip(); a=HfApi(token=t); print('token account:', a.whoami()['name']); a.hf_hub_download(r'%MODEL%','config.json'); print('gated access: OK')" || (echo [fail] still no access - request it at https://huggingface.co/%MODEL% with the SAME account printed above & exit /b 1)
 
 echo.
-echo [done] Open a NEW terminal before re-running the sweep (so the cleared env var takes effect).
+if defined INHERITED_HF_TOKEN (
+    echo ============================================================
+    echo [WARNING] The shell you launched this from STILL has a live
+    echo HF_TOKEN set - the sweep will keep using it ^(and 403^) because
+    echo resolve_hf_token^(^) checks HF_TOKEN before hf_token.txt.
+    echo A bat cannot clear its parent shell. Do ONE of:
+    echo   PowerShell:  Remove-Item Env:HF_TOKEN
+    echo   cmd.exe   :  set "HF_TOKEN="
+    echo   or just open a brand-new terminal.
+    echo Then: echo %%HF_TOKEN%%   must print blank before you re-run.
+    echo ============================================================
+) else (
+    echo [done] hf_token.txt is now the only token source. Re-run the sweep.
+)
 endlocal
