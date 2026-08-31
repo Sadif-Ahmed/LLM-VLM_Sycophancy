@@ -6,7 +6,7 @@ REM Runs vqa_sycophancy_probe_hf_local_dual.py --evidence dual
 REM across all 3 prompt-set variants (default, neighbor_nurse_doctor,
 REM generic) - 3 runs per model, on this machine's own GPU.
 REM
-REM With no --model, loops the 10 locally-runnable VLMs from
+REM With no --model, loops the 9 locally-runnable VLMs from
 REM LOCAL_VLM_CONVERSATIONAL_RANKING.md (see MODEL_LIST below) -
 REM 30 runs total, sequentially. Pass --model MODEL to run just
 REM that one model instead (3 runs).
@@ -44,13 +44,16 @@ set "SCRIPT_PY=%REPO_ROOT%\vqa_sycophancy_probe_hf_local_dual.py"
 set "PROOF_YES=%REPO_ROOT%\prescriptions\pres_yes.png"
 set "PROOF_NO=%REPO_ROOT%\prescriptions\pres_no.png"
 
-REM --- 10 locally-runnable VLMs from LOCAL_VLM_CONVERSATIONAL_RANKING.md,
+REM --- 9 locally-runnable VLMs from LOCAL_VLM_CONVERSATIONAL_RANKING.md,
 REM     ascending by est. VRAM. Excludes Llama-3.2-11B-Vision (keep on NIM)
 REM     and NVLM-D-72B (too big for local). Used only when --model is not
 REM     passed. Several of the 7-8B entries need --load-in-4bit on an 8GB
-REM     card, and MiniCPM-V / Molmo / InternVL3 / Phi-3.5 need
+REM     card, and MiniCPM-V / Molmo / InternVL3 need
 REM     --trust-remote-code - pass those flags on the command line. ---
-set "MODEL_LIST=Qwen/Qwen2.5-VL-3B-Instruct google/medgemma-4b-it microsoft/Phi-3.5-vision-instruct llava-hf/llava-1.5-7b-hf Qwen/Qwen2.5-VL-7B-Instruct Qwen/Qwen3-VL-8B-Instruct FreedomIntelligence/HuatuoGPT-Vision-7B openbmb/MiniCPM-V-2_6 allenai/Molmo-7B-D-0924 OpenGVLab/InternVL3-8B"
+REM     Phi-3.5-vision dropped: its Hub modeling code (rope_type='su') is
+REM     incompatible with transformers 5.x (installed: 5.15). Run it in a
+REM     venv pinned to transformers==4.48.3 if ever needed.
+set "MODEL_LIST=Qwen/Qwen2.5-VL-3B-Instruct google/medgemma-4b-it llava-hf/llava-1.5-7b-hf Qwen/Qwen2.5-VL-7B-Instruct Qwen/Qwen3-VL-8B-Instruct FreedomIntelligence/HuatuoGPT-Vision-7B openbmb/MiniCPM-V-2_6 allenai/Molmo-7B-D-0924 OpenGVLab/InternVL3-8B"
 
 set "MODEL="
 set "N=20"
@@ -129,14 +132,14 @@ exit /b 0
 echo Usage: %~nx0 [--model MODEL] [options]
 echo.
 echo   --model MODEL           HF Hub model id (must support multiple images per message). If omitted,
-echo                           loops the 10 locally-runnable VLMs from LOCAL_VLM_CONVERSATIONAL_RANKING.md
+echo                           loops the 9 locally-runnable VLMs from LOCAL_VLM_CONVERSATIONAL_RANKING.md
 echo   --n N                   questions per run (default: 20)
 echo   --dataset-dir DIR       default: %REPO_ROOT%\data\vqa_rad_yesno
 echo   --split train^|test      default: train
 echo   --seed SEED             default: 42
 echo   --pushback-turns 1-10   escalation depth (default: 10)
 echo   --device auto^|cuda^|cpu default: auto
-echo   --trust-remote-code     pass through to from_pretrained (needed for MiniCPM-V, Molmo, InternVL3, Phi-3.5)
+echo   --trust-remote-code     pass through to from_pretrained (needed for MiniCPM-V, Molmo, InternVL3)
 echo   --load-in-4bit          load via bitsandbytes NF4 quantization (needed for most 7-8B models on an 8GB card)
 echo   --runner NAME           override auto-detected username@hostname
 echo   --dry-run               print commands without running them

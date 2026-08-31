@@ -17,7 +17,7 @@ HF Hub id is the `--model` value — copy it straight into any
 |---|---|---|---|---|
 | `Qwen/Qwen2.5-VL-3B-Instruct` | Qwen2.5-3B | Strong — Qwen's chat tuning is consistently top-tier at this size | _(none — fits in bf16)_ | ~2–2.5GB |
 | `google/medgemma-4b-it` | Gemma3-4B | Good backbone, but ⚠️ narrowly fine-tuned on clinical Q&A — may not handle adversarial social-pressure dialogue naturally, since that's outside its fine-tuning distribution | `--load-in-4bit` | ~3–3.5GB |
-| `microsoft/Phi-3.5-vision-instruct` | Phi-3.5 | Decent reasoning, but terser/less "chatty" by design | `--load-in-4bit --trust-remote-code` | ~3.5–4GB |
+| ~~`microsoft/Phi-3.5-vision-instruct`~~ | Phi-3.5 | **DROPPED from sweep** — Hub modeling code (`rope_type='su'`) incompatible with transformers 5.x (installed: 5.15). Needs a venv pinned to `transformers==4.48.3`. | `--load-in-4bit --trust-remote-code` | ~3.5–4GB |
 | `llava-hf/llava-1.5-7b-hf` | Vicuna (Llama-2 era) | Weak — dated backbone, plus single-image cap breaks the `image` / `grounded` variants (only `none` runs) | `--load-in-4bit` | ~4.5–5GB |
 | `Qwen/Qwen2.5-VL-7B-Instruct` | Qwen2.5-7B | Strong, same family as 3B — best chat quality in the 7B class | `--load-in-4bit` | ~5.5–6.5GB |
 | `Qwen/Qwen3-VL-8B-Instruct` | Qwen3-8B | Strong, newest Qwen chat tuning | `--load-in-4bit` | ~6–7GB |
@@ -30,8 +30,10 @@ HF Hub id is the `--model` value — copy it straight into any
 
 ## Next tier — >8B, needs a 24GB card (run after the 10-model list)
 
-All support persistent multi-image. The dense 27–32B entries need `--load-in-4bit`
-even on a 4090 (won't fit bf16 in 24GB); the small ones don't.
+Qwen2.5-VL-32B and Gemma-3-27B/4B are confirmed multi-image; Kimi-VL is
+designed for it but unverified here (smoke-test first — see capability table
+below). The dense 27–32B entries need `--load-in-4bit` even on a 4090 (won't
+fit bf16 in 24GB); the small ones don't.
 
 | `--model` (HF Hub id) | Backbone | Why run it | VRAM (4-bit) |
 |---|---|---|---|
@@ -48,6 +50,34 @@ scripts\run_vqa_hf_local_noevict.bat --model google/gemma-3-27b-it --n 100 --loa
 scripts\run_vqa_hf_local_noevict.bat --model google/gemma-3-4b-it --n 100
 scripts\run_vqa_hf_local_noevict.bat --model moonshotai/Kimi-VL-A3B-Thinking-2506 --n 100 --trust-remote-code
 ```
+
+## No-evict pipeline capability
+
+The faithful pipeline has two kinds of arm:
+
+- **image arms** (`image`, `random_framed`, `random_image`, `dual`) — need the model to hold **≥2 images in one forward pass**, persistently across turns.
+- **no-image arms** (`none`, `text_evidence`) — only ever one image (the real scan, resent every turn) — any chat VLM can do these.
+
+| Model | Multi-image (image arms) | Notes |
+|---|---|---|
+| `Qwen/Qwen2.5-VL-3B / 7B / 32B-Instruct` | ✅ confirmed | reference family; all `*_noevict` results so far are these |
+| `Qwen/Qwen3-VL-8B-Instruct` | ✅ confirmed | |
+| `google/medgemma-4b-it` | ✅ confirmed | Gemma3 backbone |
+| `google/gemma-3-27b-it`, `google/gemma-3-4b-it` | ✅ confirmed | native interleaved multi-image |
+| ~~`microsoft/Phi-3.5-vision-instruct`~~ | — dropped | transformers 5.x incompatible (see table above) |
+| `openbmb/MiniCPM-V-2_6` | ✅ confirmed | multi-image + video |
+| `OpenGVLab/InternVL3-8B` | ✅ confirmed | |
+| `FreedomIntelligence/HuatuoGPT-Vision-7B` | ⚠️ unverified | depends on checkpoint arch — `config.json` class; multi-image only if the Qwen2.5-VL-backbone variant. Smoke-test `--evidence image --n 2` |
+| `moonshotai/Kimi-VL-A3B-Thinking-2506` | ⚠️ unverified | Kimi-VL is designed for multi-image + long multimodal context, but custom modeling code — smoke-test first |
+| `nvidia/nemotron-3-nano-omni-30b-a3b-reasoning` | ⚠️ local only, unverified | model supports it; NIM caps at 1 image (no faithful `image` on NIM); local load via the probe untested |
+| `llava-hf/llava-1.5-7b-hf` | ❌ single-image | **no-image arms only** (`none`, `text_evidence`) |
+| `allenai/Molmo-7B-D-0924` | ❌ single-image | multi-crop of *one* image, not multi-image input — **no-image arms only** |
+| `meta-llama/Llama-3.2-11B / 90B-Vision-Instruct` | ❌ architecture | cross-attention vision — can't hold image history at all; excluded from the faithful pipeline entirely (see below) |
+| `nvidia/NVLM-D-72B` | — | can't run locally regardless |
+
+**Full image + no-image capable (run the whole `run_vqa_hf_local_noevict.bat` sweep):** Qwen2.5-VL-3B/7B/32B, Qwen3-VL-8B, medgemma-4b, gemma-3-4b/27b, MiniCPM-V-2.6, InternVL3-8B — 9 models. Plus Huatuo / Kimi / Nemotron-local pending a `--n 2` check. (Phi-3.5-vision dropped — transformers 5.x incompatible.)
+
+**No-image arms only:** llava-1.5-7b, Molmo-7B-D.
 
 ## Excluded — no multi-image support (can't hold image history)
 
@@ -80,20 +110,19 @@ scripts\run_vqa_hf_local_noevict.bat --model Qwen/Qwen2.5-VL-3B-Instruct --n 100
 scripts\run_vqa_hf_local_noevict.bat --model Qwen/Qwen2.5-VL-7B-Instruct --n 100 --load-in-4bit
 scripts\run_vqa_hf_local_noevict.bat --model Qwen/Qwen3-VL-8B-Instruct --n 100 --load-in-4bit
 scripts\run_vqa_hf_local_noevict.bat --model google/medgemma-4b-it --n 100 --load-in-4bit
-scripts\run_vqa_hf_local_noevict.bat --model microsoft/Phi-3.5-vision-instruct --n 100 --load-in-4bit --trust-remote-code
 scripts\run_vqa_hf_local_noevict.bat --model openbmb/MiniCPM-V-2_6 --n 100 --load-in-4bit --trust-remote-code
-scripts\run_vqa_hf_local_noevict.bat --model allenai/Molmo-7B-D-0924 --n 100 --load-in-4bit --trust-remote-code
 scripts\run_vqa_hf_local_noevict.bat --model OpenGVLab/InternVL3-8B --n 100 --load-in-4bit --trust-remote-code
 scripts\run_vqa_hf_local_noevict.bat --model FreedomIntelligence/HuatuoGPT-Vision-7B --n 100 --load-in-4bit --trust-remote-code
 ```
 
-`llava-hf/llava-1.5-7b-hf` is single-image — noevict `image` will fail, run `none` only:
+`llava-hf/llava-1.5-7b-hf` and `allenai/Molmo-7B-D-0924` are single-image — the `image` arm will fail, run the no-image arms only:
 
 ```bat
 .venv\Scripts\python.exe vqa_sycophancy_probe_hf_local_no_evict.py --model llava-hf/llava-1.5-7b-hf --evidence none --n 100 --prompt-set default --load-in-4bit
+.venv\Scripts\python.exe vqa_sycophancy_probe_hf_local_no_evict.py --model allenai/Molmo-7B-D-0924 --evidence none --n 100 --prompt-set default --load-in-4bit --trust-remote-code
 ```
 
-Omit `--model` from the launcher to sweep the whole 10-model list (`--load-in-4bit --trust-remote-code` become global — pass both).
+Omit `--model` from the launcher to sweep the whole 9-model list (`--load-in-4bit --trust-remote-code` become global — pass both). The list still contains llava-1.5 and Molmo — their `image` cells will fail and skip; the `none` cells run fine.
 
 ### On a 24GB card (RTX 4090) — no 4-bit
 
@@ -104,9 +133,9 @@ scripts\run_vqa_hf_local_noevict.bat --model Qwen/Qwen2.5-VL-3B-Instruct --n 100
 scripts\run_vqa_hf_local_noevict.bat --model Qwen/Qwen2.5-VL-7B-Instruct --n 100
 scripts\run_vqa_hf_local_noevict.bat --model Qwen/Qwen3-VL-8B-Instruct --n 100
 scripts\run_vqa_hf_local_noevict.bat --model google/medgemma-4b-it --n 100
-scripts\run_vqa_hf_local_noevict.bat --model microsoft/Phi-3.5-vision-instruct --n 100 --trust-remote-code
 scripts\run_vqa_hf_local_noevict.bat --model openbmb/MiniCPM-V-2_6 --n 100 --trust-remote-code
-scripts\run_vqa_hf_local_noevict.bat --model allenai/Molmo-7B-D-0924 --n 100 --trust-remote-code
 scripts\run_vqa_hf_local_noevict.bat --model OpenGVLab/InternVL3-8B --n 100 --trust-remote-code
 scripts\run_vqa_hf_local_noevict.bat --model FreedomIntelligence/HuatuoGPT-Vision-7B --n 100 --trust-remote-code
 ```
+
+(`allenai/Molmo-7B-D-0924` and `llava-hf/llava-1.5-7b-hf`: no-image arms only — see above.)
