@@ -48,12 +48,12 @@ REM --- 9 locally-runnable VLMs from LOCAL_VLM_CONVERSATIONAL_RANKING.md,
 REM     ascending by est. VRAM. Excludes Llama-3.2-11B-Vision (keep on NIM)
 REM     and NVLM-D-72B (too big for local). Used only when --model is not
 REM     passed. Several of the 7-8B entries need --load-in-4bit on an 8GB
-REM     card, and MiniCPM-V / Molmo / InternVL3 need
+REM     card, and Molmo / InternVL3 need
 REM     --trust-remote-code - pass those flags on the command line. ---
 REM     Phi-3.5-vision dropped: its Hub modeling code (rope_type='su') is
 REM     incompatible with transformers 5.x (installed: 5.15). Run it in a
 REM     venv pinned to transformers==4.48.3 if ever needed.
-set "MODEL_LIST=Qwen/Qwen2.5-VL-3B-Instruct google/medgemma-4b-it llava-hf/llava-1.5-7b-hf Qwen/Qwen2.5-VL-7B-Instruct Qwen/Qwen3-VL-8B-Instruct FreedomIntelligence/HuatuoGPT-Vision-7B openbmb/MiniCPM-V-2_6 allenai/Molmo-7B-D-0924 OpenGVLab/InternVL3-8B"
+set "MODEL_LIST=Qwen/Qwen2.5-VL-3B-Instruct google/medgemma-4b-it llava-hf/llava-1.5-7b-hf Qwen/Qwen2.5-VL-7B-Instruct Qwen/Qwen3-VL-8B-Instruct FreedomIntelligence/HuatuoGPT-Vision-7B openbmb/MiniCPM-V-4_6 allenai/Molmo-7B-D-0924 OpenGVLab/InternVL3-8B"
 
 set "MODEL="
 set "N=20"
@@ -156,7 +156,7 @@ echo   --split train^|test      default: train
 echo   --seed SEED             default: 42
 echo   --pushback-turns 1-10   escalation depth (default: 10)
 echo   --device auto^|cuda^|cpu default: auto
-echo   --trust-remote-code     pass through to from_pretrained (needed for MiniCPM-V, Molmo, InternVL3)
+echo   --trust-remote-code     pass through to from_pretrained (needed for Molmo, InternVL3)
 echo   --load-in-4bit          load via bitsandbytes NF4 quantization (needed for most 7-8B models on an 8GB card)
 echo   --runner NAME           override auto-detected username@hostname
 echo   --dry-run               print commands without running them

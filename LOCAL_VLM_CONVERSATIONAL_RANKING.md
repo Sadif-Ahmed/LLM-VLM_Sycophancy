@@ -22,7 +22,7 @@ HF Hub id is the `--model` value — copy it straight into any
 | `Qwen/Qwen2.5-VL-7B-Instruct` | Qwen2.5-7B | Strong, same family as 3B — best chat quality in the 7B class | `--load-in-4bit` | ~5.5–6.5GB |
 | `Qwen/Qwen3-VL-8B-Instruct` | Qwen3-8B | Strong, newest Qwen chat tuning | `--load-in-4bit` | ~6–7GB |
 | `FreedomIntelligence/HuatuoGPT-Vision-7B` | Qwen2.5-VL-7B or LLaMA-3-8B (verify which per checkpoint) | ⚠️ Unverified — medical fine-tune, likely inherits its base's chat quality if it's the Qwen2.5-VL backbone variant, but check the HF repo's `config.json` architecture class before assuming it loads via `AutoModelForImageTextToText` unmodified | `--load-in-4bit --trust-remote-code` | ~5.5–7GB (same class as its 7B/8B base) |
-| `openbmb/MiniCPM-V-2_6` | Qwen2-7B | Strong — inherits Qwen's chat quality | `--load-in-4bit --trust-remote-code` | ~6–7GB |
+| `openbmb/MiniCPM-V-4_6` | Qwen3.5-text + MiniCPM-V 4.6 vision | Strong. **Swapped in for `MiniCPM-V-2_6`**, whose custom remote code needs a `.chat()` API the generic probe can't drive. 4.6 is natively integrated in transformers 5.x (`MiniCPMV4_6ForConditionalGeneration`) — no `--trust-remote-code`. | `--load-in-4bit` (try bf16 first) | ~4–8GB (verify) |
 | `allenai/Molmo-7B-D-0924` | Qwen2-7B | Strong, same reason | `--load-in-4bit --trust-remote-code` | ~6–7GB |
 | `OpenGVLab/InternVL3-8B` | Qwen2.5-7B (most sizes) | Strong, same reason | `--load-in-4bit --trust-remote-code` | ~6–7GB |
 | `nvidia/nemotron-3-nano-omni-30b-a3b-reasoning` | Nemotron 30B MoE (~3B active) | Strong; multi-image OK — see caveats | 4-bit only (30B won't fit bf16 in 24GB); `--trust-remote-code`, omni model — local load via the probe is **unverified**, results so far are NIM | ~15–16GB (4-bit) |
@@ -65,7 +65,7 @@ The faithful pipeline has two kinds of arm:
 | `google/medgemma-4b-it` | ✅ confirmed | Gemma3 backbone |
 | `google/gemma-3-27b-it`, `google/gemma-3-4b-it` | ✅ confirmed | native interleaved multi-image |
 | ~~`microsoft/Phi-3.5-vision-instruct`~~ | — dropped | transformers 5.x incompatible (see table above) |
-| `openbmb/MiniCPM-V-2_6` | ✅ confirmed | multi-image + video |
+| `openbmb/MiniCPM-V-4_6` | ✅ confirmed | multi-image + video; native in transformers 5.x (no trust-remote-code) |
 | `OpenGVLab/InternVL3-8B` | ✅ confirmed | |
 | `FreedomIntelligence/HuatuoGPT-Vision-7B` | ⚠️ unverified | depends on checkpoint arch — `config.json` class; multi-image only if the Qwen2.5-VL-backbone variant. Smoke-test `--evidence image --n 2` |
 | `moonshotai/Kimi-VL-A3B-Thinking-2506` | ⚠️ unverified | Kimi-VL is designed for multi-image + long multimodal context, but custom modeling code — smoke-test first |
@@ -75,7 +75,7 @@ The faithful pipeline has two kinds of arm:
 | `meta-llama/Llama-3.2-11B / 90B-Vision-Instruct` | ❌ architecture | cross-attention vision — can't hold image history at all; excluded from the faithful pipeline entirely (see below) |
 | `nvidia/NVLM-D-72B` | — | can't run locally regardless |
 
-**Full image + no-image capable (run the whole `run_vqa_hf_local_noevict.bat` sweep):** Qwen2.5-VL-3B/7B/32B, Qwen3-VL-8B, medgemma-4b, gemma-3-4b/27b, MiniCPM-V-2.6, InternVL3-8B — 9 models. Plus Huatuo / Kimi / Nemotron-local pending a `--n 2` check. (Phi-3.5-vision dropped — transformers 5.x incompatible.)
+**Full image + no-image capable (run the whole `run_vqa_hf_local_noevict.bat` sweep):** Qwen2.5-VL-3B/7B/32B, Qwen3-VL-8B, medgemma-4b, gemma-3-4b/27b, MiniCPM-V-4.6, InternVL3-8B — 9 models. Plus Huatuo / Kimi / Nemotron-local pending a `--n 2` check. (Phi-3.5-vision dropped — transformers 5.x incompatible.)
 
 **No-image arms only:** llava-1.5-7b, Molmo-7B-D.
 
@@ -110,7 +110,7 @@ scripts\run_vqa_hf_local_noevict.bat --model Qwen/Qwen2.5-VL-3B-Instruct --n 100
 scripts\run_vqa_hf_local_noevict.bat --model Qwen/Qwen2.5-VL-7B-Instruct --n 100 --load-in-4bit
 scripts\run_vqa_hf_local_noevict.bat --model Qwen/Qwen3-VL-8B-Instruct --n 100 --load-in-4bit
 scripts\run_vqa_hf_local_noevict.bat --model google/medgemma-4b-it --n 100 --load-in-4bit
-scripts\run_vqa_hf_local_noevict.bat --model openbmb/MiniCPM-V-2_6 --n 100 --load-in-4bit --trust-remote-code
+scripts\run_vqa_hf_local_noevict.bat --model openbmb/MiniCPM-V-4_6 --n 100 --load-in-4bit
 scripts\run_vqa_hf_local_noevict.bat --model OpenGVLab/InternVL3-8B --n 100 --load-in-4bit --trust-remote-code
 scripts\run_vqa_hf_local_noevict.bat --model FreedomIntelligence/HuatuoGPT-Vision-7B --n 100 --load-in-4bit --trust-remote-code
 ```
@@ -133,7 +133,7 @@ scripts\run_vqa_hf_local_noevict.bat --model Qwen/Qwen2.5-VL-3B-Instruct --n 100
 scripts\run_vqa_hf_local_noevict.bat --model Qwen/Qwen2.5-VL-7B-Instruct --n 100
 scripts\run_vqa_hf_local_noevict.bat --model Qwen/Qwen3-VL-8B-Instruct --n 100
 scripts\run_vqa_hf_local_noevict.bat --model google/medgemma-4b-it --n 100
-scripts\run_vqa_hf_local_noevict.bat --model openbmb/MiniCPM-V-2_6 --n 100 --trust-remote-code
+scripts\run_vqa_hf_local_noevict.bat --model openbmb/MiniCPM-V-4_6 --n 100
 scripts\run_vqa_hf_local_noevict.bat --model OpenGVLab/InternVL3-8B --n 100 --trust-remote-code
 scripts\run_vqa_hf_local_noevict.bat --model FreedomIntelligence/HuatuoGPT-Vision-7B --n 100 --trust-remote-code
 ```

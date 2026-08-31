@@ -19,7 +19,7 @@ REM
 REM Usage, from anywhere:
 REM     scripts\reset_hf_auth.bat [hf_xxxxxxxxxxxxx] [model_id]
 REM     scripts\reset_hf_auth.bat            (reuse hf_token.txt / prompt)
-REM model_id defaults to openbmb/MiniCPM-V-2_6.
+REM model_id defaults to openbmb/MiniCPM-V-4_6.
 REM ============================================================
 
 setlocal
@@ -28,7 +28,7 @@ for %%I in ("%REPO_ROOT%") do set "REPO_ROOT=%%~fI"
 set "PYTHON=%REPO_ROOT%\.venv\Scripts\python.exe"
 set "TOKEN=%~1"
 set "MODEL=%~2"
-if "%MODEL%"=="" set "MODEL=openbmb/MiniCPM-V-2_6"
+if "%MODEL%"=="" set "MODEL=openbmb/MiniCPM-V-4_6"
 
 if "%TOKEN%"=="" if exist "%REPO_ROOT%\hf_token.txt" (
     for /f "usebackq delims=" %%T in ("%REPO_ROOT%\hf_token.txt") do set "TOKEN=%%T"
